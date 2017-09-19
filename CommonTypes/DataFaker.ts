@@ -14,16 +14,16 @@ export class DataFaker {
 
     Site(): Site {
         return {
-            recid: 1;
+            recid: 1,
             company_recid: 1,
             description: "fakesite",
             address1: "fakeaddress1",
             address2: "fakeaddress2",
-            city: "fakecity";
-            province: string;
-            postal_code: string;
-            latitude: string;
-            longitude: string;
+            city: "fakecity",
+            province: string,
+            postal_code: string,
+            latitude: string,
+            longitude: string
         }
     }
 }
