@@ -7,3 +7,4 @@ node_modules/
 .pm2/
 yarn-error.log
 npm-debug.log
+!ecosystem.config.js
