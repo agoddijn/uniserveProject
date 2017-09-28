@@ -1,0 +1,17 @@
+{
+  "name": "uniserver.m8s",
+  "version": "1.0.0",
+  "description": "Web backend",
+  "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "services/*"
+  ],
+  "scripts": {
+    "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
+    "buildPingingBackend": "(cd ./services/PingingBackend && npm run build)",
+    "build": "npm run buildWebBackend & npm run buildPingingBackend"
+  }
+}
+

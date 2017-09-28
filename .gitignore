@@ -4,3 +4,6 @@ node_modules/
 .vscode/
 *.js
 *.js.map
+.pm2/
+yarn-error.log
+npm-debug.log

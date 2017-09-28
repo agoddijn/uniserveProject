@@ -1,0 +1,20 @@
+{
+  "name": "uniserver.m8s.ping.backend",
+  "version": "1.0.0",
+  "description": "Ping Backend",
+  "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+  "license": "MIT",
+  "main": "./src/PingingBackend.js",
+  "scripts": {
+    "dev": "node ./src/PingingBackend.js",
+    "watch": "tsc -w",
+    "build": "tsc || echo done"
+  },
+  "dependencies": {
+    "tcp-ping": "^0.1.1",
+    "typescript": "^2.5.3"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.31"
+  }
+}

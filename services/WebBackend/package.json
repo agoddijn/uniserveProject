@@ -1,0 +1,21 @@
+{
+  "name": "uniserver.m8s.web.backend",
+  "version": "1.0.0",
+  "description": "Web Backend",
+  "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+  "license": "MIT",
+  "main": "./src/WebBackend.js",
+  "scripts": {
+    "dev": "PORT=3030 node ./src/WebBackend.js",
+    "watch": "tsc -w",
+    "build": "tsc || echo done"
+  },
+  "dependencies": {
+    "express": "^4.15.5",
+    "typescript": "^2.5.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.37",
+    "@types/node": "^8.0.31"
+  }
+}
