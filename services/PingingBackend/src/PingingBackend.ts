@@ -8,6 +8,11 @@ tcpPing.ping({address: '216.58.193.78'}, (err, data) => {
 setInterval(()=>{
     console.log("starting ping");
     tcpPing.ping({address: '216.58.193.78'}, (err, data) => {
-        console.log("pinnged" + err + JSON.stringify(data) );
+        if (err) {
+            console.log("Ping error: " + err)
+        } else {
+            console.log("Ping success: " + JSON.stringify(data) );
+        }
+        
     });
 }, 10000);

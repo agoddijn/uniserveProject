@@ -13,7 +13,11 @@
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
     "buildUtils": "(cd ./utils/ && npm run build)",
     "buildPingingBackend": "(cd ./services/PingingBackend && npm run build)",
-    "build": "npm run buildWebBackend & npm run buildPingingBackend & npm run buildUtils"
+    "watchWebBackend": "(cd ./services/WebBackend && npm run watch)",
+    "watchUtils": "(cd ./utils/ && npm run watch)",
+    "watchPingingBackend": "(cd ./services/PingingBackend && npm run watch)",
+    "build": "npm run buildWebBackend & npm run buildPingingBackend & npm run buildUtils",
+    "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils"
   }
 }
 
