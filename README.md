@@ -15,9 +15,10 @@ Uniserve Router Monitoring Project
 
 in root:
 yarn install
+
 npm run build
 
-to start everything:
+* to start everything:
 pm2 start ecosystem.config.js
 
 monitor logs:

@@ -1,5 +1,5 @@
 {
-  "name": "uniserver.m8s.ping.backend",
+  "name": "uniserve.m8s.ping.backend",
   "version": "1.0.0",
   "description": "Ping Backend",
   "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "tcp-ping": "^0.1.1",
-    "typescript": "^2.5.3"
+    "typescript": "^2.5.3",
+    "uniserve.m8s.utils": "1.0.0"    
   },
   "devDependencies": {
     "@types/node": "^8.0.31"

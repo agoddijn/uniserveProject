@@ -6,12 +6,14 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "services/*"
+    "services/*",
+    "utils/"
   ],
   "scripts": {
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
+    "buildUtils": "(cd ./utils/ && npm run build)",
     "buildPingingBackend": "(cd ./services/PingingBackend && npm run build)",
-    "build": "npm run buildWebBackend & npm run buildPingingBackend"
+    "build": "npm run buildWebBackend & npm run buildPingingBackend & npm run buildUtils"
   }
 }
 

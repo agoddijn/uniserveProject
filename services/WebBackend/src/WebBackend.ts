@@ -2,7 +2,8 @@ import * as express from "express";
 import * as Authenticator from "./auth/Authenticator";
 import * as path from "path";
 import * as devicesAPI from "./api/devices";
-import * as deviceAPI from "./api/device"
+import * as deviceAPI from "./api/device";
+import {Log} from "uniserve.m8s.utils";
 
 const app = express();
 
@@ -16,5 +17,5 @@ app.get("/api/company/:company_id/devices", Authenticator.authenticateUser, devi
 app.get("/api/company/:company_id/device/:device_id", Authenticator.authenticateUser, deviceAPI.device);
 
 app.listen(process.env.PORT, ()=>{
-    console.log("App is running on http://localhost:" + process.env.PORT);
+    Log.info("App is running on http://localhost:" + process.env.PORT);
 })

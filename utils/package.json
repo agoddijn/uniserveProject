@@ -1,0 +1,14 @@
+{
+    "name": "uniserve.m8s.utils",
+    "version": "1.0.0",
+    "description": "Common utilities",
+    "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+    "license": "MIT",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {
+        "typescript": "^2.5.3"
+    }
+}

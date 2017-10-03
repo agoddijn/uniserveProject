@@ -1,5 +1,5 @@
 {
-  "name": "uniserver.m8s.web.backend",
+  "name": "uniserve.m8s.web.backend",
   "version": "1.0.0",
   "description": "Web Backend",
   "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "express": "^4.15.5",
-    "typescript": "^2.5.3"
+    "typescript": "^2.5.3",
+    "uniserve.m8s.utils": "1.0.0"    
   },
   "devDependencies": {
     "@types/express": "^4.0.37",

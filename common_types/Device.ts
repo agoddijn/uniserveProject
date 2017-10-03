@@ -1,6 +1,6 @@
-import {PingRecord} from './PingRecord'
+import PingRecord from './PingRecord'
 
-export interface Device {
+export default interface Device {
     recid: number;
     site_recid: number;
     id: string;
