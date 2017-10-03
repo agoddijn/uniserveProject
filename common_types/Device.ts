@@ -1,11 +1,12 @@
 import PingRecord from './PingRecord'
 
 export default interface Device {
-    recid: number;
+    device_recid: number;
     site_recid: number;
-    id: string;
+    device_id: string;
     manufacturer: string;
     description: string;
+    device_type: string;
     mac_address: string;
     ip_address: string;
     //should always be ordered by timestamp

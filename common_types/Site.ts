@@ -1,7 +1,7 @@
 import Device from './Device'
 
 export default interface Site {
-    recid: number;
+    site_recid: number;
     company_recid: number;
     description: string;
     address1: string;
