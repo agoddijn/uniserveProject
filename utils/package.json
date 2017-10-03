@@ -6,7 +6,8 @@
     "license": "MIT",
     "main": "index.js",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "watch": "tsc -w"
     },
     "dependencies": {
         "typescript": "^2.5.3"
