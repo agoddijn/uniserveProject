@@ -1,16 +1,19 @@
 {
-    "name": "uniserve.m8s.utils",
-    "version": "1.0.0",
-    "description": "Common utilities",
-    "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
-    "license": "MIT",
-    "main": "index.js",
-    "scripts": {
-        "build": "tsc",
-        "watch": "tsc -w"
-    },
-    "dependencies": {
-        "typescript": "^2.5.3",
-        "uniserve.m8s.types":  "1.0.0"         
-    }
+  "name": "uniserve.m8s.utils",
+  "version": "1.0.0",
+  "description": "Common utilities",
+  "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "typescript": "^2.5.3",
+    "uniserve.m8s.types": "1.0.0"
+  },
+  "dependencies": {
+    "pg-promise": "^6.10.2"
+  }
 }
