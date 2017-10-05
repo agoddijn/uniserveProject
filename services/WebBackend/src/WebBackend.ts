@@ -3,7 +3,7 @@ import * as Authenticator from "./auth/Authenticator";
 import * as path from "path";
 import * as devicesAPI from "./api/devices";
 import * as deviceAPI from "./api/device";
-import {Log} from "uniserve.m8s.utils";
+import {Log, DbInterface} from "uniserve.m8s.utils";
 import {Company} from "uniserve.m8s.types";
 
 const app = express();
@@ -15,6 +15,10 @@ app.get('/', function(req,res) {
 });
 
 let test : Company = {company_name: "test", company_recid: 1, company_id: "1"};
+
+let dbInt = new DbInterface;
+dbInt.helloWorld();
+dbInt.getData();
 
 app.get("/api/company/:company_id/devices", Authenticator.authenticateUser, devicesAPI.devices);
 app.get("/api/company/:company_id/device/:device_id", Authenticator.authenticateUser, deviceAPI.device);

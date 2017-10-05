@@ -90,7 +90,7 @@ ALTER TABLE public.msp_site OWNER TO ubc03;
 
 CREATE TABLE msp_ping (
     ping_recid integer DEFAULT nextval(('pk_msp_ping_recid'::text)::regclass) NOT NULL,
-    device_id integer NOT NULL,
+    device_recid integer NOT NULL,
     ip_address character varying(50),
     ms_response integer,
     responded boolean DEFAULT false,
