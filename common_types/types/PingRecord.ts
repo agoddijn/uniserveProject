@@ -1,4 +1,4 @@
-export default interface PingRecord {
+export interface PingRecord {
     ping_recid: number;
     device_id: number;
     ip_address: string;

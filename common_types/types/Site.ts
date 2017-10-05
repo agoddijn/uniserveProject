@@ -1,6 +1,6 @@
-import Device from './Device'
+import {Device} from './Device'
 
-export default interface Site {
+export interface Site {
     site_recid: number;
     company_recid: number;
     description: string;
