@@ -7,7 +7,7 @@ const cn = {
     port: 5432,
     database: 'ubc03',
     user: 'postgres',
-    password: 'jackjack'
+    password: ''
 }
 const db = pgp(cn);
 
@@ -30,26 +30,6 @@ export default class DbInterface {
     }
 
     /*
-     * Returns the list of all devices
-     * Needed by PinginBackend
-     */
-    getDeviceList(): Device[] {
-        var result: Device[] = [];
-        let device: Device = {
-            device_recid: 1001,
-            site_recid: 1003,
-            device_id: "Main Office Router",
-            manufacturer: "",
-            description: "",
-            device_type: "",
-            mac_address: "",
-            ip_address: "123.456.789.012"
-        };
-        result.push(device);
-        return result;
-    }
-
-    /*
      * Stores a bunch of ping records
      * Return true if succesful, false otherwise
      */
@@ -57,6 +37,33 @@ export default class DbInterface {
         return new Promise((fulfill, reject) => {
             console.log("Received records: " + JSON.stringify(records));
             fulfill(true);
+        });
+    }
+
+    // Retrieves the company ID based on the given username/email.
+    getCompanyID(username){
+        db.any("SELECT company_recid FROM msp_company WHERE username=\'" + username + "\';").then(data => {
+            console.log("Data: " + JSON.stringify(data));
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
+    }
+
+    // Retrieves the site IDs based on the given Company ID.
+    getSites(companyID){
+        db.any("SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';").then(data => {
+            console.log("Data: " + JSON.stringify(data));
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
+    }
+
+    // Retrieves the device IDs based on the given Site ID.
+    getDevices(siteID){
+        db.any("SELECT device_recid FROM msp_device WHERE site_recid=\'" + siteID + "\';").then(data => {
+            console.log("Data: " + JSON.stringify(data));
+        }).catch(e => {
+            console.log("Error: " + e);
         })
     }
 
