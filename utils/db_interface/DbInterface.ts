@@ -27,6 +27,15 @@ export default class DbInterface {
         })
     }
 
+    // Retrieves all companies
+    getAllCompanies(){
+        db.any("SELECT * FROM msp_company;").then(data => {
+            console.log("Data: " + JSON.stringify(data));
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
+    }
+
     // Retrieves the company ID based on the given username/email.
     getCompanyID(username){
         db.any("SELECT company_recid FROM msp_company WHERE username=\'" + username + "\';").then(data => {
@@ -36,9 +45,27 @@ export default class DbInterface {
         })
     }
 
+    // Retrieves all sites
+    getAllSites(){
+        db.any("SELECT * FROM msp_site;").then(data => {
+            console.log("Data: " + JSON.stringify(data));
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
+    }
+
     // Retrieves the site IDs based on the given Company ID.
     getSites(companyID){
         db.any("SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';").then(data => {
+            console.log("Data: " + JSON.stringify(data));
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
+    }
+
+    // Retrieves all devices
+    getAllDevices(){
+        db.any("SELECT * FROM msp_device;").then(data => {
             console.log("Data: " + JSON.stringify(data));
         }).catch(e => {
             console.log("Error: " + e);
