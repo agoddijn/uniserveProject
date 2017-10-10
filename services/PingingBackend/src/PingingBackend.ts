@@ -10,20 +10,22 @@ var deviceList: Device[] = dbInt.getDeviceList();
 
 // Interval once a minute 
 setInterval(()=>{
+    storage.sendRecords();
     var date = new Date();
     console.log("starting pings");
-    let pingPromises: Promise<any>[];
+    let pingPromises: Promise<any>[] = [];
     for (let device of deviceList) {
+        console.log("found a device with ip " + device.ip_address);
         pingPromises.push(ping(device));
     }
     Promise.all(pingPromises).then((data: any[]) => {
-        var records: PingRecord[];
+        var records: PingRecord[] = [];
         for (let pingResponse of data) {
             records.push(responseToRecord(pingResponse));
         }
         storage.addPingRecords(date, records);
     })
-}, 60000);
+}, 10000);
 
 function ping(device: Device): Promise<any> {
     let pingPromise = new Promise((fulfill, reject) => {
@@ -34,6 +36,7 @@ function ping(device: Device): Promise<any> {
             } else {
                 console.log("Ping success: " + JSON.stringify(data) );
                 data.device_id = device.device_id;
+                data.ping_recid = device.device_recid;
                 fulfill(data);
             }  
         });
@@ -42,10 +45,12 @@ function ping(device: Device): Promise<any> {
 }
 
 function responseToRecord(response: any): PingRecord {
-    let record: PingRecord;
-    record.ping_recid;
-    record.device_id = response.device_id;
-    record.ms_response = response.avg;
-    record.responded = true;
+    let record: PingRecord = {
+        ping_recid: response.ping_recid,
+        device_id: response.device_id,
+        ms_response: response.avg,
+        responded: response.avg ? true : false,
+        datetime: new Date()
+    };
     return record;
 }

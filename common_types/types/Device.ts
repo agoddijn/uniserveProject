@@ -10,5 +10,5 @@ export interface Device {
     mac_address: string;
     ip_address: string;
     //should always be ordered by timestamp
-    ping_records: PingRecord[];
+    ping_records?: PingRecord[];
 }

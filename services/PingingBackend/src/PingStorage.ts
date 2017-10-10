@@ -7,7 +7,7 @@ export default class PingStorage {
     pingMap: Map<number,PingRecord[]>;
 
     constructor() {
-        console.log("PingStorage::init()");
+        console.log("PingStorage::init");
         this.pingMap = new Map();
         this.dbInt = new DbInterface();
     };
@@ -22,7 +22,8 @@ export default class PingStorage {
     }
 
     public sendRecords(): void {
-        for (var date in this.pingMap) {
+        var date: any;
+        for (date in this.pingMap) {
             let records: PingRecord[] = this.pingMap[date];
             this.dbInt.storePingRecords(records)
             .then((success: boolean) => {

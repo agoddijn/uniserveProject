@@ -34,7 +34,18 @@ export default class DbInterface {
      * Needed by PinginBackend
      */
     getDeviceList(): Device[] {
-        var result: Device[];
+        var result: Device[] = [];
+        let device: Device = {
+            device_recid: 1001,
+            site_recid: 1003,
+            device_id: "Main Office Router",
+            manufacturer: "",
+            description: "",
+            device_type: "",
+            mac_address: "",
+            ip_address: "123.456.789.012"
+        };
+        result.push(device);
         return result;
     }
 
@@ -44,6 +55,7 @@ export default class DbInterface {
      */
     storePingRecords(records: PingRecord[]): Promise<boolean> {
         return new Promise((fulfill, reject) => {
+            console.log("Received records: " + JSON.stringify(records));
             fulfill(true);
         })
     }
