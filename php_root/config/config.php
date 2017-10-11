@@ -28,7 +28,7 @@ $gConfig['alert_email']		= $gConfig['admin_email'];
 $gConfig['UBC']['host']          = "127.0.0.1";
 $gConfig['UBC']['name']          = "ubc03";
 $gConfig['UBC']['user']          = "ubc03";
-$gConfig['UBC']['pass']          = "UbC$3";
+$gConfig['UBC']['pass']          = "olivepepsi";
 
 //
 // Define the session type: either "db" or "file"
