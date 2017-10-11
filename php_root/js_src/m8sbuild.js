@@ -1,6 +1,6 @@
 (function() {
     var httpRequest;
-    document.getElementById("ajaxButton").addEventListener('click', makeRequest);
+    var test =  makeRequest;
   
     function makeRequest() {
       httpRequest = new XMLHttpRequest();
@@ -11,9 +11,7 @@
       }
       httpRequest.onreadystatechange = alertContents;
       httpRequest.open('GET', '/?p=monitor_api');
-      httpRequest.open('GET', '/?p=monitor_api');
       httpRequest.setRequestHeader('Content-Type', 'application/json');
-
       httpRequest.send();
     }
   
