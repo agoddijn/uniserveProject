@@ -1,14 +1,19 @@
 PHP Changes
 ============
 
-Overview of all changes to the php should all be in php_integration branch.
+Overview of all changes to the php should all be in php_integration branch on git
 
-    *file:line numbers
+    */folder/file:line numbers
     
-    1. config.php:31 
+    1. config/config.php:31 
         Changed DB password
-
-    2. test 
+    2. modules/monitor/menu.php:20
+        Removed submenus, navigation will be handled in app.
+    3. modules/monitor/location/
+        Removed all files except the switch
+    4. templates/api.php
+        php file for handling proxy to JS backend
+    
 
 2nd paragraph. *Italic*, **bold**, and `monospace`. Itemized lists
 look like:
