@@ -10,7 +10,7 @@
         return false;
       }
       httpRequest.onreadystatechange = alertContents;
-      httpRequest.open('GET', '/?p=monitor_api');
+      httpRequest.open('GET', '/ajax/monitoring_api.php');
       httpRequest.setRequestHeader('Content-Type', 'application/json');
       httpRequest.send();
     }

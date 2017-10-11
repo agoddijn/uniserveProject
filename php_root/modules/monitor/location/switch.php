@@ -5,13 +5,6 @@
 //
 switch($page) {
 	
-	// examples
-	case "api":			
-		require_once(DIR_BASE . "/modules/monitor/templates/api.php");	
-	break;
-	//
-	// Default Page
-	//
 	default:
 	case "monitor":
 		//
