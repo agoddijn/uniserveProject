@@ -31,6 +31,11 @@ $gConfig['UBC']['user']          = "ubc03";
 $gConfig['UBC']['pass']          = "olivepepsi";
 
 //
+// API Settings
+$gConfig['API']['host']          = "127.0.0.1:3031";
+$gConfig['API']['authtoken']        = "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ";
+
+//
 // Define the session type: either "db" or "file"
 //
 $gConfig['session']['type']		= "file";
