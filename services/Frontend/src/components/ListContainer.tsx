@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Device } from "../../commonTypes/Device";
+import { Device } from "uniserve.m8s.types";
 import { ContainerBar } from "./PresentationalContainerBar"
 
 export class ListContainer extends React.Component<any, {}> {
