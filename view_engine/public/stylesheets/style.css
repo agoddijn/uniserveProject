@@ -1,0 +1,50 @@
+*{
+    box-sizing: border-box;
+}
+#container{
+    height: 100vh;
+    background: lightgrey;
+}
+#listcontainer{
+    position: relative;
+    left: 2vw;
+    top: 2vh;
+    width: 50vw; 
+    height: 86vh;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    float: left;
+}
+#mapcontainer{
+    position: relative;
+    left: 4vw;
+    top: 2vh;
+    width: 44vw; 
+    height: 40vh;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    float: left;
+}
+.AppBar div{
+    background-color: #46A9D4;
+    border: 1px solid #46A9D4;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+}
+.AppBar header{
+    background-color: #46A9D4;
+    border: 1px solid #46A9D4;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+}
+#logo{
+    color: red;
+}
+.layoutButton span{
+    color: white;
+}
+.title{
+    margin: auto;
+}
