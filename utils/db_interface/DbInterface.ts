@@ -6,7 +6,7 @@ const cn = {
     host: process.env.DB_HOST,
     port: +process.env.DB_PORT,
     database: process.env.DB_NAME,
-    user: process.env.DB_USER,
+    user: 'postgres',
     password: process.env.DB_PASS
 }
 const db = pgp(cn);
@@ -45,7 +45,7 @@ export default class DbInterface {
 
     // Retrieves all companies
     getAllCompanies(){
-        db.any("SELECT * FROM msp_company   ;").then(data => {
+        db.any("SELECT * FROM msp_company;").then(data => {
             console.log("Data: " + JSON.stringify(data));
         }).catch(e => {
             console.log("Error: " + e);
