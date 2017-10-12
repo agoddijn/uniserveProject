@@ -33,7 +33,7 @@ dbInt.getAllDevices()
         .catch(e => {
             console.log("Error: " + JSON.stringify(e));
         });
-    }, 30000);
+    }, 10000);
 
 }))
 .catch(e => {
@@ -45,12 +45,17 @@ dbInt.getAllDevices()
 
 function ping(device: Device): Promise<any> {
     return new Promise((fulfill, reject) => {
-        tcpPing.ping({address: device.ip_address}, (err, data) => {
+        let options = {
+            address: device.ip_address,
+            attempts: 2
+        }
+
+        tcpPing.ping(options, (err, data) => {
             if (err) {
                 // console.log("Ping error: " + err)
                 fulfill(err);
             } else {
-                console.log("Ping success");
+                // console.log("Ping success");
                 data.device_id = device.device_id;
                 data.ping_recid = device.device_recid;
                 fulfill(data);
