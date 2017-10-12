@@ -1,8 +1,6 @@
 PHP Changes
 ============
 
-Overview of all changes to the php should all be in php_integration branch on git
-
     */folder/file:line numbers
     
     1. config/config.php:31 
@@ -12,38 +10,15 @@ Overview of all changes to the php should all be in php_integration branch on gi
     3. modules/monitor/location/
         Removed all files except the switch
     4. templates/api.php
-        php file for handling proxy to JS backend
+        php file for handling proxy to JS backend this is where most of the stuff is
     5. config/config.php:35
         settings for the api
     
+User authentication is handled via check of $gUser->id.
+The node-php auth happens via auth token set in config.php and pm2 config via env variable
 
-2nd paragraph. *Italic*, **bold**, and `monospace`. Itemized lists
-look like:
+**Issues:**
 
-  * this one
-  * that one
-  * the other one
+    *Node-PHP com goes over http, not a big deal ATM as they are on same box
 
-Note that --- not considering the asterisk --- the actual text
-content starts at 4-columns in.
-
-> Block quotes are
-> written like so.
->
-> They can span multiple paragraphs,
-> if you like.
-
-Use 3 dashes for an em-dash. Use 2 dashes for ranges (ex., "it's all
-in chapters 12--14"). Three dots ... will be converted to an ellipsis.
-Unicode is supported. ☺
-
-
-
-An h2 header
-------------
-
-Here's a numbered list:
-
- 1. first item
- 2. second item
- 3. third item
+    *Node-PHP auth tokens checked into repo
