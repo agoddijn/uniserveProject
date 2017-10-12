@@ -4,14 +4,14 @@ import {Log, DbInterface} from "uniserve.m8s.utils";
 
 
 export let devices = (req: Request, res: Response) => {
-
-    let company_recid = req.params.company_recid;
+    //might be a string tbh
+    let request_id = <number> req.params.company_recid;
     Log.trace("API:devices");
-    Log.info("API:devices # company_recid: " + company_recid);
+    Log.info("API:devices # company_recid: " + request_id);
 
     let fakesite: Site = {
         site_recid: 1,
-        company_recid: 1,
+        company_recid: request_id,
         description: "fake site",
         address1: "fake address1",
         address2: "fake address2",
