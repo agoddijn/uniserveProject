@@ -6,42 +6,57 @@ import PingStorage from './PingStorage';
 var dbInt = new DbInterface;
 var storage = new PingStorage;
 
-var deviceList: Device[] = dbInt.getDeviceList();
+dbInt.getAllDevices()
+.then((deviceList => {
 
-// Interval once a minute 
-setInterval(()=>{
-    storage.sendRecords();
-    var date = new Date();
-    console.log("starting pings");
-    let pingPromises: Promise<any>[] = [];
-    for (let device of deviceList) {
-        console.log("found a device with ip " + device.ip_address);
-        pingPromises.push(ping(device));
-    }
-    Promise.all(pingPromises).then((data: any[]) => {
-        var records: PingRecord[] = [];
-        for (let pingResponse of data) {
-            records.push(responseToRecord(pingResponse));
+    // console.log("Device List: " + JSON.stringify(deviceList));
+    
+    // Interval once a minute 
+    setInterval(()=>{
+        // console.log("starting pings");
+        storage.sendRecords();
+        var date = new Date();
+        let pingPromises: Promise<any>[] = [];
+        for (let device of deviceList) {
+            // console.log("found a device with ip " + device.ip_address);
+            pingPromises.push(ping(device));
         }
-        storage.addPingRecords(date, records);
-    })
-}, 10000);
+        Promise.all(pingPromises)
+        .then((data: any[]) => {
+            // console.log("Got some data");
+            var records: PingRecord[] = [];
+            for (let pingResponse of data) {
+                records.push(responseToRecord(pingResponse));
+            }
+            storage.addPingRecords(date, records);
+        })
+        .catch(e => {
+            console.log("Error: " + JSON.stringify(e));
+        });
+    }, 30000);
+
+}))
+.catch(e => {
+
+    console.log("Could not get data");
+
+});
+
 
 function ping(device: Device): Promise<any> {
-    let pingPromise = new Promise((fulfill, reject) => {
+    return new Promise((fulfill, reject) => {
         tcpPing.ping({address: device.ip_address}, (err, data) => {
             if (err) {
-                console.log("Ping error: " + err)
+                // console.log("Ping error: " + err)
                 fulfill(err);
             } else {
-                console.log("Ping success: " + JSON.stringify(data) );
+                console.log("Ping success");
                 data.device_id = device.device_id;
                 data.ping_recid = device.device_recid;
                 fulfill(data);
             }  
         });
     });
-    return pingPromise;
 }
 
 function responseToRecord(response: any): PingRecord {

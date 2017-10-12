@@ -7,7 +7,7 @@ const cn = {
     port: 5432,
     database: 'ubc03',
     user: 'postgres',
-    password: ''
+    password: 'jackjack'
 }
 const db = pgp(cn);
 
@@ -33,16 +33,37 @@ export default class DbInterface {
      * Stores a bunch of ping records
      * Return true if succesful, false otherwise
      */
-    storePingRecords(records: PingRecord[]): Promise<boolean> {
+    storePingRecords(records: PingRecord[]): Promise<boolean | number> {
         return new Promise((fulfill, reject) => {
-            console.log("Received records: " + JSON.stringify(records));
-            fulfill(true);
+            console.log("Recieving records");
+            for (let record of records) {
+                console.log("\n" + JSON.stringify(record));
+            }
+            fulfill(records[0].datetime.getTime());
         });
+    }
+
+    // Retrieves all companies
+    getAllCompanies(){
+        db.any("SELECT * FROM msp_company;").then(data => {
+            console.log("Data: " + JSON.stringify(data));
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
     }
 
     // Retrieves the company ID based on the given username/email.
     getCompanyID(username){
         db.any("SELECT company_recid FROM msp_company WHERE username=\'" + username + "\';").then(data => {
+            console.log("Data: " + JSON.stringify(data));
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
+    }
+
+    // Retrieves all sites
+    getAllSites(){
+        db.any("SELECT * FROM msp_site;").then(data => {
             console.log("Data: " + JSON.stringify(data));
         }).catch(e => {
             console.log("Error: " + e);
@@ -56,6 +77,11 @@ export default class DbInterface {
         }).catch(e => {
             console.log("Error: " + e);
         })
+    }
+
+    // Retrieves all devices
+    getAllDevices(): Promise<Device[]> {
+        return db.any("SELECT * FROM msp_device;");
     }
 
     // Retrieves the device IDs based on the given Site ID.

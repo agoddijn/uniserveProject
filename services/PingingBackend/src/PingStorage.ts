@@ -13,25 +13,33 @@ export default class PingStorage {
     };
 
     public addPingRecords(dateStamp: Date, records: PingRecord[]): void {
+        // console.log("Adding ping records: " + JSON.stringify(records));
         for (let record of records) {
             record.datetime = dateStamp;
         }
         if (!(dateStamp.getTime() in this.pingMap)) {
-            this.pingMap[dateStamp.getTime()] = records;
+            this.pingMap.set(dateStamp.getTime(),records);
         }
     }
 
     public sendRecords(): void {
-        var date: any;
-        for (date in this.pingMap) {
-            let records: PingRecord[] = this.pingMap[date];
-            this.dbInt.storePingRecords(records)
-            .then((success: boolean) => {
-                if (success) {
-                    this.pingMap.delete(date);
-                }
-            })
+        var that = this;
+        // console.log("sending ping records");
+        let storePromises: Promise<boolean | number>[] = [];
+        for (let [date, records] of this.pingMap) {
+            // console.log("Storing " + JSON.stringify(records));
+            storePromises.push(this.dbInt.storePingRecords(records))
         }
+        Promise.all(storePromises)
+        .then(dates => {
+            for (let date of dates) {
+                if (date) {
+                    // console.log("Deleting " + date);
+                    date = <number>date;
+                    that.pingMap.delete(date);
+                }
+            }
+        });
     }
 
 }
