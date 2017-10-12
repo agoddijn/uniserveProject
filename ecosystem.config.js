@@ -10,10 +10,13 @@ module.exports = {
       script    : './services/WebBackend/src/WebBackend.js',
       env: {
         "NODE_ENV": "development",
-        "PORT"    : 3030        
+        "PORT"    : 3031,
+        "PHP_AUTH_TOKEN": "DEVTOKEN"       
       },
-      env_production : {
-        NODE_ENV: 'production'
+      env_staging : {
+        "NODE_ENV": 'production',
+        "PORT"    : 3031,
+        "PHP_AUTH_TOKEN": "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ"
       }
     },
 
