@@ -1,11 +1,13 @@
 import * as pgPromise from 'pg-promise';
+import {Device, PingRecord} from 'uniserve.m8s.types'
+
 const pgp = pgPromise();
 const cn = {
     host: 'localhost',
     port: 5432,
     database: 'ubc03',
     user: 'postgres',
-    password: ''
+    password: 'jackjack'
 }
 const db = pgp(cn);
 
@@ -25,6 +27,20 @@ export default class DbInterface {
         }).catch(e => {
             console.log("Error: " + e);
         })
+    }
+
+    /*
+     * Stores a bunch of ping records
+     * Return true if succesful, false otherwise
+     */
+    storePingRecords(records: PingRecord[]): Promise<boolean | number> {
+        return new Promise((fulfill, reject) => {
+            console.log("Recieving records");
+            for (let record of records) {
+                console.log("\n" + JSON.stringify(record));
+            }
+            fulfill(records[0].datetime.getTime());
+        });
     }
 
     // Retrieves all companies
@@ -64,12 +80,8 @@ export default class DbInterface {
     }
 
     // Retrieves all devices
-    getAllDevices(){
-        db.any("SELECT * FROM msp_device;").then(data => {
-            console.log("Data: " + JSON.stringify(data));
-        }).catch(e => {
-            console.log("Error: " + e);
-        })
+    getAllDevices(): Promise<Device[]> {
+        return db.any("SELECT * FROM msp_device;");
     }
 
     // Retrieves the device IDs based on the given Site ID.
