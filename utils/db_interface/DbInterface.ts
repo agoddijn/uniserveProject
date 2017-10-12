@@ -33,13 +33,13 @@ export default class DbInterface {
      * Stores a bunch of ping records
      * Return true if succesful, false otherwise
      */
-    storePingRecords(records: PingRecord[]): Promise<boolean | number> {
+    storePingRecords(records: PingRecord[]): Promise<[number, boolean]> {
         return new Promise((fulfill, reject) => {
             console.log("Recieving records");
             for (let record of records) {
                 console.log("\n" + JSON.stringify(record));
             }
-            fulfill(records[0].datetime.getTime());
+            fulfill([records[0].datetime.getTime(), true]);
         });
     }
 
