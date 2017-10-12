@@ -18,15 +18,5 @@ if (count($gUser->devices)> 0) {
 	$menu['monitor']['title'] = _('Monitoring');
 	$menu['monitor']['sub_menu'] = array();
 	
-	// Add sub menu items as needed (max two sub_menu arrays)
-	$menu['monitor']['sub_menu']['monitor_level1a']['title'] = _('Level 1A');
-	$menu['monitor']['sub_menu']['monitor_level1a']['sub_menu'] = array();
-	$menu['monitor']['sub_menu']['monitor_level1a']['sub_menu']['monitor_level2a'] = _('Level 2A');
-	$menu['monitor']['sub_menu']['monitor_level1a']['sub_menu']['monitor_level2b'] = _('Level 2B');
-	$menu['monitor']['sub_menu']['monitor_level1a']['sub_menu']['monitor_level2c'] = _('Level 2C');
-	$menu['monitor']['sub_menu']['monitor_level1b'] = _('Level 1B');
-	$menu['monitor']['sub_menu']['monitor_level1c'] = _('Level 1C');
-	
-	
 }
 ?>

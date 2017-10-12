@@ -8,5 +8,5 @@ node_modules/
 *.dmp
 yarn-error.log
 npm-debug.log
-!ecosystem.config.js
-config.staging.json
+!dev.config.js
+!staging.config.js

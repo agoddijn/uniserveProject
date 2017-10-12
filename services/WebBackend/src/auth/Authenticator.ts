@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from "express";
+import {Request, Response, NextFunction } from "express";
+import {Log} from "uniserve.m8s.utils";
 
 /**
  * Authenticates users
@@ -7,12 +8,17 @@ import { Request, Response, NextFunction } from "express";
  * @param {Response} res 
  * @param {NextFunction} next 
  */
-export let authenticateUser = (req: Request, res: Response, next: NextFunction) => {
-    //true if user is authenticad
-    console.log("authenticating");
-    if(true){
+export let authenticate = (req: Request, res: Response, next: NextFunction) => {
+    Log.trace("Authenticator::authenticate");
+
+    if(req.query.authtoken && req.query.authtoken === process.env.PHP_AUTH_TOKEN){
         return next();
-    } else {
-        res.redirect('/')
     }
+
+    Log.error("Authenticator::authenticate HARD ERROR PHP TOKEN AUTH FAILURE SHOULD NOT HAPPEN EVER URL:" + req.url);
+
+    //TODO
+    //errors will get added on php side right if server responds with nothing
+    //should probably actually be made more explicit
+    res.send();
 }
