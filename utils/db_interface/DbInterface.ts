@@ -3,11 +3,11 @@ import {Device, PingRecord} from 'uniserve.m8s.types'
 
 const pgp = pgPromise();
 const cn = {
-    host: 'localhost',
-    port: 5432,
-    database: 'ubc03',
-    user: 'postgres',
-    password: 'jackjack'
+    host: process.env.DB_HOST,
+    port: +process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
 }
 const db = pgp(cn);
 
@@ -45,7 +45,7 @@ export default class DbInterface {
 
     // Retrieves all companies
     getAllCompanies(){
-        db.any("SELECT * FROM msp_company;").then(data => {
+        db.any("SELECT * FROM msp_company   ;").then(data => {
             console.log("Data: " + JSON.stringify(data));
         }).catch(e => {
             console.log("Error: " + e);
