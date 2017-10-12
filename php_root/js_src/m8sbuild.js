@@ -10,7 +10,7 @@
         return false;
       }
       httpRequest.onreadystatechange = alertContents;
-      httpRequest.open('GET', '/ajax/monitoring_api.php');
+      httpRequest.open('GET', '/ajax/monitoring_api.php?type=devices');
       httpRequest.setRequestHeader('Content-Type', 'application/json');
       httpRequest.send();
     }
