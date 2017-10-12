@@ -20,8 +20,8 @@ let dbInt = new DbInterface;
 dbInt.helloWorld();
 dbInt.getData();
 
-app.get("/api/company/:company_id/devices", Authenticator.authenticateUser, devicesAPI.devices);
-app.get("/api/company/:company_id/device/:device_id", Authenticator.authenticateUser, deviceAPI.device);
+app.get("/api/company/:company_recid/devices", Authenticator.authenticate, devicesAPI.devices);
+app.get("/api/company/:company_recid/device/:device_recid", Authenticator.authenticate, deviceAPI.device);
 
 app.listen(process.env.PORT, ()=>{
     Log.info("App is running on http://localhost:" + process.env.PORT);
