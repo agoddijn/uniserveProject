@@ -31,8 +31,8 @@ $gConfig['UBC']['user']          = "ubc03";
 $gConfig['UBC']['pass']          = "olivepepsi";
 
 //
-// API Settings
-$gConfig['API']['host']          = "127.0.0.1:3031";
+// API Settings 
+$gConfig['API']['host']          = "http://127.0.0.1:3031";
 $gConfig['API']['authtoken']        = "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ";
 
 //
