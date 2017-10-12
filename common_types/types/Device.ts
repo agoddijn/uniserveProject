@@ -8,7 +8,7 @@ export interface Device {
     description: string;
     device_type: string;
     mac_address: string;
-    ip_address: string;
+    ip_address?: string;
     //should always be ordered by timestamp
     ping_records: PingRecord[];
 }
