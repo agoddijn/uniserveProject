@@ -1,0 +1,15 @@
+{
+    "name": "uniserve.m8s.types",
+    "version": "1.0.0",
+    "description": "Common Types",
+    "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+    "license": "MIT",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc -w"
+    },
+    "dependencies": {
+        "typescript": "^2.5.3"
+    }
+}

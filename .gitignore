@@ -5,6 +5,7 @@ node_modules/
 *.js
 *.js.map
 .pm2/
+*.dmp
 yarn-error.log
 npm-debug.log
 !ecosystem.config.js

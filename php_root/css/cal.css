@@ -1,0 +1,11 @@
+
+td.available{font-family:arial;font-size:12px;padding:7px;}
+td.available:hover{font-family:arial;font-size:12px;padding:4px;border:medium solid rgb(0,0,220);cursor:pointer;}
+th.calendar{font-family:arial;font-size:12px;padding:7px;color:#00bb00;font-weight:bold;}
+.calendar {color:#000000;font-family:arial;font-size:12px;padding:7px;text-decoration:none;background-color:#eeeeee;border-style:outset;width:40px;}
+
+td.caption{font-family:arial;font-size:14px;font-weight:bold;text-decoration:none;}
+td.caption a{font-family:arial;font-size:16px;font-weight:bold;text-decoration:none;}
+
+td.crossout {text-decoration:line-through;padding:7px;font-weight:bold;}
+td.crossout:hover {text-decoration:line-through;border:medium solid rgb(0,0,220);padding:4px;font-weight:bold;}

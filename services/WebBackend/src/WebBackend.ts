@@ -3,7 +3,8 @@ import * as Authenticator from "./auth/Authenticator";
 import * as path from "path";
 import * as devicesAPI from "./api/devices";
 import * as deviceAPI from "./api/device";
-import {Log} from "uniserve.m8s.utils";
+import {Log, DbInterface} from "uniserve.m8s.utils";
+import {Company} from "uniserve.m8s.types";
 
 const app = express();
 
@@ -13,8 +14,13 @@ app.get('/', function(req,res) {
     res.sendFile(path.normalize(__dirname + "/../../Frontend/public/index.html"));
 });
 
-app.get("/api/company/:company_id/devices", Authenticator.authenticateUser, devicesAPI.devices);
-app.get("/api/company/:company_id/device/:device_id", Authenticator.authenticateUser, deviceAPI.device);
+let test : Company = {company_name: "test", company_recid: 1, company_id: "1"};
+
+let dbInt = new DbInterface;
+dbInt.helloWorld();
+
+app.get("/api/company/:company_recid/devices", Authenticator.authenticate, devicesAPI.devices);
+app.get("/api/company/:company_recid/device/:device_recid", Authenticator.authenticate, deviceAPI.device);
 
 app.listen(process.env.PORT, ()=>{
     Log.info("App is running on http://localhost:" + process.env.PORT);

@@ -7,13 +7,25 @@
   "private": true,
   "workspaces": [
     "services/*",
-    "utils/"
+    "utils/",
+    "common_types/"
   ],
   "scripts": {
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
-    "buildUtils": "(cd ./utils/ && npm run build)",
+    "watchWebBackend": "(cd ./services/WebBackend && npm run watch)",
+    
+    "buildUtils": "(cd ./utils && npm run build)",
+    "watchUtils": "(cd ./utils && npm run watch)",
+    
     "buildPingingBackend": "(cd ./services/PingingBackend && npm run build)",
-    "build": "npm run buildWebBackend & npm run buildPingingBackend & npm run buildUtils"
+    "watchPingingBackend": "(cd ./services/PingingBackend && npm run watch)",
+    
+    "buildTypes": "(cd ./common_types/ && npm run build)",
+    "watchTypes": "(cd ./common_types/ && npm run watch)",
+    
+    "build": "npm run buildWebBackend & npm run buildPingingBackend & npm run buildUtils & npm run buildTypes",
+    
+    "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes"
   }
 }
 
