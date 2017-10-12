@@ -13,6 +13,8 @@ Overview of all changes to the php should all be in php_integration branch on gi
         Removed all files except the switch
     4. templates/api.php
         php file for handling proxy to JS backend
+    5. config/config.php:35
+        settings for the api
     
 
 2nd paragraph. *Italic*, **bold**, and `monospace`. Itemized lists
