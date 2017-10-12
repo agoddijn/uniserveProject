@@ -26,7 +26,6 @@ if(isset($gUser->id)){
                 break;
         }
 
-
     } catch (Exception $e) {
         http_response_code(503);
         error_log("monitoring_api.php - API Server did not respond. ");
