@@ -28,7 +28,12 @@ $gConfig['alert_email']		= $gConfig['admin_email'];
 $gConfig['UBC']['host']          = "127.0.0.1";
 $gConfig['UBC']['name']          = "ubc03";
 $gConfig['UBC']['user']          = "ubc03";
-$gConfig['UBC']['pass']          = "UbC$3";
+$gConfig['UBC']['pass']          = "olivepepsi";
+
+//
+// API Settings 
+$gConfig['API']['host']          = "http://127.0.0.1:3031";
+$gConfig['API']['authtoken']        = "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ";
 
 //
 // Define the session type: either "db" or "file"
