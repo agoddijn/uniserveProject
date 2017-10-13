@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction } from "express";
-import {HTTPMainPageRequest, HTTPMainPageResponse, Site, Device} from "uniserve.m8s.types";
+import {HTTPMainPageResponse, Site, Device} from "uniserve.m8s.types";
 import {Log, DbInterface} from "uniserve.m8s.utils";
 
 
@@ -31,7 +31,7 @@ export let devices = (req: Request, res: Response) => {
         device_type: "fake device type",
         mac_address: "fake mac address",
         ip_address: "fake ip",
-        ping_records: [{ping_recid: 1, device_id: 1, ms_response: 100, responded: true, datetime: new Date()}]
+        ping_records: [{ping_recid: 1, device_recid: 1, ms_response: 100, responded: true, datetime: new Date()}]
     }
 
     fakesite.devices = [fakedevice];

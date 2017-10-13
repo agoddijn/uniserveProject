@@ -1,29 +1,40 @@
 Uniserve Router Monitoring Project
 ------------
-### Dependencies: ###
 
-* Node - v6.x (includes npm 3.10.10)
+Dev Docs 
+--
+* [Dev Environment Setup](/docs/dev_setup.md)
+* [Server Install/Update](/docs/serverinstall.md)
+* [Changes to PHP](/docs/php_changes.md)
 
-* pm2 - sudo npm install pm2 -g
-* http://pm2.keymetrics.io/docs/usage/quick-start/
+Project Structure
+~~~~
+├── database                    DB Schema/Starter Files
+├── dev.config.js               PM2 Config File for Dev
+├── staging.config.js           PM2 Config File for Staging(Uniserve Server)
+├── docs                        Documentation
 
-* yarn - https://yarnpkg.com/en/docs/install#linux-tab
+├── modules                     Modules used by multiple services/testing
+│   ├── common_types            Common Types
+│   ├── data_faker              Creates Fake Data for testing  
+│   ├── db_interface            DB Interface for services
+│   ├── db_utils                DB Utils for testing
+│   ├── php_shim                PHP Shim for Dev
+│   └── utils                   Misc Utils ie Log
 
-* tsc - npm install -g typescript 
+├── scripts                     Misc scripts
+│   └── vscode                  Useful scripts for developing in vs code
 
-### Deployment: ###
+├── services                    Main Project
+│   ├── DataAggregator          Nightly Cron Job Condensing/Removing outdated data
+│   ├── Frontend                User facing react app
+│   ├── PingingBackend          Handles pining devices and storing in database    
+│   └── WebBackend              Gets data for front end
 
-in root:
-yarn install
+├── php_root                    Has the base Uniserve project with required changes
 
-npm run build
+├── test                        E2e and Integration tests
+└── utils                       Will be depreciated soon with stuff moved to modules
+~~~~
 
-* to start everything:
-pm2 start ecosystem.config.js
-
-monitor logs:
-pm2 logs
-
-monitor proccesses:
-pm2 list or pm2 monit
 

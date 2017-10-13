@@ -67,7 +67,7 @@ function ping(device: Device): Promise<any> {
 function responseToRecord(response: any): PingRecord {
     let record: PingRecord = {
         ping_recid: response.ping_recid,
-        device_id: response.device_id,
+        device_recid: response.device_recid,
         ms_response: response.avg,
         responded: response.avg ? true : false,
         datetime: new Date()

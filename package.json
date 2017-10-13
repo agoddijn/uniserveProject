@@ -1,14 +1,14 @@
 {
   "name": "uniserver.m8s",
   "version": "1.0.0",
-  "description": "Web backend",
+  "description": "Uniserve Project Root",
   "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
   "license": "MIT",
   "private": true,
   "workspaces": [
     "services/*",
-    "utils/",
-    "common_types/"
+    "modules/*",
+    "utils/"
   ],
   "scripts": {
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
@@ -20,8 +20,8 @@
     "buildPingingBackend": "(cd ./services/PingingBackend && npm run build)",
     "watchPingingBackend": "(cd ./services/PingingBackend && npm run watch)",
     
-    "buildTypes": "(cd ./common_types/ && npm run build)",
-    "watchTypes": "(cd ./common_types/ && npm run watch)",
+    "buildTypes": "(cd ./modules/common_types/ && npm run build)",
+    "watchTypes": "(cd ./modules/common_types/ && npm run watch)",
     
     "build": "npm run buildWebBackend & npm run buildPingingBackend & npm run buildUtils & npm run buildTypes",
     
