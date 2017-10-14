@@ -6,6 +6,8 @@ import PingStorage from './PingStorage';
 var dbInt = new DbInterface;
 var storage = new PingStorage;
 
+console.log("test");
+
 dbInt.getAllDevices()
 .then((deviceList => {
 
@@ -41,7 +43,6 @@ dbInt.getAllDevices()
     console.log("Could not get data");
 
 });
-
 
 function ping(device: Device): Promise<any> {
     return new Promise((fulfill, reject) => {

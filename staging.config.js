@@ -15,15 +15,24 @@ module.exports = {
           "DB_HOST" : 'localhost',
           "DB_PORT" : 5432,
           "DB_NAME" : 'ubc03',
-          "DB_USER" : 'postgres',
-          "DB_PASS" : ''
+          "DB_USER" : 'ubc03',
+          "DB_PASS" : 'olivepepsi'
         }
       },
   
       // Pinger
       {
         name      : 'Pinger',
-        script    : './services/PingingBackend/src/PingingBackend.js'
+        script    : './services/PingingBackend/src/PingingBackend.js',
+        env : {
+          "NODE_ENV": 'staging',
+          "PORT"    : 3031,
+          "DB_HOST" : 'localhost',
+          "DB_PORT" : 5432,
+          "DB_NAME" : 'ubc03',
+          "DB_USER" : 'ubc03',
+          "DB_PASS" : 'olivepepsi'
+        }
       }
     ]
   

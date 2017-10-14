@@ -8,12 +8,14 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Pinger",
+            "envFile": "${workspaceFolder}/dev.env",            
             "program": "${workspaceFolder}/services/PingingBackend/src/PingingBackend.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch WebBackend",
+            "envFile": "${workspaceFolder}/dev.env",
             "program": "${workspaceFolder}/services/WebBackend/src/WebBackend.js"
 
         }
