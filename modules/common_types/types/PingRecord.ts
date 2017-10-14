@@ -5,4 +5,5 @@ export interface PingRecord {
     ms_response: number;
     responded: boolean;
     datetime: Date;
+    ip_address: string;
 }
