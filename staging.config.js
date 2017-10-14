@@ -11,7 +11,12 @@ module.exports = {
         env : {
           "NODE_ENV": 'staging',
           "PORT"    : 3031,
-          "PHP_AUTH_TOKEN": "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ"
+          "PHP_AUTH_TOKEN": "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ",
+          "DB_HOST" : 'localhost',
+          "DB_PORT" : 5432,
+          "DB_NAME" : 'ubc03',
+          "DB_USER" : 'postgres',
+          "DB_PASS" : ''
         }
       },
   
