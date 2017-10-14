@@ -1,6 +1,5 @@
-import {Company} from "../../../uniserve.m8s/common_types";
-import {Device} from "../../../uniserve.m8s/common_types";
-
+import {Company} from "uniserve.m8s.types";
+import {Device} from "uniserve.m8s.types";
 
 export class DataFaker {
 
