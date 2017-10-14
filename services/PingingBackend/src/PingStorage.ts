@@ -10,6 +10,7 @@ export default class PingStorage {
     constructor() {
         console.log("PingStorage::init");
         this.pingMap = new Map();
+        this.pingMapSending = new Map();
         this.dbInt = new DbInterface();
     };
 
@@ -28,11 +29,10 @@ export default class PingStorage {
         // console.log("sending ping records");
         let storePromises: Promise<[number, boolean]>[] = [];
         for (let [date, records] of this.pingMap) {
-            // console.log("Storing " + JSON.stringify(records));
-            storePromises.push(that.dbInt.storePingRecords(records))
-            that.pingMapSending.set(date, records);
-            that.pingMap.delete(date);
+            that.pingMapSending.set(date,records.slice());
+            storePromises.push(that.dbInt.storePingRecords(date, records));
         }
+        that.pingMap.clear();
         Promise.all(storePromises)
         .then(responses => {
             for (let response of responses) {
@@ -41,11 +41,10 @@ export default class PingStorage {
                     // console.log("Deleting " + date);
                     that.pingMapSending.delete(date);
                 } else {
-                    that.pingMap.set(date, that.pingMapSending[date]);
+                    that.pingMap.set(date, that.pingMapSending.get(date));
                     that.pingMapSending.delete(date);
                 }
             }
         });
     }
-
 }
