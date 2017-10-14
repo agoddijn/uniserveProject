@@ -7,15 +7,6 @@ module.exports = {
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
-    devServer: {
-        proxy: {
-            '/ajax/**': {
-                target: 'http://localhost:3032',
-                secure: false
-            }
-        },
-        hot: true
-    },
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
