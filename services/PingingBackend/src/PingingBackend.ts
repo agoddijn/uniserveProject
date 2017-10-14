@@ -58,6 +58,7 @@ function ping(device: Device): Promise<any> {
                 // console.log("Ping success");
                 data.device_id = device.device_id;
                 data.ping_recid = device.device_recid;
+                data.ip_address = device.ip_address;
                 fulfill(data);
             }  
         });
@@ -70,7 +71,8 @@ function responseToRecord(response: any): PingRecord {
         device_id: response.device_id,
         ms_response: response.avg,
         responded: response.avg ? true : false,
-        datetime: new Date()
+        datetime: new Date(),
+        ip_address: response.ip_address
     };
     return record;
 }
