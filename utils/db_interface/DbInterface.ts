@@ -57,13 +57,6 @@ export default class DbInterface {
         });
     }
 
-    // Using a Company ID, get associated Sites records, Device records And lates ping
-    // Join??? Multiple commands? 
-    // GetCompanyDevices(company_recid)
-
-    //
-    //
-    //
     getCompanyDevices(companyID: number){
         let that = this;
         let query = "SELECT * FROM msp_company c, msp_site s, msp_device d "
@@ -74,11 +67,6 @@ export default class DbInterface {
         db.any(query).then(data => {
            // console.log("Data: " + JSON.stringify(data));
             that.compileResults(data, that);
-           // for (var key in data){
-              //  if (data.hasOwnProperty(key)){
-             //       console.log(key + " -> " + JSON.stringify(data[key]));
-            //    }
-           // }
         }).catch(e => {
             console.log("Error: " + e);
         })
@@ -86,7 +74,6 @@ export default class DbInterface {
 
     compileResults(results:any, that:any) {
         let pingRecords: PingRecord[] = [];
-        //let companyRecord : Company = {};
         let siteRecords : Site[] = [];
         for (var key in results){
             if (results.hasOwnProperty(key)){
@@ -103,10 +90,7 @@ export default class DbInterface {
                     longitude : results[key]["longitude"],
                     devices : that.parseDevices(results[key],that)
                 }
-              //  console.log("HEELO");
-              //  console.log(JSON.stringify(results[key]))
                 siteRecords.push(tempSite);
-             //   console.log(JSON.stringify(tempSite));
             }
         }
         let companyRecord : Company = {
@@ -115,8 +99,6 @@ export default class DbInterface {
             company_name : results[0]["company_name"],
             sites : siteRecords
         }
-        console.log("YOOYOYOY");
-        console.log(JSON.stringify(companyRecord));
     }
 
     parseDevices(site:any, that) {
