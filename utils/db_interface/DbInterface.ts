@@ -1,5 +1,5 @@
 import * as pgPromise from 'pg-promise';
-import {Device, PingRecord} from 'uniserve.m8s.types'
+import {Company, Site, Device, PingRecord} from 'uniserve.m8s.types'
 
 const pgp = pgPromise();
 const cn = {
@@ -64,6 +64,91 @@ export default class DbInterface {
     //
     //
     //
+    getCompanyDevices(companyID: number){
+        let that = this;
+        let query = "SELECT * FROM msp_company c, msp_site s, msp_device d "
+            +"WHERE c.company_recid = " + companyID + " "
+            +"AND c.company_recid = s.company_recid "
+            +"AND s.site_recid = d.device_recid;"
+         //   +"AND d.device_recid = p.device_recid;";
+        db.any(query).then(data => {
+           // console.log("Data: " + JSON.stringify(data));
+            that.compileResults(data, that);
+           // for (var key in data){
+              //  if (data.hasOwnProperty(key)){
+             //       console.log(key + " -> " + JSON.stringify(data[key]));
+            //    }
+           // }
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
+    }
+
+    compileResults(results:any, that:any) {
+        let pingRecords: PingRecord[] = [];
+        //let companyRecord : Company = {};
+        let siteRecords : Site[] = [];
+        for (var key in results){
+            if (results.hasOwnProperty(key)){
+                let tempSite : Site = {
+                    site_recid : results[key]["site_recid"],
+                    company_recid : results[key]["company_recid"],
+                    description : results[key]["description"],
+                    address1 : results[key]["address1"],
+                    address2 : results[key]["address2"],
+                    city : results[key]["city"],
+                    province : results[key]["province"],
+                    postal_code : results[key]["postal_code"],
+                    latitude : results[key]["latitude"],
+                    longitude : results[key]["longitude"],
+                    devices : that.parseDevices(results[key],that)
+                }
+              //  console.log("HEELO");
+              //  console.log(JSON.stringify(results[key]))
+                siteRecords.push(tempSite);
+             //   console.log(JSON.stringify(tempSite));
+            }
+        }
+        let companyRecord : Company = {
+            company_recid : results[0]["company_recid"],
+            company_id : results[0]["company_id"],
+            company_name : results[0]["company_name"],
+            sites : siteRecords
+        }
+        console.log("YOOYOYOY");
+        console.log(JSON.stringify(companyRecord));
+    }
+
+    parseDevices(site:any, that) {
+        let deviceRecords: Device[] = [];
+        let device : Device = {
+            device_recid : site["device_recid"],
+            site_recid : site["site_recid"],
+            device_id : site["device_id"],
+            manufacturer : site["manufacturer"],
+            description : site["description"],
+            device_type : site["device_type"],
+            mac_address : site["mac_address"],
+            ip_address : site["ip_address"],
+            ping_records : that.parsePings(site)
+        }
+        deviceRecords.push(device)
+        return deviceRecords;
+    }
+
+    parsePings(device:any) {
+        let pingRecords : PingRecord[] = [];
+        let ping : PingRecord = {
+            ping_recid : device["ping_recid"],
+            device_recid : device["device_recid"],
+            ip_address : device["ip_address"],
+            ms_response : device["ms_response"],
+            responded : device["responded"],
+            datetime : device["datetime"],
+        }
+        pingRecords.push(ping);
+        return pingRecords;
+    }
 
     // Retrieves all companies
     getAllCompanies(){

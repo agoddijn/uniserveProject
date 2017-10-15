@@ -10,7 +10,6 @@ console.log("test");
 
 dbInt.getAllDevices()
 .then((deviceList => {
-
     // console.log("Device List: " + JSON.stringify(deviceList));
     
     // Interval once a minute 
