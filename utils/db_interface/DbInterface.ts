@@ -37,12 +37,33 @@ export default class DbInterface {
         return new Promise((fulfill, reject) => {
             console.log("Recieving records");
             for (let record of records) {
-                console.log(JSON.stringify(record));
+                console.log("\n" + JSON.stringify(record));
+                if (isNaN(record.ms_response) || record.ms_response === null) {
+                    record.ms_response = -1
+                }
+                let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
+                
+                let query = "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (" + record.device_recid 
+                + ", \'" + record.ip_address + "\', " + record.ms_response + ", " + record.responded + ", \'" +  psqlDate + "\');"
+                
+                db.any(query).then(data => {
+                        console.log("Sent data");
+                    }).catch(e => {
+                        console.log("Error: " + e);
+                    })
             }
             fulfill([date, true]);   
             // fulfill([date, false]) if it didnt work      
         });
     }
+
+    // Using a Company ID, get associated Sites records, Device records And lates ping
+    // Join??? Multiple commands? 
+    // GetCompanyDevices(company_recid)
+
+    //
+    //
+    //
 
     // Retrieves all companies
     getAllCompanies(){

@@ -20,12 +20,12 @@ dbInt.getAllDevices()
         var date = new Date();
         let pingPromises: Promise<any>[] = [];
         for (let device of deviceList) {
-            // console.log("found a device with ip " + device.ip_address);
+           //  console.log("found a device with ip " + device.ip_address);
             pingPromises.push(ping(device));
         }
         Promise.all(pingPromises)
         .then((data: any[]) => {
-            // console.log("Got some data");
+           //  console.log("Got some data");
             var records: PingRecord[] = [];
             for (let pingResponse of data) {
                 records.push(responseToRecord(pingResponse));
@@ -58,7 +58,7 @@ function ping(device: Device): Promise<any> {
             } else {
                 // console.log("Ping success");
                 data.device_id = device.device_id;
-                data.ping_recid = device.device_recid;
+                data.device_recid = device.device_recid;
                 data.ip_address = device.ip_address;
                 fulfill(data);
             }  
