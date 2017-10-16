@@ -1,5 +1,6 @@
 import {Company} from "uniserve.m8s.types";
 import {Device} from "uniserve.m8s.types";
+import {PingRecord} from "uniserve.m8s.types";
 
 
 export class DataFaker {
@@ -12,7 +13,7 @@ export class DataFaker {
         let returnDevices = [];
 
         let limit = howMany; 
-        let i = 0;
+        let i = 1;
 
         while (limit > 0) {
             returnDevices.push(that.links[i]);
@@ -24,11 +25,40 @@ export class DataFaker {
 
     }
 
-    getPingRecords(howManyDevices: number, howManyPings:number): PingRecord {
+    getPingRecords(howMany: number, timeStamp: Date): PingRecord[] {
         // create a ping record for number amount of devices
         // make responded true
-
+        let that = this;
         
+        let pingRec: PingRecord; 
+        let generatedPingRecords: PingRecord[];
+
+        let limit = howMany;
+        let device_id = 1;
+
+        while (limit > 0) {
+            pingRec = that.generatePingRecord(device_id, timeStamp);
+            pingRec.ms_response = device_id; 
+
+            generatedPingRecords.push(pingRec);
+
+            limit--;
+            device_id++;
+        }
+        
+        return generatedPingRecords;
+        
+    }
+
+    generatePingRecord(device_id: any, date: Date): PingRecord {
+        let pingRecord: PingRecord;
+
+        pingRecord.datetime = date;
+        pingRecord.device_recid = device_id;
+        pingRecord.responded = true;
+        pingRecord.ms_response = 1;
+
+        return pingRecord;
     }
 
     addDataSet(jsonObjects: any) {
