@@ -1,6 +1,6 @@
 export interface PingRecord {
     ping_recid: number;
-    device_id: number;
+    device_recid: number;
     ms_response: number;
     responded: boolean;
     datetime: Date;

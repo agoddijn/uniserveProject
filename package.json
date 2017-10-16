@@ -8,7 +8,8 @@
   "workspaces": [
     "services/*",
     "utils/",
-    "common_types/"
+    "common_types/",
+    "modules/*"
   ],
   "scripts": {
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",

@@ -1,0 +1,16 @@
+{
+  "name": "uniserve.m8s.data_faker",
+  "version": "1.0.0",
+  "description": "Data faker",
+  "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+  "license": "MIT",
+  "main": "dataFaker.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "typescript": "^2.5.3",
+    "uniserve.m8s.types": "1.0.0"
+  }
+}
