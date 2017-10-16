@@ -7,14 +7,8 @@
   "private": true,
   "workspaces": [
     "services/*",
-<<<<<<< HEAD
     "utils/",
-    "common_types/",
     "modules/*"
-=======
-    "modules/*",
-    "utils/"
->>>>>>> c05f1ee74786bc9eb5349d5cdcf407a36fb1da32
   ],
   "scripts": {
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
