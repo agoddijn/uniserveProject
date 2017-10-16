@@ -1,5 +1,5 @@
 import * as pgPromise from 'pg-promise';
-import {Device, PingRecord} from 'uniserve.m8s.types'
+import {Company, Site, Device, PingRecord} from 'uniserve.m8s.types'
 
 const pgp = pgPromise();
 const cn = {
@@ -37,11 +37,99 @@ export default class DbInterface {
         return new Promise((fulfill, reject) => {
             console.log("Recieving records");
             for (let record of records) {
-                console.log(JSON.stringify(record));
+                console.log("\n" + JSON.stringify(record));
+                if (isNaN(record.ms_response) || record.ms_response === null) {
+                    record.ms_response = -1
+                }
+                let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
+                
+                let query = "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (" + record.device_recid 
+                + ", \'" + record.ip_address + "\', " + record.ms_response + ", " + record.responded + ", \'" +  psqlDate + "\');"
+                
+                db.any(query).then(data => {
+                        console.log("Sent data");
+                    }).catch(e => {
+                        console.log("Error: " + e);
+                    })
             }
             fulfill([date, true]);   
             // fulfill([date, false]) if it didnt work      
         });
+    }
+
+    getCompanyDevices(companyID: number){
+        let that = this;
+        let query = "SELECT * FROM msp_company c, msp_site s, msp_device d "
+            +"WHERE c.company_recid = " + companyID + " "
+            +"AND c.company_recid = s.company_recid "
+            +"AND s.site_recid = d.device_recid;"
+         //   +"AND d.device_recid = p.device_recid;";
+        db.any(query).then(data => {
+           // console.log("Data: " + JSON.stringify(data));
+            that.compileResults(data, that);
+        }).catch(e => {
+            console.log("Error: " + e);
+        })
+    }
+
+    compileResults(results:any, that:any) {
+        let pingRecords: PingRecord[] = [];
+        let siteRecords : Site[] = [];
+        for (var key in results){
+            if (results.hasOwnProperty(key)){
+                let tempSite : Site = {
+                    site_recid : results[key]["site_recid"],
+                    company_recid : results[key]["company_recid"],
+                    description : results[key]["description"],
+                    address1 : results[key]["address1"],
+                    address2 : results[key]["address2"],
+                    city : results[key]["city"],
+                    province : results[key]["province"],
+                    postal_code : results[key]["postal_code"],
+                    latitude : results[key]["latitude"],
+                    longitude : results[key]["longitude"],
+                    devices : that.parseDevices(results[key],that)
+                }
+                siteRecords.push(tempSite);
+            }
+        }
+        let companyRecord : Company = {
+            company_recid : results[0]["company_recid"],
+            company_id : results[0]["company_id"],
+            company_name : results[0]["company_name"],
+            sites : siteRecords
+        }
+    }
+
+    parseDevices(site:any, that) {
+        let deviceRecords: Device[] = [];
+        let device : Device = {
+            device_recid : site["device_recid"],
+            site_recid : site["site_recid"],
+            device_id : site["device_id"],
+            manufacturer : site["manufacturer"],
+            description : site["description"],
+            device_type : site["device_type"],
+            mac_address : site["mac_address"],
+            ip_address : site["ip_address"],
+            ping_records : that.parsePings(site)
+        }
+        deviceRecords.push(device)
+        return deviceRecords;
+    }
+
+    parsePings(device:any) {
+        let pingRecords : PingRecord[] = [];
+        let ping : PingRecord = {
+            ping_recid : device["ping_recid"],
+            device_recid : device["device_recid"],
+            ip_address : device["ip_address"],
+            ms_response : device["ms_response"],
+            responded : device["responded"],
+            datetime : device["datetime"],
+        }
+        pingRecords.push(ping);
+        return pingRecords;
     }
 
     // Retrieves all companies

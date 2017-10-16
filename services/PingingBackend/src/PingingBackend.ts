@@ -8,7 +8,6 @@ var storage = new PingStorage;
 
 dbInt.getAllDevices()
 .then((deviceList => {
-
     // console.log("Device List: " + JSON.stringify(deviceList));
     
     // Interval once a minute 
@@ -18,12 +17,12 @@ dbInt.getAllDevices()
         var date = new Date();
         let pingPromises: Promise<any>[] = [];
         for (let device of deviceList) {
-            // console.log("found a device with ip " + device.ip_address);
+           //  console.log("found a device with ip " + device.ip_address);
             pingPromises.push(ping(device));
         }
         Promise.all(pingPromises)
         .then((data: any[]) => {
-            // console.log("Got some data");
+           //  console.log("Got some data");
             var records: PingRecord[] = [];
             for (let pingResponse of data) {
                 records.push(responseToRecord(pingResponse));
@@ -57,7 +56,9 @@ function ping(device: Device): Promise<any> {
             .catch(err => {
                 err.device = device;                
                 fulfill(err);
+
             })
+
     });
 }
 
