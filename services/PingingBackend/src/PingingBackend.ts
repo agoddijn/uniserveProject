@@ -1,12 +1,10 @@
-import * as tcpPing from 'tcp-ping';
 import {Log, DbInterface} from 'uniserve.m8s.utils';
 import {PingRecord, Device} from 'uniserve.m8s.types';
 import PingStorage from './PingStorage';
+import * as sysPing from 'ping'
 
 var dbInt = new DbInterface;
 var storage = new PingStorage;
-
-console.log("test");
 
 dbInt.getAllDevices()
 .then((deviceList => {
@@ -46,33 +44,32 @@ dbInt.getAllDevices()
 function ping(device: Device): Promise<any> {
     return new Promise((fulfill, reject) => {
         let options = {
-            address: device.ip_address,
-            attempts: 2
+            timeout: 2,
+            min_reply: 1
         }
 
-        tcpPing.ping(options, (err, data) => {
-            if (err) {
-                // console.log("Ping error: " + err)
+        sysPing.promise.probe(device.ip_address, options)
+            .then(res => {
+                res.device = device;
+                fulfill(res);
+            })
+            .catch(err => {
+                err.device = device;                
                 fulfill(err);
-            } else {
-                // console.log("Ping success");
-                data.device_id = device.device_id;
-                data.device_recid = device.device_recid;
-                data.ip_address = device.ip_address;
-                fulfill(data);
-            }  
-        });
+
+            })
+
     });
 }
 
 function responseToRecord(response: any): PingRecord {
     let record: PingRecord = {
-        ping_recid: response.ping_recid,
-        device_recid: response.device_recid,
-        ms_response: response.avg,
-        responded: response.avg ? true : false,
+        ping_recid: null,
+        device_recid: response.device.device_recid,
+        ms_response: +response.avg,
+        responded: response.alive,
         datetime: new Date(),
-        ip_address: response.ip_address
+        ip_address: response.host
     };
     return record;
 }
