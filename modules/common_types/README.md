@@ -1,0 +1,1 @@
+Common types shared by services

@@ -1,14 +1,13 @@
-import * as tcpPing from 'tcp-ping';
 import {Log, DbInterface} from 'uniserve.m8s.utils';
 import {PingRecord, Device} from 'uniserve.m8s.types';
 import PingStorage from './PingStorage';
+import * as sysPing from 'ping'
 
 var dbInt = new DbInterface;
 var storage = new PingStorage;
 
 dbInt.getAllDevices()
 .then((deviceList => {
-
     // console.log("Device List: " + JSON.stringify(deviceList));
     
     // Interval once a minute 
@@ -18,12 +17,12 @@ dbInt.getAllDevices()
         var date = new Date();
         let pingPromises: Promise<any>[] = [];
         for (let device of deviceList) {
-            // console.log("found a device with ip " + device.ip_address);
+           //  console.log("found a device with ip " + device.ip_address);
             pingPromises.push(ping(device));
         }
         Promise.all(pingPromises)
         .then((data: any[]) => {
-            // console.log("Got some data");
+           //  console.log("Got some data");
             var records: PingRecord[] = [];
             for (let pingResponse of data) {
                 records.push(responseToRecord(pingResponse));
@@ -42,35 +41,35 @@ dbInt.getAllDevices()
 
 });
 
-
 function ping(device: Device): Promise<any> {
     return new Promise((fulfill, reject) => {
         let options = {
-            address: device.ip_address,
-            attempts: 2
+            timeout: 2,
+            min_reply: 1
         }
 
-        tcpPing.ping(options, (err, data) => {
-            if (err) {
-                // console.log("Ping error: " + err)
+        sysPing.promise.probe(device.ip_address, options)
+            .then(res => {
+                res.device = device;
+                fulfill(res);
+            })
+            .catch(err => {
+                err.device = device;                
                 fulfill(err);
-            } else {
-                // console.log("Ping success");
-                data.device_id = device.device_id;
-                data.ping_recid = device.device_recid;
-                fulfill(data);
-            }  
-        });
+
+            })
+
     });
 }
 
 function responseToRecord(response: any): PingRecord {
     let record: PingRecord = {
-        ping_recid: response.ping_recid,
-        device_id: response.device_id,
-        ms_response: response.avg,
-        responded: response.avg ? true : false,
-        datetime: new Date()
+        ping_recid: null,
+        device_recid: response.device.device_recid,
+        ms_response: +response.avg,
+        responded: response.alive,
+        datetime: new Date(),
+        ip_address: response.host
     };
     return record;
 }

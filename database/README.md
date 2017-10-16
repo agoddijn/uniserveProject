@@ -22,3 +22,21 @@ You may be prompted to enter your password.
 * insert_msp_device.sql
 
 11.Once those are complete, refesh PgAdmin and the tables should be populated.
+
+
+No PWORD Error
+--
+
+If you get " Error: Error connecting to the server: fe_sendauth: no password supplied"
+
+    1. Enter psql: `sudo -u postgres psql`
+    2. Open the file it says
+    3. Near bottom of file change all the local trust methods to trust ie:
+        # "local" is for Unix domain socket connections only
+        local   all             all                                     trust
+        # IPv4 local connections:
+        host    all             all             127.0.0.1/32            trust
+        # IPv6 local connections:
+    4. In psql: SELECT `pg_reload_conf();`
+
+
