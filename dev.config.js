@@ -10,7 +10,7 @@ module.exports = {
       script    : './services/WebBackend/src/WebBackend.js',
       env: {
         "NODE_ENV": "development",
-        "PORT"    : 3031,
+        "WEBBACKEND_PORT"    : 3031,
         "PHP_AUTH_TOKEN": "DEVTOKEN" ,
         "DB_HOST" : 'localhost',
         "DB_PORT" : 5432,
@@ -33,6 +33,18 @@ module.exports = {
         "DB_USER" : 'postgres',
         "DB_PASS" : ''      
       }
+  },
+
+  //PHP Shim
+  {
+    name      : 'PHP Shim',
+    script    : './modules/php_shim/php_shim.js',
+    env: {
+      "NODE_ENV": "development",
+      "WEBBACKEND_PORT"    : 3031,
+      "PHP_AUTH_TOKEN": "DEVTOKEN"
+    }
+
   }
 ]
 

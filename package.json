@@ -22,8 +22,10 @@
     
     "buildTypes": "(cd ./modules/common_types/ && npm run build)",
     "watchTypes": "(cd ./modules/common_types/ && npm run watch)",
+
+    "buildShim": "(cd ./modules/php_shim/ && npm run build)",
     
-    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes",
+    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim",
     
     "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes"
   }

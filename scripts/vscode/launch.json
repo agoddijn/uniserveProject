@@ -7,18 +7,30 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Pinger",
+            "name": "Pinger",
             "envFile": "${workspaceFolder}/dev.env",            
             "program": "${workspaceFolder}/services/PingingBackend/src/PingingBackend.js"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch WebBackend",
+            "name": "WebBackend",
             "envFile": "${workspaceFolder}/dev.env",
             "program": "${workspaceFolder}/services/WebBackend/src/WebBackend.js"
-
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "PHPShim",
+            "envFile": "${workspaceFolder}/dev.env",
+            "program": "${workspaceFolder}/modules/php_shim/php_shim.js"
         }
 
+    ],
+    "compounds": [
+        {
+            "name": "Shim/Backend",
+            "configurations": ["WebBackend", "PHPShim"]
+        }
     ]
 }
