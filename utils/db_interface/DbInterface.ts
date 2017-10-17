@@ -48,28 +48,33 @@ export default class DbInterface {
                 
                 db.any(query).then(data => {
                         console.log("Sent data");
+                        fulfill([date, true]); 
                     }).catch(e => {
                         console.log("Error: " + e);
+                        reject([date, false]); 
                     })
-            }
-            fulfill([date, true]);   
+            }  
             // fulfill([date, false]) if it didnt work      
         });
     }
 
-    getCompanyDevices(companyID: number){
-        let that = this;
-        let query = "SELECT * FROM msp_company c, msp_site s, msp_device d "
-            +"WHERE c.company_recid = " + companyID + " "
-            +"AND c.company_recid = s.company_recid "
-            +"AND s.site_recid = d.device_recid;"
-         //   +"AND d.device_recid = p.device_recid;";
-        db.any(query).then(data => {
-           // console.log("Data: " + JSON.stringify(data));
-            that.compileResults(data, that);
-        }).catch(e => {
-            console.log("Error: " + e);
-        })
+    getCompanyDevices(companyID: number)/*: Promise<[any, boolean]>*/ {
+        return new Promise((fulfill, reject) => {
+            let that = this;
+            let query = "SELECT * FROM msp_company c, msp_site s, msp_device d "
+                +"WHERE c.company_recid = " + companyID + " "
+                +"AND c.company_recid = s.company_recid "
+                +"AND s.site_recid = d.device_recid;"
+            //   +"AND d.device_recid = p.device_recid;";
+            db.any(query).then(data => {
+                that.compileResults(data, that);
+            //    console.log(data);
+                fulfill([data, true]); 
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null, false]);
+            })
+         });
     }
 
     compileResults(results:any, that:any) {
@@ -88,8 +93,8 @@ export default class DbInterface {
                     postal_code : results[key]["postal_code"],
                     latitude : results[key]["latitude"],
                     longitude : results[key]["longitude"],
-                    devices : that.parseDevices(results[key],that)
                 }
+                that.parseDevices(results, tempSite.company_recid, tempSite.site_recid, that);
                 siteRecords.push(tempSite);
             }
         }
@@ -99,22 +104,30 @@ export default class DbInterface {
             company_name : results[0]["company_name"],
             sites : siteRecords
         }
+        return companyRecord
     }
 
-    parseDevices(site:any, that) {
+    parseDevices(results:any, company_recid, site_recid, that) {
         let deviceRecords: Device[] = [];
-        let device : Device = {
-            device_recid : site["device_recid"],
-            site_recid : site["site_recid"],
-            device_id : site["device_id"],
-            manufacturer : site["manufacturer"],
-            description : site["description"],
-            device_type : site["device_type"],
-            mac_address : site["mac_address"],
-            ip_address : site["ip_address"],
-            ping_records : that.parsePings(site)
+        //console.log(JSON.stringify(results));
+        
+        for (var key in results){
+            
+            if (results.hasOwnProperty(key) && results[key]["company_recid"] == company_recid && results[key]["site_recid"] == site_recid){
+                let device : Device = {
+                    device_recid : results[key]["device_recid"],
+                    site_recid : results[key]["site_recid"],
+                    device_id : results[key]["device_id"],
+                    manufacturer : results[key]["manufacturer"],
+                    description : results[key]["description"],
+                    device_type : results[key]["device_type"],
+                    mac_address : results[key]["mac_address"],
+                    ip_address : results[key]["ip_address"],
+                //    ping_records : that.parsePings(site)
+                }
+                deviceRecords.push(device)
+            }
         }
-        deviceRecords.push(device)
         return deviceRecords;
     }
 
@@ -132,40 +145,82 @@ export default class DbInterface {
         return pingRecords;
     }
 
+    // Retrieve pings from specific device
+    getDevicePings(deviceRecID:any) : Promise<[any, boolean]>{
+        return new Promise((fulfill, reject) => {
+            let query = "SELECT * from msp_ping where msp_ping.device_recid=\'" + deviceRecID + "\' order by datetime";
+            db.any(query).then(data => {
+                fulfill([data, true]); 
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false])
+            })  
+        });     
+    }
+
+    // Retrieve 5 most recent pings
+    getRecentPings(deviceRecID:any) : Promise<[any, boolean]>{
+        return new Promise((fulfill, reject) => {
+            let query = "SELECT * FROM msp_ping where device_recid=\'" + deviceRecID + "\' order by datetime desc, ping_recid, device_recid limit 5;"
+            db.any(query).then(data => {
+                fulfill([data, true]); 
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false])
+            })  
+        });
+    }
+
     // Retrieves all companies
-    getAllCompanies(){
-        db.any("SELECT * FROM msp_company;").then(data => {
-            console.log("Data: " + JSON.stringify(data));
-        }).catch(e => {
-            console.log("Error: " + e);
-        })
+    getAllCompanies() : Promise<[any, boolean]>{
+        return new Promise((fulfill, reject) => {
+            let query = "SELECT * FROM msp_company;";
+            db.any(query).then(data => {
+                fulfill([data, true]); 
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false])
+            })  
+        });
     }
 
     // Retrieves the company ID based on the given username/email.
-    getCompanyID(username){
-        db.any("SELECT company_recid FROM msp_company WHERE username=\'" + username + "\';").then(data => {
-            console.log("Data: " + JSON.stringify(data));
-        }).catch(e => {
-            console.log("Error: " + e);
-        })
+    getCompanyID(username) : Promise<[any, boolean]>{
+        return new Promise((fulfill, reject) => {
+            let query = "SELECT company_recid FROM msp_company WHERE username=\'" + username + "\';";
+            db.any(query).then(data => {
+                fulfill([data, true]); 
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false])
+            })  
+        });
     }
 
     // Retrieves all sites
-    getAllSites(){
-        db.any("SELECT * FROM msp_site;").then(data => {
-            console.log("Data: " + JSON.stringify(data));
-        }).catch(e => {
-            console.log("Error: " + e);
-        })
+    getAllSites() : Promise<[any, boolean]>{
+        return new Promise ((fulfill, reject) => {
+            let query = "SELECT * FROM msp_site;";
+            db.any(query).then(data => {
+                fulfill([data, true]); 
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false])
+            })  
+        });
     }
 
     // Retrieves the site IDs based on the given Company ID.
     getSites(companyID){
-        db.any("SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';").then(data => {
-            console.log("Data: " + JSON.stringify(data));
-        }).catch(e => {
-            console.log("Error: " + e);
-        })
+        return new Promise ((fulfill, reject) => {    
+            let query = "SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';";
+            db.any(query).then(data => {
+                fulfill([data, true]); 
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false])
+            })  
+        });
     }
 
     // Retrieves all devices
@@ -174,12 +229,15 @@ export default class DbInterface {
     }
 
     // Retrieves the device IDs based on the given Site ID.
-    getDevices(siteID){
-        db.any("SELECT device_recid FROM msp_device WHERE site_recid=\'" + siteID + "\';").then(data => {
-            console.log("Data: " + JSON.stringify(data));
-        }).catch(e => {
-            console.log("Error: " + e);
-        })
+    getDevices(siteID): Promise<[any, boolean]> {
+        return new Promise((fulfill, reject) => {            
+            db.any("SELECT device_recid FROM msp_device WHERE site_recid=\'" + siteID + "\';").then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,true]);
+            })
+    });
     }
 
 }
