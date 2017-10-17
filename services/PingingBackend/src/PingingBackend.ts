@@ -74,21 +74,27 @@ function responseToRecord(response: any): PingRecord {
     return record;
 }
 
-function fakePingingBackend(devices: Device[]): PingRecord[] {
-    var records: PingRecord[] = [];
-    var date = new Date();
-    for (let device of devices) {
-        let respond: boolean = true;
-        if (Math.random() > 0.8) respond = false;
-        let record: PingRecord = {
-            ping_recid: null,
-            device_recid: device.device_recid,
-            ms_response: respond ? 5 * Math.random() : null,
-            responded: respond,
-            datetime: date,
-            ip_address: device.ip_address
+function fakePingingBackend(devices: Device[]): Promise<PingRecord[]> {
+
+    return new Promise((fulfill, reject) => {
+        var date = new Date();
+        let pingPromises: Promise<any>[] = [];
+        for (let device of devices) {
+            pingPromises.push(ping(device));
         }
-        records.push(record);
-    }
-    return records;
+        Promise.all(pingPromises)
+        .then((data: any[]) => {
+            var records: PingRecord[] = [];
+            for (let pingResponse of data) {
+                let record: PingRecord = responseToRecord(pingResponse);
+                record.datetime = date;
+                records.push(record);
+            }
+            fulfill(records);
+        })
+        .catch(e => {
+            console.log("Error: " + JSON.stringify(e));
+            fulfill([]);
+        });
+    });
 }
