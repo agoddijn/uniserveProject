@@ -1,14 +1,19 @@
 {
   "name": "uniserver.m8s",
   "version": "1.0.0",
-  "description": "Web backend",
+  "description": "Uniserve Project Root",
   "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
   "license": "MIT",
   "private": true,
   "workspaces": [
     "services/*",
+<<<<<<< HEAD
+    "modules/*",
+    "utils/"
+=======
     "utils/",
-    "common_types/"
+    "modules/*"
+>>>>>>> edca2abe3ac6f9d50bedd1841fa57856a54769b5
   ],
   "scripts": {
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
@@ -20,10 +25,12 @@
     "buildPingingBackend": "(cd ./services/PingingBackend && npm run build)",
     "watchPingingBackend": "(cd ./services/PingingBackend && npm run watch)",
     
-    "buildTypes": "(cd ./common_types/ && npm run build)",
-    "watchTypes": "(cd ./common_types/ && npm run watch)",
+    "buildTypes": "(cd ./modules/common_types/ && npm run build)",
+    "watchTypes": "(cd ./modules/common_types/ && npm run watch)",
+
+    "buildShim": "(cd ./modules/php_shim/ && npm run build)",
     
-    "build": "npm run buildWebBackend & npm run buildPingingBackend & npm run buildUtils & npm run buildTypes",
+    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim",
     
     "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes"
   }
