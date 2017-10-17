@@ -1,6 +1,6 @@
-import {expect} from 'chai';
-import {Company} from "../../../../uniserve.m8s/common_types";
-import {Device} from "../../../../uniserve.m8s/common_types";
+//import {expect} from 'chai';
+import {Company} from "uniserve.m8s.types";
+import {Device} from "uniserve.m8s.types";
 
 
 // describe('dataFakerTest', function() {

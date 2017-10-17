@@ -19,9 +19,10 @@ let test : Company = {company_name: "test", company_recid: 1, company_id: "1"};
 let dbInt = new DbInterface;
 dbInt.helloWorld();
 
+dbInt.getCompanyDevices(1000);  
 app.get("/api/company/:company_recid/devices", Authenticator.authenticate, devicesAPI.devices);
 app.get("/api/company/:company_recid/device/:device_recid", Authenticator.authenticate, deviceAPI.device);
 
-app.listen(process.env.PORT, ()=>{
-    Log.info("App is running on http://localhost:" + process.env.PORT);
+app.listen(process.env.WEBBACKEND_PORT, ()=>{
+    Log.info("Web Backend is running on http://localhost:" + process.env.WEBBACKEND_PORT);
 })

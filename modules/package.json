@@ -1,10 +1,10 @@
 {
-  "name": "uniserve.m8s.utils",
+  "name": "uniserve.m8s.data_faker",
   "version": "1.0.0",
-  "description": "Common utilities",
+  "description": "Data faker",
   "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
   "license": "MIT",
-  "main": "./index.js",
+  "main": "dataFaker.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w"
@@ -12,8 +12,5 @@
   "devDependencies": {
     "typescript": "^2.5.3",
     "uniserve.m8s.types": "1.0.0"
-  },
-  "dependencies": {
-    "pg-promise": "^6.10.2"
   }
 }

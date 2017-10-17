@@ -1,21 +1,26 @@
 {
-  "name": "uniserve.m8s.ping.backend",
+  "name": "uniserve.m8s.web.php_shim",
   "version": "1.0.0",
-  "description": "Ping Backend",
+  "description": "Web Backend",
   "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
   "license": "MIT",
-  "main": "./src/PingingBackend.js",
+  "main": "./php_shim.js",
   "scripts": {
-    "dev": "node ./src/PingingBackend.js",
     "watch": "tsc -w",
     "build": "tsc || echo done"
   },
   "dependencies": {
-    "ping": "^0.2.2",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.5",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "typescript": "^2.5.3",
+    "uniserve.m8s.types": "1.0.0",
     "uniserve.m8s.utils": "1.0.0"
   },
   "devDependencies": {
+    "@types/express": "^4.0.37",
     "@types/node": "^8.0.31"
   }
 }

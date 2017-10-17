@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Pinger",
+            "envFile": "${workspaceFolder}/dev.env",            
+            "program": "${workspaceFolder}/services/PingingBackend/src/PingingBackend.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "WebBackend",
+            "envFile": "${workspaceFolder}/dev.env",
+            "program": "${workspaceFolder}/services/WebBackend/src/WebBackend.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "PHPShim",
+            "envFile": "${workspaceFolder}/dev.env",
+            "program": "${workspaceFolder}/modules/php_shim/php_shim.js"
+        }
+
+    ],
+    "compounds": [
+        {
+            "name": "Shim/Backend",
+            "configurations": ["WebBackend", "PHPShim"]
+        }
+    ]
+}
