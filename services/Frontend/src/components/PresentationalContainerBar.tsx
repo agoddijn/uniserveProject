@@ -6,19 +6,6 @@ import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import Icon from 'material-ui/Icon'
 
-// const styles = (theme: any) => ({
-//     root: {
-//         marginTop: theme.spacing.unit * 3,
-//         width: '100%',
-//     },
-//     flex: {
-//         flex: 1,
-//     },
-//     menuButton: {
-//         marginLeft: -12,
-//         marginRight: 20,
-//     },
-// });
 
 export const ContainerBar = (props: { Title: string }) => {
     return (<div className="AppBar">
@@ -35,5 +22,6 @@ export const ContainerBar = (props: { Title: string }) => {
                         <Button color="contrast">Gear</Button>
                     </Toolbar>
                 </AppBar>
+                
             </div>)
 }

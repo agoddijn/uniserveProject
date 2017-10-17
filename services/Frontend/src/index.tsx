@@ -1,12 +1,12 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { ListContainer } from "./components/ListContainer";
+import { TabularViewContainer } from "./components/TabularViewContainer";
 import { MapContainer } from  "./components/MapContainer";
 
 ReactDOM.render(
     (<div>
-         <ListContainer Device={{}} />
+         <TabularViewContainer Device={{}} />
          <MapContainer Device={{}} />
     </div>),
     document.getElementById("container")

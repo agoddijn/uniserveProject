@@ -1,25 +1,22 @@
 {
-  "name": "webfrontend",
+  "name": "view_engine",
   "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack-dev-server"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "MIT",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@types/react": "^16.0.10",
     "@types/react-dom": "^16.0.1",
-    "@types/webpack": "^3.0.13",
-    "@types/webpack-dev-server": "^2.9.0",
     "jshint": "^2.9.5",
     "material-ui": "^1.0.0-beta.16",
     "material-ui-icons": "^1.0.0-beta.15",
+    "prop-types": "^15.6.0",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "uniserve.m8s.types": "1.0.0",
-    "uniserve.m8s.utils": "1.0.0",
-    "webpack": "^3.7.1",
-    "webpack-dev-server": "^2.9.1"
+    "react-dom": "^16.0.0"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.2.3",
