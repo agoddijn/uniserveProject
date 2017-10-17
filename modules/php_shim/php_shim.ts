@@ -7,6 +7,8 @@ import {Log} from "uniserve.m8s.utils";
 
 const app = express();
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 
 let session = {};
@@ -14,7 +16,7 @@ let session = {};
 //TODO: blow up if not in dev env
 
 app.post('/login', (req,res) => {
-    let company_recid   = req.body.company_recid;
+    let company_recid   = +req.body.company_recid;
     let token           = crypto.randomBytes(4).toString('hex');
     Log.trace(`php_shim::/login | company_recid: ${company_recid} token: ${token}`);
 

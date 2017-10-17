@@ -1,0 +1,70 @@
+*{
+    box-sizing: border-box;
+}
+#container{
+    height: 100vh;
+    background: lightgrey;
+}
+#listcontainer{
+    position: relative;
+    left: 2vw;
+    top: 2vh;
+    width: 50vw; 
+    height: 86vh;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    float: left;
+}
+#mapcontainer{
+    position: relative;
+    left: 4vw;
+    top: 2vh;
+    width: 44vw; 
+    height: 40vh;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    float: left;
+}
+.AppBar div{
+    background-color: #D0021B;
+    border: 1px solid #D0021B;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+}
+.AppBar header{
+    background-color: #D0021B;
+    border: 1px solid #D0021B;
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+}
+#logo{
+    color: red;
+}
+.layoutButton span{
+    color: white;
+}
+.title{
+    margin: auto;
+}
+iframe{
+    width: 44vw;
+    height: 40vh;
+    border: 0;
+}
+td .responseCircle{
+    width:5vw;
+    height: 5vh;
+    border: 1px;
+    border-radius: 30vh;
+    color: green;
+}
+.tableroot{
+    width: 100%;
+    overflow-x: 'auto';
+}
+.tableroot th{
+    text-align: left;
+}
+

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Device } from "../../commonTypes/Device";
+import { Device } from "uniserve.m8s.types";
 import { ContainerBar } from "./PresentationalContainerBar"
 import { DataType } from "./TabularViewContainer"
 var PropTypes = require('prop-types')
@@ -33,9 +33,10 @@ export class PresentationalTable extends React.Component<any, {}> {
             }else{
                 colorCode = "green"
             }
+            let resStyle = {backgroundColor: colorCode, borderRadius: '50%', width: '40px', height: '40px', marginLeft: '50px'};                        
             return (
                 <TableRow key={key}>
-                    <td className="responseCircle"></td>
+                <td className="responseCircle"><div style={resStyle}></div></td>
                     <TableCell>{n.name}</TableCell>
                     <TableCell numeric>{n.usage + "G"}</TableCell>
                     <TableCell>{n.time_stamp}</TableCell>
