@@ -68,7 +68,6 @@ export default class DbInterface {
             //   +"AND d.device_recid = p.device_recid;";
             db.any(query).then(data => {
                 that.compileResults(data, that);
-            //    console.log(data);
                 fulfill([data, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -93,8 +92,8 @@ export default class DbInterface {
                     postal_code : results[key]["postal_code"],
                     latitude : results[key]["latitude"],
                     longitude : results[key]["longitude"],
+                    devices : that.parseDevices(results, results[key]["company_recid"], results[key]["site_recid"], that)
                 }
-                that.parseDevices(results, tempSite.company_recid, tempSite.site_recid, that);
                 siteRecords.push(tempSite);
             }
         }
@@ -109,10 +108,7 @@ export default class DbInterface {
 
     parseDevices(results:any, company_recid, site_recid, that) {
         let deviceRecords: Device[] = [];
-        //console.log(JSON.stringify(results));
-        
         for (var key in results){
-            
             if (results.hasOwnProperty(key) && results[key]["company_recid"] == company_recid && results[key]["site_recid"] == site_recid){
                 let device : Device = {
                     device_recid : results[key]["device_recid"],
