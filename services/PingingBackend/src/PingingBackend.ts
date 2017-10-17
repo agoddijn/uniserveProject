@@ -73,3 +73,22 @@ function responseToRecord(response: any): PingRecord {
     };
     return record;
 }
+
+function fakePingingBackend(devices: Device[]): PingRecord[] {
+    var records: PingRecord[] = [];
+    var date = new Date();
+    for (let device of devices) {
+        let respond: boolean = true;
+        if (Math.random() > 0.8) respond = false;
+        let record: PingRecord = {
+            ping_recid: null,
+            device_recid: device.device_recid,
+            ms_response: respond ? 5 * Math.random() : null,
+            responded: respond,
+            datetime: date,
+            ip_address: device.ip_address
+        }
+        records.push(record);
+    }
+    return records;
+}
