@@ -10,3 +10,4 @@ yarn-error.log
 npm-debug.log
 !dev.config.js
 !staging.config.js
+services/PingingBackend/src/PingingBackend.ts
