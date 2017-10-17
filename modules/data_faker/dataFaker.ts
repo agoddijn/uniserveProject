@@ -2,9 +2,17 @@ import {Company} from "uniserve.m8s.types";
 import {Device} from "uniserve.m8s.types";
 import {PingRecord} from "uniserve.m8s.types";
 
+let fs = require('fs');
+
 
 export class DataFaker {
     links: Device[];
+    json: any; 
+
+    constructor() {
+        let that = this;
+        that.json = require('./data/top10000.JSON'); 
+    }
 
     getDevices(howMany: number): Device[] {
         // returns the first "number" of devices
@@ -25,9 +33,9 @@ export class DataFaker {
 
     }
 
-    getPingRecords(howMany: number, timeStamp: Date): PingRecord[] {
-        // create a ping record for number amount of devices
-        // make responded true
+    generatePingRecords(howMany: number, timeStamp: Date): PingRecord[] {
+        // create a ping record for howMany amount of devices
+
         let that = this;
         
         let pingRec: PingRecord; 
@@ -56,7 +64,7 @@ export class DataFaker {
         pingRecord.datetime = date;
         pingRecord.device_recid = device_id;
         pingRecord.responded = true;
-        pingRecord.ms_response = 1;
+        pingRecord.ms_response = 100;
 
         return pingRecord;
     }
