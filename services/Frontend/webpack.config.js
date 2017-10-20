@@ -1,24 +1,26 @@
 
 var webpack = require('webpack');
+var path = require("path");
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry:  [
+        'react-hot-loader/patch',
+        './src/index.tsx'     
+    ],
+
     output: {
         filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: path.join(__dirname, "/dist"),
+        publicPath: "/dist/",        
     },
 
     // Enable sourcemaps for debugging webpack's output.
-    devtool: "cheap-eval-source-map",
+    // Use: 'cheap-module-source-map' for source maps or 'eval' for speed
+    devtool: 'eval',  
 
     devServer: {
         port: 8080,
-        inline: true,
-        proxy: {
-            "/login": "http://localhost:3035",
-            "/logout": "http://localhost:3035",
-            "/ajax/": "http://localhost:3035",
-        }
+        hot: true
     },
 
     resolve: {
@@ -29,19 +31,24 @@ module.exports = {
     module: { 
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+            { test: /\.tsx?$/, 
+                loaders: ['react-hot-loader/webpack', "awesome-typescript-loader"], 
+                include: path.join(__dirname, 'src'),
+                exclude: path.resolve(__dirname, 'node_modules')
+            }
         ]
     },
 
     plugins: [
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
               'NODE_ENV': JSON.stringify('development')
             }
-          })
+          }),
+
     ],
 
     // When importing a module whose path matches one of the following, just
