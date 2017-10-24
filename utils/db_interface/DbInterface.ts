@@ -67,8 +67,8 @@ export default class DbInterface {
                 +"AND s.site_recid = d.device_recid;"
             //   +"AND d.device_recid = p.device_recid;";
             db.any(query).then(data => {
-                that.compileResults(data, that);
-                fulfill([data, true]); 
+                let compiledResult = that.compileResults(data, that);
+                fulfill([compiledResult, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
                 reject([null, false]);
@@ -108,6 +108,7 @@ export default class DbInterface {
 
     parseDevices(results:any, company_recid, site_recid, that) {
         let deviceRecords: Device[] = [];
+        console.log(JSON.stringify(results));
         for (var key in results){
             if (results.hasOwnProperty(key) && results[key]["company_recid"] == company_recid && results[key]["site_recid"] == site_recid){
                 let device : Device = {
@@ -138,15 +139,18 @@ export default class DbInterface {
             datetime : device["datetime"],
         }
         pingRecords.push(ping);
+        console.log(JSON.stringify(ping));
         return pingRecords;
     }
 
     // Retrieve pings from specific device
     getDevicePings(deviceRecID:any) : Promise<[any, boolean]>{
+        let that = this;
         return new Promise((fulfill, reject) => {
             let query = "SELECT * from msp_ping where msp_ping.device_recid=\'" + deviceRecID + "\' order by datetime";
             db.any(query).then(data => {
-                fulfill([data, true]); 
+                let pingRecords = that.parsePings(data)
+                fulfill([pingRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
                 reject([null,false])
