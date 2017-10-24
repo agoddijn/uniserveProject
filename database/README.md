@@ -1,6 +1,6 @@
 ## Setting up your environment with PostgreSQL and initializing the database.
 
-1. Install PostgreSQL following these [steps](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04.)
+1. Install PostgreSQL following these [steps](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)
 2. Install PgAdmin from [here](https://www.pgadmin.org/)
 3. Once those are setup, start PostgreSQL on the command line using the command `sudo -u postgres psql` and enter the following query: `CREATE DATABASE ubc03;`
 4. Psql should return with `CREATE DATABASE` if it has been succesfully created.
