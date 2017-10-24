@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "node ./src/PingingBackend.js",
     "watch": "tsc -w",
-    "build": "tsc || echo done"
+    "build": "tsc || echo done",
+    "test": "mocha --timeout 10000 -R list"
   },
   "dependencies": {
     "ping": "^0.2.2",
@@ -16,6 +17,11 @@
     "uniserve.m8s.utils": "1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^8.0.31"
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.31",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^4.0.1"
   }
 }
