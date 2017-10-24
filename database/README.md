@@ -23,6 +23,9 @@ You may be prompted to enter your password.
 
 11.Once those are complete, refesh PgAdmin and the tables should be populated.
 
+### Deleting all records
+
+1. Run delete_all_records.sql using the same command as in step 8.
 
 No PWORD Error
 --

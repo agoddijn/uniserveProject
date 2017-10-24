@@ -101,6 +101,38 @@ CREATE TABLE msp_ping (
 ALTER TABLE public.msp_ping OWNER TO ubc03;
 
 --
+-- Name: msp_ping_30; Type: TABLE; Schema: public; Owner: ubc03; Tablespace: 
+--
+
+CREATE TABLE msp_ping_30 (
+    ping_recid integer DEFAULT nextval(('pk_msp_ping_recid'::text)::regclass) NOT NULL,
+    device_recid integer NOT NULL,
+    ip_address character varying(50),
+    ms_response integer,
+    responded boolean DEFAULT false,
+    datetime TIMESTAMP
+);
+
+
+ALTER TABLE public.msp_ping_30 OWNER TO ubc03;
+
+--
+-- Name: msp_ping_60; Type: TABLE; Schema: public; Owner: ubc03; Tablespace: 
+--
+
+CREATE TABLE msp_ping_60 (
+    ping_recid integer DEFAULT nextval(('pk_msp_ping_recid'::text)::regclass) NOT NULL,
+    device_recid integer NOT NULL,
+    ip_address character varying(50),
+    ms_response integer,
+    responded boolean DEFAULT false,
+    datetime TIMESTAMP
+);
+
+
+ALTER TABLE public.msp_ping_60 OWNER TO ubc03;
+
+--
 -- Name: pk_msp_company_recid; Type: SEQUENCE; Schema: public; Owner: ubc03
 --
 
@@ -157,6 +189,34 @@ CREATE SEQUENCE pk_msp_ping_recid
 ALTER TABLE public.pk_msp_ping_recid OWNER TO ubc03;
 
 --
+-- Name: pk_msp_ping_30_recid; Type: SEQUENCE; Schema: public; Owner: ubc03
+--
+
+CREATE SEQUENCE pk_msp_ping_30_recid
+    START WITH 1000
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pk_msp_ping_30_recid OWNER TO ubc03;
+
+--
+-- Name: pk_msp_ping_60_recid; Type: SEQUENCE; Schema: public; Owner: ubc03
+--
+
+CREATE SEQUENCE pk_msp_ping_60_recid
+    START WITH 1000
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pk_msp_ping_60_recid OWNER TO ubc03;
+
+--
 -- Name: msp_company_pkey; Type: CONSTRAINT; Schema: public; Owner: ubc03; Tablespace: 
 --
 
@@ -189,6 +249,23 @@ ALTER TABLE ONLY msp_ping
 
 
 --
+-- Name: msp_ping_30_pkey; Type: CONSTRAINT; Schema: public; Owner: ubc03; Tablespace: 
+--
+
+ALTER TABLE ONLY msp_ping_30
+    ADD CONSTRAINT msp_ping_30_pkey PRIMARY KEY (ping_30_recid);
+
+
+
+--
+-- Name: msp_ping_60_pkey; Type: CONSTRAINT; Schema: public; Owner: ubc03; Tablespace: 
+--
+
+ALTER TABLE ONLY msp_ping_60
+    ADD CONSTRAINT msp_ping_60_pkey PRIMARY KEY (ping_60_recid);
+
+
+--
 -- Name: msp_device_site_recid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ubc03
 --
 
@@ -205,11 +282,28 @@ ALTER TABLE ONLY msp_site
 
 
 --
--- Name: msp_site_company_recid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ubc03
+-- Name: msp_site_ping_recid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ubc03
 --
 
 ALTER TABLE ONLY msp_ping
     ADD CONSTRAINT msp_ping_device_recid_fkey FOREIGN KEY (device_recid) REFERENCES msp_device(device_recid) ON DELETE RESTRICT;
+
+
+--
+-- Name: msp_site_ping_30_recid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ubc03
+--
+
+ALTER TABLE ONLY msp_ping_30
+    ADD CONSTRAINT msp_ping_30_device_recid_fkey FOREIGN KEY (device_recid) REFERENCES msp_device(device_recid) ON DELETE RESTRICT;
+
+
+
+--
+-- Name: msp_site_ping_60_recid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: ubc03
+--
+
+ALTER TABLE ONLY msp_ping_60
+    ADD CONSTRAINT msp_ping_60_device_recid_fkey FOREIGN KEY (device_recid) REFERENCES msp_device(device_recid) ON DELETE RESTRICT;
 
 
 --
