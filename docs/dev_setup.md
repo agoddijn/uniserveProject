@@ -34,18 +34,23 @@ VSCode Scripts
 
 Testing:
 --
-To set up your testing framework `cd` into your package and run
-    ```
-    yarn add --dev mocha
-    yarn add --dev chai
-    yarn add --dev chai-as-promised
-    yarn add --dev @types/mocha
-    yarn add --dev @types/chai
-    npm install -g mocha
-    ```
+To set up your testing framework
+
+    cd into your package and run:
+
+    1. yarn add --dev mocha
+    2. yarn add --dev chai
+    3. yarn add --dev chai-as-promised
+    4. yarn add --dev @types/mocha
+    5. yarn add --dev @types/chai
+    6. npm install -g mocha
+
 Then add the following to your `package.json` scripts
+
     `"test": "mocha --timeout 10000 -R list"`
+
 This sets the default timeout for tests, which can be overwritten in a test itself, and sets the rporter to list
+
 Then add a `test` directory to your service and add all your `.ts` files in there
 
 
