@@ -12,11 +12,12 @@ export let devices = async (req: Request, res: Response) => {
     try {
         const db = new DbInterface();
         const siteData = await db.getCompanyDevices(request_id);
-        const sites: Site[] = siteData[0];
+        const sites: Site[] = siteData[0].sites;
         
-        for(let site of sites){
-            for(let device of site.devices){
-                device.ping_records = await db.getRecentPings(device.device_recid); 
+        for(const site of sites){
+            for(const device of site.devices){
+                const dbpings = await db.getRecentPings(device.device_recid);
+                device.ping_records = dbpings[0];
             }
         }
 
