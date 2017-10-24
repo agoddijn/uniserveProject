@@ -108,7 +108,7 @@ export default class DbInterface {
 
     parseDevices(results:any, company_recid, site_recid, that) {
         let deviceRecords: Device[] = [];
-        console.log(JSON.stringify(results));
+       // console.log(JSON.stringify(results));
         for (var key in results){
             if (results.hasOwnProperty(key) && results[key]["company_recid"] == company_recid && results[key]["site_recid"] == site_recid){
                 let device : Device = {
@@ -139,7 +139,7 @@ export default class DbInterface {
             datetime : device["datetime"],
         }
         pingRecords.push(ping);
-        console.log(JSON.stringify(ping));
+       // console.log(JSON.stringify(ping));
         return pingRecords;
     }
 
