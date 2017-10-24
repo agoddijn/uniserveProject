@@ -11,7 +11,8 @@ export let devices = async (req: Request, res: Response) => {
 
     try {
         const db = new DbInterface();
-        const sites: Site[] =  <Site[]> await db.getCompanyDevices(request_id)[0];
+        const siteData = await db.getCompanyDevices(request_id);
+        const sites: Site[] = siteData[0];
         
         for(let site of sites){
             for(let device of site.devices){
