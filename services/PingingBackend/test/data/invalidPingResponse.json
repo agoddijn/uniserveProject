@@ -1,0 +1,13 @@
+{
+    "avg": null,
+    "device": {
+        "device_recid": 1000,
+        "device_id": "Webhost 1",
+        "manufacturer": "Mikrotik",
+        "description": "Marketing Web Server",
+        "device_type": "Web Server",
+        "mac_address": "",
+        "ip_address": "123.456.7.8",
+        "site_recid": 1000
+    }
+}

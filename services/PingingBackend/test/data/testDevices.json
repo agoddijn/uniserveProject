@@ -1,0 +1,142 @@
+[  
+    {  
+       "device_recid":1000,
+       "device_id":"WebHost 1",
+       "manufacturer":"Mikrotik",
+       "description":"Marketing Web Server",
+       "device_type":"Web Server",
+       "mac_address":"",
+       "ip_address":"78A907570944.sn.mynetname.net",
+       "site_recid":1000
+    },
+    {  
+       "device_recid":1001,
+       "device_id":"Main Office Router",
+       "manufacturer":"Mikrotik",
+       "description":"Office Wifi Router",
+       "device_type":"Router",
+       "mac_address":"",
+       "ip_address":"78A9077F9070.sn.mynetname.net",
+       "site_recid":1003
+    },
+    {  
+       "device_recid":1003,
+       "device_id":"DB 1",
+       "manufacturer":"Mikrotik",
+       "description":"Sales Database",
+       "device_type":"Database Server",
+       "mac_address":"",
+       "ip_address":"78A907F7CB17.sn.mynetname.net",
+       "site_recid":1002
+    },
+    {  
+       "device_recid":1007,
+       "device_id":"Main Office Router",
+       "manufacturer":"Mikrotik",
+       "description":"Office Wifi Router",
+       "device_type":"Router",
+       "mac_address":"",
+       "ip_address":"78A90765364C.sn.mynetname.net",
+       "site_recid":1010
+    },
+    {  
+       "device_recid":1011,
+       "device_id":"WebHost 1",
+       "manufacturer":"Mikrotik",
+       "description":"Marketing Web Server",
+       "device_type":"Web Server",
+       "mac_address":"",
+       "ip_address":"78A90707A60F.sn.mynetname.net",
+       "site_recid":1012
+    },
+    {  
+       "device_recid":1008,
+       "device_id":"DB 1",
+       "manufacturer":"Mikrotik",
+       "description":"Sales Database",
+       "device_type":"Database Server",
+       "mac_address":"",
+       "ip_address":"78A9071CFAC4.sn.mynetname.net",
+       "site_recid":1013
+    },
+    {  
+       "device_recid":1002,
+       "device_id":"Procurement 1",
+       "manufacturer":"Virtual Server",
+       "description":"Western Inventory Control",
+       "device_type":"Web Server",
+       "mac_address":"",
+       "ip_address":"78A907457024.sn.mynetname.net",
+       "site_recid":1001
+    },
+    {  
+       "device_recid":1004,
+       "device_id":"DB 2",
+       "manufacturer":"Amazon EC2",
+       "description":"Billing Database",
+       "device_type":"Database Server",
+       "mac_address":"",
+       "ip_address":"78A9078DC78B.sn.mynetname.net",
+       "site_recid":1004
+    },
+    {  
+       "device_recid":1005,
+       "device_id":"WebHost 2",
+       "manufacturer":"Amazon EC2",
+       "description":"CSR Interface",
+       "device_type":"Web Server",
+       "mac_address":"",
+       "ip_address":"78A907CBDA96.sn.mynetname.net",
+       "site_recid":1005
+    },
+    {  
+       "device_recid":1006,
+       "device_id":"Procurement 2",
+       "manufacturer":"Amazon EC2",
+       "description":"Eastern Inventory Control",
+       "device_type":"Web Server",
+       "mac_address":"",
+       "ip_address":"78A90785626E.sn.mynetname.net",
+       "site_recid":1006
+    },
+    {  
+       "device_recid":1009,
+       "device_id":"DB 2",
+       "manufacturer":"Amazon EC2",
+       "description":"Billing Database",
+       "device_type":"Database Server",
+       "mac_address":"",
+       "ip_address":"78A907F8F251.sn.mynetname.net",
+       "site_recid":1007
+    },
+    {  
+       "device_recid":1010,
+       "device_id":"WebHost 2",
+       "manufacturer":"Amazon EC2",
+       "description":"CSR Interface",
+       "device_type":"Web Server",
+       "mac_address":"",
+       "ip_address":"78A907D5263A.sn.mynetname.net",
+       "site_recid":1009
+    },
+    {  
+       "device_recid":1012,
+       "device_id":"Procurement 2",
+       "manufacturer":"Amazon EC2",
+       "description":"Eastern Inventory Control",
+       "device_type":"Web Server",
+       "mac_address":"",
+       "ip_address":"78A9070931B7.sn.mynetname.net",
+       "site_recid":1008
+    },
+    {  
+       "device_recid":1013,
+       "device_id":"Procurement 1",
+       "manufacturer":"Virtual Server",
+       "description":"Western Inventory Control",
+       "device_type":"Web Server",
+       "mac_address":"",
+       "ip_address":"78A907FE793D.sn.mynetname.net",
+       "site_recid":1011
+    }
+ ]
