@@ -1,13 +1,21 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { AppContainer } from 'react-hot-loader';
+import main from './main';
 
-import { TabularViewContainer } from "./components/TabularViewContainer";
-import { MapContainer } from  "./components/MapContainer";
 
-ReactDOM.render(
-    (<div>
-         <TabularViewContainer Device={{}} />
-         <MapContainer Device={{}} />
-    </div>),
-    document.getElementById("container")
-);
+const render = (Component: any) => {
+    ReactDOM.render(
+        <AppContainer>
+            <Component />
+        </AppContainer>,
+        document.getElementById("container")
+    );
+}
+
+render(main);
+
+// Webpack Hot Module Replacement API
+if ((module as any).hot) {
+    (module as any).hot.accept('./main', () => { render( require('./main').default ) })
+}
