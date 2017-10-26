@@ -1,7 +1,7 @@
 import {Log, DbInterface} from 'uniserve.m8s.utils';
 import {PingRecord, Device} from 'uniserve.m8s.types';
 import PingStorage from './PingStorage';
-import * as sysPing from 'ping';
+import * as tcpPing from 'tcp-ping';
 
 export default class Pinger {
 
@@ -52,34 +52,31 @@ export default class Pinger {
         });
     }
     
-    private ping(device: Device): Promise<any> {
+    public ping(device: Device): Promise<any> {
         return new Promise((fulfill, reject) => {
             let options = {
-                timeout: 2,
-                min_reply: 1
+                attempts: 2,
+                address: device.ip_address
             }
     
-            sysPing.promise.probe(device.ip_address, options)
-            .then(res => {
-                res.device = device;
-                fulfill(res);
+            tcpPing.ping(options, (err, data) => {
+                if (!data) {
+                    fulfill({avg: null, device: device});
+                }
+                data.device = device;
+                fulfill(data);
             })
-            .catch(err => {
-                err.device = device;                
-                fulfill(err);
-
-            })
-        });
+        })   
     }
     
-    private responseToRecord(response: any): PingRecord {
+    public responseToRecord(response: any): PingRecord {
         let record: PingRecord = {
             ping_recid: null,
             device_recid: response.device.device_recid,
-            ms_response: +response.avg,
-            responded: response.alive,
+            ms_response: (response.avg != null) ? +response.avg : null,
+            responded: response.avg != null,
             datetime: new Date(),
-            ip_address: response.host
+            ip_address: response.device.ip_address
         };
         return record;
     }

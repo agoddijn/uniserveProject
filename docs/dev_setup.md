@@ -40,10 +40,11 @@ To set up your testing framework
 
     1. yarn add --dev mocha
     2. yarn add --dev chai
-    3. yarn add --dev chai-as-promised
-    4. yarn add --dev @types/mocha
-    5. yarn add --dev @types/chai
-    6. npm install -g mocha
+    3. yarn add --dev @types/mocha
+    4. yarn add --dev @types/chai
+    5. yarn add --dev sinon
+    6. yarn add --dev sinon-chai
+    7. npm install -g mocha
 
 Then add the following to your `package.json` scripts
 
