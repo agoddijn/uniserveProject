@@ -1,5 +1,7 @@
 {
     "avg": 25,
+    "alive": true,
+    "host": "123.456.7.8",
     "device": {
         "device_recid": 1000,
         "device_id": "Webhost 1",
