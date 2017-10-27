@@ -25,9 +25,12 @@
 
     "buildShim": "(cd ./modules/php_shim/ && npm run build)",
     
-    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim",
+    "buildAggregator": "(cd ./services/DataAggregator/ && npm run build)",
+    "watchAggregator": "(cd ./services/DataAggregator/ && npm run watch)",
     
-    "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes"
+    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim && npm run buildAggregator",
+    
+    "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes "
   }
 }
 

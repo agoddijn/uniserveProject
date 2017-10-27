@@ -34,6 +34,22 @@ module.exports = {
       }
   },
 
+  {
+    name      : 'Aggregator',
+    script    : './services/DataAggregator/src/DataAggregator.js',
+    env: {
+      "DB_HOST" : 'localhost',
+      "DB_PORT" : 5432,
+      "DB_NAME" : 'ubc03',
+      "DB_USER" : 'postgres',
+      "DB_PASS" : ''
+    },
+    "autorestart": false,
+    "exec_mode"  : "cluster_mode",
+    "instances"  : 1,
+    "cron_restart": "0-59 * * * *"
+  },
+
   //PHP Shim
   {
     name      : 'PHP Shim',
