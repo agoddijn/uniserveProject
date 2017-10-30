@@ -18,6 +18,7 @@ let test : Company = {company_name: "test", company_recid: 1, company_id: "1"};
 
 let dbInt = new DbInterface;
 dbInt.helloWorld();
+dbInt.getCompanyDevices(1000);
 
 
 app.get("/api/company/:company_recid/devices", Authenticator.authenticate, devicesAPI.devices);

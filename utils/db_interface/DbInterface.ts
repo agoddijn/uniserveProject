@@ -68,6 +68,7 @@ export default class DbInterface {
             //   +"AND d.device_recid = p.device_recid;";
             db.any(query).then(data => {
                 let compiledResult = that.compileResults(data, that);
+                console.log(JSON.stringify(compiledResult));
                 fulfill([compiledResult, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -158,6 +159,7 @@ export default class DbInterface {
         });     
     }
 
+    // MAKE THE SCRIPT CALLABLE FROM HERE FOR TESTING <- insertion
     // Retrieve 5 most recent pings
     getRecentPings(deviceRecID:any) : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
