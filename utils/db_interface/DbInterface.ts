@@ -10,6 +10,7 @@ const cn = {
     password: process.env.DB_PASS
 }
 const db = pgp(cn);
+const path = require('path');
 
 export default class DbInterface {
 
@@ -239,7 +240,87 @@ export default class DbInterface {
                 console.log("Error: " + e);
                 reject([null,true]);
             })
-    });
+        });
+    }
+
+    createTables() : Promise<[any,boolean]> {
+        return new Promise((fulfill, reject) => {
+            const sqlCreateTables = this.sql('../../database/schema.sql');
+            db.one(sqlCreateTables)
+            .then(result => {
+                console.log(result);
+                fulfill([result, true]);
+            })
+            .catch(error => {
+                console.log(error);
+                reject([error, true]);
+            })
+        });
+    }
+
+    deleteAllRecords() : Promise<[any,boolean]> {
+        return new Promise((fulfill, reject) => {
+            const sqlDeleteRecords = this.sql('../../database/delete_all_records.sql');
+            db.one(sqlDeleteRecords)
+            .then(result => {
+                console.log(result);
+                fulfill([result, true]);
+            })
+            .catch(error => {
+                console.log(error);
+                reject([error, true]);
+            })
+        });
+    }
+
+    generateCompanyRecords() : Promise<[any,boolean]> {
+        return new Promise((fulfill, reject) => {
+            const sqlGenerateCompanyRecords = this.sql('../../database/insert_msp_company.sql');
+            db.one(sqlGenerateCompanyRecords)
+            .then(result => {
+                console.log(result);
+                fulfill([result, true]);
+            })
+            .catch(error => {
+                console.log(error);
+                reject([error, true]);
+            })
+        });
+    }
+
+    generateSiteRecords() : Promise<[any,boolean]> {
+        return new Promise((fulfill, reject) => {
+            const sqlGenerateSiteRecords = this.sql('../../database/insert_msp_site.sql');
+            db.one(sqlGenerateSiteRecords)
+            .then(result => {
+                console.log(result);
+                fulfill([result, true]);
+            })
+            .catch(error => {
+                console.log(error);
+                reject([error, true]);
+            })
+        });
+    }
+
+    generateDeviceRecords() : Promise<[any,boolean]> {
+        return new Promise((fulfill, reject) => {
+            const sqlGenerateDeviceRecords = this.sql('../../database/insert_msp_device_valid.sql');
+            db.one(sqlGenerateDeviceRecords)
+            .then(result => {
+                console.log(result);
+                fulfill([result, true]);
+            })
+            .catch(error => {
+                console.log(error);
+                reject([error, true]);
+            })
+        });
+    }
+
+    sql(file) {
+        const fullPath = path.join(__dirname, file);
+        return new pgp.QueryFile(fullPath, {minify: true});
     }
 
 }
