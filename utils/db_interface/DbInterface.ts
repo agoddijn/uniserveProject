@@ -44,17 +44,17 @@ export default class DbInterface {
      * Deletes all records in the database
      * Return true if succesful, false otherwise
      */
-    deleteAllRecords() : Promise<[any,boolean]> {
+    deleteAllRecords() : Promise<[boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlDeleteRecords = this.sql('../../database/delete_all_records.sql');
             db.one(sqlDeleteRecords)
             .then(result => {
                // console.log(result);
-                fulfill([result, true]);
+                fulfill([true]);
             })
             .catch(error => {
                 //console.log(error);
-                reject([error, true]);
+                reject([true]);
             })
         });
     }
@@ -63,17 +63,17 @@ export default class DbInterface {
      * Insert the default Company records
      * Return true if succesful, false otherwise
      */
-    generateCompanyRecords() : Promise<[any,boolean]> {
+    generateCompanyRecords() : Promise<[boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlGenerateCompanyRecords = this.sql('../../database/insert_msp_company.sql');
             db.one(sqlGenerateCompanyRecords)
             .then(result => {
                // console.log(result);
-                fulfill([result, true]);
+                fulfill([true]);
             })
             .catch(error => {
                // console.log(error);
-                reject([error, true]);
+                reject([true]);
             })
         });
     }
@@ -82,17 +82,17 @@ export default class DbInterface {
      * Insert the default Site recordss
      * Return true if succesful, false otherwise
      */
-    generateSiteRecords() : Promise<[any,boolean]> {
+    generateSiteRecords() : Promise<[boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlGenerateSiteRecords = this.sql('../../database/insert_msp_site.sql');
             db.one(sqlGenerateSiteRecords)
             .then(result => {
                // console.log(result);
-                fulfill([result, true]);
+                fulfill([true]);
             })
             .catch(error => {
                // console.log(error);
-                reject([error, true]);
+                reject([true]);
             })
         });
     }
@@ -101,17 +101,17 @@ export default class DbInterface {
      * Insert the default Device records
      * Return true if succesful, false otherwise
      */
-    generateDeviceRecords() : Promise<[any,boolean]> {
+    generateDeviceRecords() : Promise<[boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlGenerateDeviceRecords = this.sql('../../database/insert_msp_device_valid.sql');
             db.one(sqlGenerateDeviceRecords)
             .then(result => {
                 //console.log(result);
-                fulfill([result, true]);
+                fulfill([true]);
             })
             .catch(error => {
               //  console.log(error);
-                reject([error, true]);
+                reject([true]);
             })
         });
     }
