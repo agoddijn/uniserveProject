@@ -30,27 +30,32 @@ export default class Pinger {
         });
     }
 
-    public doPing() {
+    public doPing(): Promise<boolean> {
         var that = this;
         this.storage.sendRecords();
-        var date = new Date();
-        let pingPromises: Promise<any>[] = [];
-        for (let device of that.devices) {
-           //  console.log("found a device with ip " + device.ip_address);
-            pingPromises.push(that.ping(device));
-        }
-        Promise.all(pingPromises)
-        .then((data: any[]) => {
-           //  console.log("Got some data");
-            var records: PingRecord[] = [];
-            for (let pingResponse of data) {
-                records.push(that.responseToRecord(pingResponse));
+        return new Promise((fulfill, reject) => {
+            var date = new Date();
+            let pingPromises: Promise<any>[] = [];
+            for (let device of that.devices) {
+               //  console.log("found a device with ip " + device.ip_address);
+                pingPromises.push(that.ping(device));
             }
-            that.storage.addPingRecords(date, records);
+            Promise.all(pingPromises)
+            .then((data: any[]) => {
+               //  console.log("Got some data");
+                var records: PingRecord[] = [];
+                for (let pingResponse of data) {
+                    records.push(that.responseToRecord(pingResponse));
+                }
+                that.storage.addPingRecords(date, records);
+                fulfill(true);
+            })
+            .catch(e => {
+                console.log("Error: " + JSON.stringify(e));
+                fulfill(false);
+            });
         })
-        .catch(e => {
-            console.log("Error: " + JSON.stringify(e));
-        });
+        
     }
     
     public ping(device: Device): Promise<any> {
