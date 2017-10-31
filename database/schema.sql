@@ -109,8 +109,7 @@ CREATE TABLE msp_ping_30 (
     device_recid integer NOT NULL,
     ip_address character varying(50),
     ms_response integer,
-    response_count integer,
-    no_response_count integer,
+    response_count decimal,
     datetime TIMESTAMP
 );
 
@@ -126,8 +125,7 @@ CREATE TABLE msp_ping_60 (
     device_recid integer NOT NULL,
     ip_address character varying(50),
     ms_response integer,
-    response_count integer,
-    no_response_count integer,
+    response_count decimal,
     datetime TIMESTAMP
 );
 
