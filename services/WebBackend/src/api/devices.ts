@@ -16,7 +16,7 @@ export let devices = async (req: Request, res: Response) => {
         
         for(const site of sites){
             for(const device of site.devices){
-                const dbpings = await db.getRecentPings(device.device_recid);
+                const dbpings = await db.getRecentPings(device.device_recid, 5);
                 device.ping_records = dbpings[0];
             }
         }
