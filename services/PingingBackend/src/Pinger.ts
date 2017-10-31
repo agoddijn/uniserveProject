@@ -1,7 +1,7 @@
 import {Log, DbInterface} from 'uniserve.m8s.utils';
 import {PingRecord, Device} from 'uniserve.m8s.types';
 import PingStorage from './PingStorage';
-import * as tcpPing from 'tcp-ping';
+import * as sysPing from 'ping'
 
 export default class Pinger {
 
@@ -14,6 +14,7 @@ export default class Pinger {
         console.log("Pinger::init");
         this.dbInt = new DbInterface();
         this.storage = new PingStorage();
+        this.devices = [];
         this.updateDevices();
     }
 
@@ -55,16 +56,18 @@ export default class Pinger {
     public ping(device: Device): Promise<any> {
         return new Promise((fulfill, reject) => {
             let options = {
-                attempts: 2,
-                address: device.ip_address
+                timeout: 2,
+                min_reply: 1
             }
-    
-            tcpPing.ping(options, (err, data) => {
-                if (!data) {
-                    fulfill({avg: null, device: device});
-                }
-                data.device = device;
-                fulfill(data);
+
+            sysPing.promise.probe(device.ip_address, options)
+            .then(res => {
+                res.device = device;
+                fulfill(res);
+            })
+            .catch(err => {
+                err.device = device;                
+                fulfill(err);
             })
         })   
     }
@@ -73,10 +76,10 @@ export default class Pinger {
         let record: PingRecord = {
             ping_recid: null,
             device_recid: response.device.device_recid,
-            ms_response: (response.avg != null) ? +response.avg : null,
-            responded: response.avg != null,
+            ms_response: response.alive ? +response.avg : null,
+            responded: response.alive,
             datetime: new Date(),
-            ip_address: response.device.ip_address
+            ip_address: response.host
         };
         return record;
     }

@@ -67,14 +67,13 @@ describe("Pinger spec", () => {
         var fakeDevices = require('./data/testDevices');
         this.pinger.ping(fakeDevices[0])
         .then((pingResponse) => {
-            expect(pingResponse.attempts).to.equal(2);
-            expect(pingResponse.results).to.be.an('array');
-            expect(pingResponse.avg).to.not.be.undefined;
+            expect(pingResponse.device).to.deep.equal(fakeDevices[0]);
+            expect(pingResponse.alive).to.be.a('boolean');
 
             done();
         })
         .catch((e) => {
-            done("Should never error");
+            done(e);
         })
     })
 

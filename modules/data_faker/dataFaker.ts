@@ -33,6 +33,19 @@ export class DataFaker {
 
     }
 
+    getTopDevices(howMany: number): Device[] {
+        // returns the first "number" of devices
+        let that = this;
+
+        let returnDevices = [];
+
+        for (let i = 0; i < howMany && i < that.json.length; i++) {
+            returnDevices.push(that.json[i]);
+        }
+        
+        return returnDevices;
+    }
+
     generatePingRecords(howMany: number, timeStamp: Date): PingRecord[] {
         // create a ping record for howMany amount of devices
 
