@@ -125,6 +125,40 @@ export default class DbInterface {
         return new pgp.QueryFile(fullPath, {minify: true});
     }
 
+    // DELETION COMMANDS
+
+    /*
+     * Delete all pings older than 30 days.
+     * Return true if succesful, false otherwise
+     */
+    delete30DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval);";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        });
+    }
+
+    /*
+     * Delete all pings older than 60 days
+     * Return true if succesful, false otherwise
+     */
+    delete60DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        });
+    }
+
     // INSERTION COMMANDS
 
     /*
@@ -295,6 +329,38 @@ export default class DbInterface {
                 reject([null,false])
             })  
         });     
+    }
+
+     /*
+     * Retrieve all pings that are older than 30 days.
+     * Return true if succesful, false otherwise
+     */
+    get30DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = "SELECT * FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY device_recid, ping_recid ORDER BY device_recid, datetime";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        });
+    }
+
+    /*
+     * Retrieve all pings that are older than 60 days.
+     * Return true if succesful, false otherwise
+     */
+    get60DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = "SELECT * FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY device_recid, ping_recid ORDER BY device_recid, datetime";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        });
     }
 
     // HELPERS
