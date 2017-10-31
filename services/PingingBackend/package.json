@@ -9,7 +9,7 @@
     "dev": "node ./src/PingingBackend.js",
     "watch": "tsc -w",
     "build": "tsc || echo done",
-    "test": "mocha --timeout 10000 -R list"
+    "test": "(npm run build && mocha --timeout 10000 -R list)"
   },
   "dependencies": {
     "ping": "^0.2.2",
@@ -22,6 +22,8 @@
     "@types/node": "^8.0.31",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "sinon": "^4.0.2",
+    "sinon-chai": "^2.14.0"
   }
 }

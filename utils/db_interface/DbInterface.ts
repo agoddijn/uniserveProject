@@ -144,15 +144,15 @@ export default class DbInterface {
                 let query = "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (" + record.device_recid 
                 + ", \'" + record.ip_address + "\', " + record.ms_response + ", " + record.responded + ", \'" +  psqlDate + "\');"
                 
-                db.any(query).then(data => {
-                        console.log("Sent data");
-                        fulfill([date, true]); 
-                    }).catch(e => {
-                        console.log("Error: " + e);
-                        reject([date, false]); 
-                    })
-            }  
-            // fulfill([date, false]) if it didnt work      
+                db.any(query)
+                .then(data => {
+                    console.log("Sent data");
+                    fulfill([date, true]); 
+                }).catch(e => {
+                    console.log("Error: " + e);
+                    fulfill([date, false]); 
+                })
+            }      
         });
     }
 
