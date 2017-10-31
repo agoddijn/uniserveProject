@@ -34,14 +34,19 @@ const mocha = new Mocha({
 });
 
 for(let directory of directories){
-    fs.readdirSync(directory).filter(function (file) {
-        // Only keep the .js files
-        return file.substr(-3) === '.js';
-    }).forEach(function (file) {
-        mocha.addFile(
-            path.join(directory, file)
-        );
-    });
+    try{
+        fs.readdirSync(directory).filter(function (file) {
+            // Only keep the .js files
+            return file.substr(-3) === '.js';
+        }).forEach(function (file) {
+            mocha.addFile(
+                path.join(directory, file)
+            );
+        });
+    } catch (e) {
+        console.log("test-runner.ts::Error couldn't open directory: " + directory);
+    }
+
 }
 
 // Run the tests.
