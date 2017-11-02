@@ -68,3 +68,5 @@ app.get('/ajax/monitoring_api.php', async (req, res) => {
 app.listen(3035, ()=>{
     Log.info("php_shim is running on http://localhost:" + 3035);
 })
+
+module.exports = app;

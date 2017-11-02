@@ -11,8 +11,8 @@ let directories = [];
 let fastUnitTests = require("./config/fast_tests.json");
 let slowUnitTests = require("./config/slow_tests.json");
 
-fastUnitTests = fastUnitTests.map(directory => { path.join("./", directory)});
-slowUnitTests = slowUnitTests.map(directory => { path.join("./", directory)});
+fastUnitTests = fastUnitTests.map(directory =>  path.join(__dirname, "../", directory));
+slowUnitTests = slowUnitTests.map(directory =>  path.join(__dirname, "../", directory));
 
 let timeout = 10000;
 let slow = 1000;

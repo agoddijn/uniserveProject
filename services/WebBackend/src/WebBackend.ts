@@ -25,3 +25,6 @@ app.get("/api/company/:company_recid/device/:device_recid", Authenticator.authen
 app.listen(process.env.WEBBACKEND_PORT, ()=>{
     Log.info("Web Backend is running on http://localhost:" + process.env.WEBBACKEND_PORT);
 })
+
+//needed for testing
+module.exports = app;
