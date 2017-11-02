@@ -37,12 +37,10 @@ export default class Pinger {
             var date = new Date();
             let pingPromises: Promise<any>[] = [];
             for (let device of that.devices) {
-               //  console.log("found a device with ip " + device.ip_address);
                 pingPromises.push(that.ping(device));
             }
             Promise.all(pingPromises)
             .then((data: any[]) => {
-               //  console.log("Got some data");
                 var records: PingRecord[] = [];
                 for (let pingResponse of data) {
                     records.push(that.responseToRecord(pingResponse));
@@ -54,8 +52,7 @@ export default class Pinger {
                 console.log("Error: " + JSON.stringify(e));
                 fulfill(false);
             });
-        })
-        
+        })   
     }
     
     public ping(device: Device): Promise<any> {

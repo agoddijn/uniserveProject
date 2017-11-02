@@ -9,8 +9,8 @@
     "dev": "node ./src/PingingBackend.js",
     "watch": "tsc -w",
     "build": "tsc || echo done",
-    "test": "(npm run build & node ./test/test-runner.js fast)",
-    "testall": "(npm run build & node ./test/test-runner.js all)"
+    "test": "node ./test/test-runner.js fast",
+    "testall": "node ./test/test-runner.js all"
   },
   "dependencies": {
     "ping": "^0.2.2",

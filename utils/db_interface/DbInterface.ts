@@ -133,9 +133,9 @@ export default class DbInterface {
      */
     storePingRecords(date: number, records: PingRecord[]): Promise<[number, boolean]> {
         return new Promise((fulfill, reject) => {
-            console.log("Recieving records");
+            // console.log("Recieving records");
             for (let record of records) {
-                console.log("\n" + JSON.stringify(record));
+                // console.log("\n" + JSON.stringify(record));
                 if (isNaN(record.ms_response) || record.ms_response === null) {
                     record.ms_response = -1
                 }
