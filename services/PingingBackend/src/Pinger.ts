@@ -49,7 +49,7 @@ export default class Pinger {
                 fulfill(true);
             })
             .catch(e => {
-                console.log("Error: " + JSON.stringify(e));
+                console.log("Error: " + e);
                 fulfill(false);
             });
         })   

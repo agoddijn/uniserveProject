@@ -61,7 +61,7 @@ describe("Pinger performance test", () => {
                     expect(success).to.be.true;
                     var storageCall = that.storageSpy.getCall(i);
                     expect(storageCall.args[1].length).to.equal(increment(i+1));
-                    expect(that.dbStoreStub.called).to.be.true;
+                    if (i > 0) expect(that.dbStoreStub.called).to.be.true;
                     that.dbStoreStub.resetHistory();
                     done();
                 })
