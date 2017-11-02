@@ -12,7 +12,7 @@ const cn = {
 const db = pgp(cn);
 const path = require('path');
 
-export default class DbInterface {
+export class DbInterface {
 
     constructor(){
         console.log("DbInterface::Init");
@@ -173,6 +173,7 @@ export default class DbInterface {
     // Retrieves the site IDs based on the given Company ID.
     getSites(companyID){
         return new Promise ((fulfill, reject) => {    
+            console.log("AAAAAAAAAAAAAAAAAAAAAA");
             let query = "SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';";
             db.any(query).then(data => {
                 fulfill([data, true]); 

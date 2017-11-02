@@ -1,4 +1,5 @@
-import {Log, DbInterface} from 'uniserve.m8s.utils';
+import {Log} from 'uniserve.m8s.utils';
+import {DbInterface} from "../../../modules/db_interface/DbInterface";
 import {PingRecord, Device} from 'uniserve.m8s.types';
 import PingStorage from './PingStorage';
 import * as sysPing from 'ping';
