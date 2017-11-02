@@ -5,7 +5,7 @@ import * as devicesAPI from "./api/devices";
 import * as deviceAPI from "./api/device";
 import {Log} from "uniserve.m8s.utils";
 import {Company} from "uniserve.m8s.types";
-import {DbInterface} from "../../../modules/db_interface/DbInterface";
+import {DbInterface} from "uniserve.m8s.web.db_interface";
 
 const app = express();
 
