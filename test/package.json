@@ -1,0 +1,22 @@
+{
+  "name": "uniserve.m8s.web.tests",
+  "version": "1.0.0",
+  "description": "Test Runner for scripts",
+  "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+  "license": "MIT",
+  "main": "./test-runner.js",
+  "scripts": {
+    "watch": "tsc -w",
+    "build": "tsc || echo done",
+    "test": "(npm run build & node ./test-runner.js fast)",
+    "testall": "(npm run build & node ./test-runner.js all)"
+  },
+  "dependencies": {
+    "typescript": "^2.5.3"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "@types/node": "^8.0.31",
+    "@types/mocha": "^2.2.44"
+  }
+}
