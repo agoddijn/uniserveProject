@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction } from "express";
 import {HTTPMainPageResponse, Site, Device} from "uniserve.m8s.types";
 import {Log} from "uniserve.m8s.utils";
-import {DbInterface} from "../../../../modules/db_interface/DbInterface";
+import {DbInterface} from "uniserve.m8s.web.db_interface";
 
 export let devices = async (req: Request, res: Response) => {
     //might be a string tbh
