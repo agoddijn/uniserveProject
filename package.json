@@ -12,6 +12,8 @@
     "test/"
   ],
   "scripts": {
+    "buildDataFaker": "(cd ./modules/data_faker && npm run build)",   
+
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
     "watchWebBackend": "(cd ./services/WebBackend && npm run watch)",
     
@@ -32,7 +34,7 @@
     "buildAggregator": "(cd ./services/DataAggregator/ && npm run build)",
     "watchAggregator": "(cd ./services/DataAggregator/ && npm run watch)",
     
-    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim && npm run buildAggregator",  
+    "build": "npm run buildDataFaker && npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim && npm run buildAggregator",  
     "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes",
 
     "buildTests": "(cd ./test && npm run build)",
