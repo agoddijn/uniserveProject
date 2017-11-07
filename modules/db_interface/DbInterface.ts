@@ -172,8 +172,7 @@ export class DbInterface {
 
     // Retrieves the site IDs based on the given Company ID.
     getSites(companyID){
-        return new Promise ((fulfill, reject) => {    
-            console.log("AAAAAAAAAAAAAAAAAAAAAA");
+        return new Promise ((fulfill, reject) => {
             let query = "SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';";
             db.any(query).then(data => {
                 fulfill([data, true]); 
