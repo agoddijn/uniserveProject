@@ -1,14 +1,12 @@
 import * as React from "react";
 import { ContainerBar } from "./PresentationalContainerBar"
 import { PresentationalTable } from "./PresentationalTable"
-import { Site } from "../../../../modules/common_types/types/Site"
-import { Device } from "../../../../modules/common_types/types/Device"
+import { Site, Device } from "uniserve.m8s.types";
 
 
 export class TabularViewContainer extends React.Component<{Sites:Site[]}, {Devices:Device[]}> {
     constructor(props: {Sites:Site[]}) {
         super(props);
-        
         this.state = {Devices: []};
     }
     componentWillReceiveProps(next:{Sites:Site[]}){

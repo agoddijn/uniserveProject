@@ -33,7 +33,7 @@ export default class main extends React.Component<any, {Sites:Site[]}> {
         return <div>
             <TabularViewContainer Sites={this.state.Sites} />
             <MapContainer Device={{}} />
-            <SummaryContainer />
+            <SummaryContainer Sites={this.state.Sites}/>
         </div>;
     }
 }
