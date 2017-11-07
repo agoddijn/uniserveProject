@@ -15,7 +15,8 @@
   "dependencies": {
     "ping": "^0.2.2",
     "typescript": "^2.5.3",
-    "uniserve.m8s.utils": "1.0.0"
+    "uniserve.m8s.utils": "1.0.0",
+    "uniserve.m8s.data_faker": "1.0.0"    
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
