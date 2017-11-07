@@ -8,7 +8,8 @@
   "workspaces": [
     "services/*",
     "modules/*",
-    "utils/"
+    "utils/",
+    "test/"
   ],
   "scripts": {
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
@@ -30,7 +31,12 @@
     
     "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim && npm run buildModules",
     
-    "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes && npm run watchModules"
+    "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes && npm run watchModules",
+    "buildTests": "(cd ./test && npm run build)",
+
+    "test": "(cd ./test && npm run test)",
+    "testall": "(cd ./test && npm run test)"
+    
   }
 }
 
