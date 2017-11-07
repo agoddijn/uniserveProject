@@ -10,8 +10,9 @@ export class DataFaker {
     json: any; 
 
     constructor() {
+        console.log("Init::DataFaker")
         let that = this;
-        that.json = require('./data/top10000.JSON'); 
+        that.json = require('./data/top10000.json'); 
     }
 
     getDevices(howMany: number): Device[] {
@@ -31,6 +32,30 @@ export class DataFaker {
         
         return returnDevices;
 
+    }
+
+    getTopDevices(howMany: number): Device[] {
+        // returns the first "number" of devices
+        let that = this;
+
+        let returnDevices = [];
+
+        for (let i = 0; i < howMany && i < that.json.length; i++) {
+            var cur = that.json[i];
+            var dev: Device = {
+                device_recid: null,
+                site_recid: null,
+                device_id: null,
+                manufacturer: null,
+                description: "top10000url",
+                device_type: null,
+                mac_address: null,
+                ip_address: cur.url
+            }
+            returnDevices.push(dev);
+        }
+        
+        return returnDevices;
     }
 
     generatePingRecords(howMany: number, timeStamp: Date): PingRecord[] {

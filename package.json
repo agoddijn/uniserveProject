@@ -8,7 +8,8 @@
   "workspaces": [
     "services/*",
     "modules/*",
-    "utils/"
+    "utils/",
+    "test/"
   ],
   "scripts": {
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
@@ -16,21 +17,29 @@
     
     "buildUtils": "(cd ./utils && npm run build)",
     "watchUtils": "(cd ./utils && npm run watch)",
-    
+
+    "buildModules": "(cd ./modules && npm run build)",
+    "watchModules": "(cd ./modules && npm run watch)",
+   
     "buildPingingBackend": "(cd ./services/PingingBackend && npm run build)",
-    "watchPingingBackend": "(cd ./services/PingingBackend && npm run watch)",
+    "watchPingingBackend": "(cd ./services/PingingBackend && npm run watch)", 
     
     "buildTypes": "(cd ./modules/common_types/ && npm run build)",
     "watchTypes": "(cd ./modules/common_types/ && npm run watch)",
-
+    
     "buildShim": "(cd ./modules/php_shim/ && npm run build)",
     
     "buildAggregator": "(cd ./services/DataAggregator/ && npm run build)",
     "watchAggregator": "(cd ./services/DataAggregator/ && npm run watch)",
     
-    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim && npm run buildAggregator",
-    
+    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim && npm run buildAggregator",  
     "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes "
+
+    "buildTests": "(cd ./test && npm run build)",
+
+    "test": "(cd ./test && npm run test)",
+    "testall": "(cd ./test && npm run test)"
+    
   }
 }
 

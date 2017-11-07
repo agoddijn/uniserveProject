@@ -1,30 +1,28 @@
 {
-  "name": "uniserve.m8s.web.backend",
+  "name": "uniserve.m8s.web.tests",
   "version": "1.0.0",
-  "description": "Web Backend",
+  "description": "Test Runner for scripts",
   "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
   "license": "MIT",
-  "main": "./src/WebBackend.js",
+  "main": "./test-runner.js",
   "scripts": {
-    "dev": "PORT=3030 node ./src/WebBackend.js",
     "watch": "tsc -w",
     "build": "tsc || echo done",
-    "test": "(npm run build & node ./test/test-runner.js fast)",
-    "testall": "(npm run build & node ./test/test-runner.js all)"
+    "test": "(npm run build ; node ./root-test-runner.js fast)",
+    "testall": "(npm run build ; node ./root-test-runner.js all)"
   },
   "dependencies": {
-    "express": "^4.15.5",
-    "typescript": "^2.5.3",
-    "uniserve.m8s.types": "1.0.0",
-    "uniserve.m8s.utils": "1.0.0"
+    "typescript": "^2.5.3"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
+    "@types/chai-http": "^3.0.3",
     "@types/express": "^4.0.37",
     "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.31",
     "@types/sinon-chai": "^2.7.29",
     "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
     "dotenv": "^4.0.0",
     "mocha": "^4.0.1",
     "sinon": "^4.0.2",

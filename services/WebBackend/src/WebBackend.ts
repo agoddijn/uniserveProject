@@ -17,7 +17,6 @@ app.get('/', function(req,res) {
 let test : Company = {company_name: "test", company_recid: 1, company_id: "1"};
 
 let dbInt = new DbInterface;
-dbInt.helloWorld();
 
 
 app.get("/api/company/:company_recid/devices", Authenticator.authenticate, devicesAPI.devices);
@@ -26,3 +25,6 @@ app.get("/api/company/:company_recid/device/:device_recid", Authenticator.authen
 app.listen(process.env.WEBBACKEND_PORT, ()=>{
     Log.info("Web Backend is running on http://localhost:" + process.env.WEBBACKEND_PORT);
 })
+
+//needed for testing
+module.exports = app;
