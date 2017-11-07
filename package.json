@@ -26,6 +26,7 @@
     "buildShim": "(cd ./modules/php_shim/ && npm run build)",
     
     "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim",
+    "build staging": "npm run build && (cd ./services/Frontend/ && npm run buildstaging)",
     
     "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes"
   }

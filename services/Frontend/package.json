@@ -4,7 +4,8 @@
   "description": "Frontend React App",
   "scripts": {
     "build": "webpack",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "buildstaging": "webpack --config webpack.staging.config.js"
   },
   "license": "MIT",
   "dependencies": {
