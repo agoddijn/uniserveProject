@@ -1,128 +1,90 @@
-import * as pgPromise from 'pg-promise';
 import {Company, Site, Device, PingRecord} from 'uniserve.m8s.types'
-
-const pgp = pgPromise();
-const cn = {
-    host: process.env.DB_HOST,
-    port: +process.env.DB_PORT,
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS
-}
-const db = pgp(cn);
+import {dbObj} from '../db_connection/db_connection'
 const path = require('path');
-
-export default class DbInterface {
-
+let db = dbObj;
+export class DbInterface {
     constructor(){
         console.log("DbInterface::Init");
     }
 
-    
-    // INSERTION/DELETION SCRIPTS
+    // AGGREGATION COMMANDS
 
     /*
-     * Creates all of the database tables
+     * Migrate and aggregate all records older than 30 days
      * Return true if succesful, false otherwise
      */
-    createTables() : Promise<[any,boolean]> {
-        return new Promise((fulfill, reject) => {
-            const sqlCreateTables = this.sql('../../database/schema.sql');
-            db.one(sqlCreateTables)
-            .then(result => {
-                //console.log(result);
-                fulfill([result, true]);
+    migrate30DayData() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = 
+            "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " +
+            "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, count(nullif(responded, false)), count(nullif(responded, true)), date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '5 min' as timestamp " +
+            "FROM( SELECT * FROM msp_ping p WHERE  datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid ORDER BY p.device_recid, p.datetime ) AS SUBQUERY " +
+            "GROUP BY timestamp, device_recid " + 
+            "ORDER BY device_recid, timestamp; " +
+            "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
             })
-            .catch(error => {
-                //console.log(error);
-                reject([error, true]);
+        })
+    }
+
+    /*
+     * Migrate and aggregate all records older than 60 days
+     * Return true if succesful, false otherwise
+     */
+    migrate60DayData() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = 
+                "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " + 
+                "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, (round(sum(response_count),1)::decimal) as ping_success_rate, date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '25 min' as timestamp " +
+                "FROM(SELECT * FROM msp_ping_30 p WHERE  datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.response_count ORDER BY p.device_recid, p.datetime) AS SUBQUERY " +
+                "GROUP BY timestamp, device_recid ORDER BY device_recid, timestamp; " +
+                "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        })
+    }
+
+    // DELETION COMMANDS
+
+    /*
+     * Delete all pings older than 30 days.
+     * Return true if succesful, false otherwise
+     */
+    delete30DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval);";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
             })
         });
     }
 
     /*
-     * Deletes all records in the database
+     * Delete all pings older than 60 days
      * Return true if succesful, false otherwise
      */
-    deleteAllRecords() : Promise<[boolean]> {
-        return new Promise((fulfill, reject) => {
-            const sqlDeleteRecords = this.sql('../../database/delete_all_records.sql');
-            db.one(sqlDeleteRecords)
-            .then(result => {
-               // console.log(result);
-                fulfill([true]);
-            })
-            .catch(error => {
-                //console.log(error);
-                reject([true]);
+    delete60DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
             })
         });
-    }
-
-    /*
-     * Insert the default Company records
-     * Return true if succesful, false otherwise
-     */
-    generateCompanyRecords() : Promise<[boolean]> {
-        return new Promise((fulfill, reject) => {
-            const sqlGenerateCompanyRecords = this.sql('../../database/insert_msp_company.sql');
-            db.one(sqlGenerateCompanyRecords)
-            .then(result => {
-               // console.log(result);
-                fulfill([true]);
-            })
-            .catch(error => {
-               // console.log(error);
-                reject([true]);
-            })
-        });
-    }
-
-    /*
-     * Insert the default Site recordss
-     * Return true if succesful, false otherwise
-     */
-    generateSiteRecords() : Promise<[boolean]> {
-        return new Promise((fulfill, reject) => {
-            const sqlGenerateSiteRecords = this.sql('../../database/insert_msp_site.sql');
-            db.one(sqlGenerateSiteRecords)
-            .then(result => {
-               // console.log(result);
-                fulfill([true]);
-            })
-            .catch(error => {
-               // console.log(error);
-                reject([true]);
-            })
-        });
-    }
-
-    /*
-     * Insert the default Device records
-     * Return true if succesful, false otherwise
-     */
-    generateDeviceRecords() : Promise<[boolean]> {
-        return new Promise((fulfill, reject) => {
-            const sqlGenerateDeviceRecords = this.sql('../../database/insert_msp_device_valid.sql');
-            db.one(sqlGenerateDeviceRecords)
-            .then(result => {
-                //console.log(result);
-                fulfill([true]);
-            })
-            .catch(error => {
-              //  console.log(error);
-                reject([true]);
-            })
-        });
-    }
-
-    
-    /*
-     * Retrieves the sql file at a given filepath
-     */
-    sql(file) {
-        const fullPath = path.join(__dirname, file);
-        return new pgp.QueryFile(fullPath, {minify: true});
     }
 
     // INSERTION COMMANDS
@@ -245,7 +207,7 @@ export default class DbInterface {
 
     // Retrieves the site IDs based on the given Company ID.
     getSites(companyID){
-        return new Promise ((fulfill, reject) => {    
+        return new Promise ((fulfill, reject) => {
             let query = "SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';";
             db.any(query).then(data => {
                 fulfill([data, true]); 
@@ -295,6 +257,38 @@ export default class DbInterface {
                 reject([null,false])
             })  
         });     
+    }
+
+     /*
+     * Retrieve all pings that are older than 30 days.
+     * Return true if succesful, false otherwise
+     */
+    get30DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = "SELECT * FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY device_recid, ping_recid ORDER BY device_recid, datetime";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        });
+    }
+
+    /*
+     * Retrieve all pings that are older than 60 days.
+     * Return true if succesful, false otherwise
+     */
+    get60DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = "SELECT * FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY device_recid, ping_recid ORDER BY device_recid, datetime";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        });
     }
 
     // HELPERS

@@ -15,8 +15,14 @@
   "dependencies": {
     "express": "^4.15.5",
     "typescript": "^2.5.3",
+<<<<<<< HEAD
     "uniserve.m8s.types": "1.0.0",
     "uniserve.m8s.utils": "1.0.0"
+=======
+    "uniserve.m8s.utils": "1.0.0",
+    "uniserve.m8s.types":  "1.0.0",
+    "uniserve.m8s.web.db_interface": "1.0.0"
+>>>>>>> DbInterface_migration
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
