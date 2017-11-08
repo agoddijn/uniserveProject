@@ -7,6 +7,52 @@ export class DbInterface {
         console.log("DbInterface::Init");
     }
 
+    // AGGREGATION COMMANDS
+
+    /*
+     * Migrate and aggregate all records older than 30 days
+     * Return true if succesful, false otherwise
+     */
+    migrate30DayData() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = 
+            "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " +
+            "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, count(nullif(responded, false)), count(nullif(responded, true)), date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '5 min' as timestamp " +
+            "FROM( SELECT * FROM msp_ping p WHERE  datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid ORDER BY p.device_recid, p.datetime ) AS SUBQUERY " +
+            "GROUP BY timestamp, device_recid " + 
+            "ORDER BY device_recid, timestamp; " +
+            "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        })
+    }
+
+    /*
+     * Migrate and aggregate all records older than 60 days
+     * Return true if succesful, false otherwise
+     */
+    migrate60DayData() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query = 
+                "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " + 
+                "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, (round(sum(response_count),1)::decimal) as ping_success_rate, date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '25 min' as timestamp " +
+                "FROM(SELECT * FROM msp_ping_30 p WHERE  datetime < (timezone('UTC',NOW()) - '1 minutes'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.response_count ORDER BY p.device_recid, p.datetime) AS SUBQUERY " +
+                "GROUP BY timestamp, device_recid ORDER BY device_recid, timestamp; " +
+                "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            db.any(query).then(data => {
+                fulfill([data,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        })
+    }
+
     // DELETION COMMANDS
 
     /*
