@@ -4,7 +4,7 @@ import {DataFaker} from 'uniserve.m8s.data_faker';
 import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 import PingStorage from '../../src/PingStorage';
-import {DbInterface} from 'uniserve.m8s.utils';
+import {DbInterface} from 'uniserve.m8s.web.db_interface';
 import {Device} from 'uniserve.m8s.types';
 
 var expect = chai.expect;

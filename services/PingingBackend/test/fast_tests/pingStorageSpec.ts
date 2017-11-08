@@ -3,7 +3,7 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 import Pinger from '../../src/Pinger';
 import PingStorage from '../../src/PingStorage';
-import {DbInterface} from 'uniserve.m8s.utils';
+import {DbInterface} from 'uniserve.m8s.web.db_interface';
 
 var expect = chai.expect;
 chai.use(sinonChai);
