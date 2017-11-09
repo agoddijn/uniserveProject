@@ -19,27 +19,25 @@ function formatDate(date: Date) {
     return day + ' ' + monthNames[monthIndex] + ' ' + year;
 }
 
-export class SummaryContainer extends React.Component<{Sites: Site[]}, {Site: any}> {
+export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site | any}> {
     constructor(props: any) {
         super(props);
         this.state = {Site: {}};
     }
-    componentWillReceiveProps(next:{Sites:Site[]}){
-        this.loadDevice(next.Sites);
+    componentWillReceiveProps(next:{Site:Site}){
+        this.loadSite(next.Site);
     }
-    loadDevice(sites: Site[]) {
-        if (sites.length > 0) {
-            if (sites[0].devices && sites[0].devices.length > 0) {
-                this.setState((prevState,props) => {
-                    return {Site: sites[0]}
-                })
-            }
+    loadSite(site: Site) {
+        if (site.devices && site.devices.length > 0) {
+            this.setState((prevState,props) => {
+                return {Site: site}
+            })
         }
     }
     render() {
         var title = "Summary";
         if (this.state.Site && this.state.Site.devices && this.state.Site.devices.length > 0 && this.state.Site.devices[0].ping_records.length > 0) {
-            title = this.state.Site.description + ": "
+            title = this.state.Site.description + " - "
             var date: Date = new Date(this.state.Site.devices[0].ping_records[0].datetime);
             title += formatDate(date);
         }

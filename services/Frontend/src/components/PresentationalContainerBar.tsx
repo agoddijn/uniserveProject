@@ -22,6 +22,5 @@ export const ContainerBar = (props: { Title: string }) => {
                         <Button color="contrast">Gear</Button>
                     </Toolbar>
                 </AppBar>
-                
             </div>)
 }

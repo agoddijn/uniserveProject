@@ -43,6 +43,9 @@
     height: 80%;
     width: 100%;
 }
+#tableRow:hover{
+    cursor: pointer;
+}
 .AppBar div{
     background-color: #D0021B;
     border: 1px solid #D0021B;
