@@ -10,3 +10,6 @@ Content-type: application/json
 ###
 GET http://localhost:3035/ajax/monitoring_api.php?type=devices
 
+
+###
+GET http://localhost:3035/ajax/monitoring_api.php?type=device&device=1006

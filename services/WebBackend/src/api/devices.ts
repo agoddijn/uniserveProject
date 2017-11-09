@@ -5,8 +5,7 @@ import {DbInterface} from "uniserve.m8s.web.db_interface";
 
 export let devices = async (req: Request, res: Response) => {
     //might be a string tbh
-    const request_id = <number> parseInt(req.params.company_recid);
-    Log.trace("API:devices");
+    const request_id = parseInt(req.params.company_recid);
     Log.info("API:devices # company_recid: " + request_id);
 
     try {
@@ -24,8 +23,8 @@ export let devices = async (req: Request, res: Response) => {
         res.json(sites);  
 
     } catch(e) {
-        //TODO proper errors
-        res.json("error");
+        res.status(400);
+        res.json("Error: " + JSON.stringify(e));
     }
 
 }
