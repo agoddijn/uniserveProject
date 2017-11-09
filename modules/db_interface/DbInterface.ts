@@ -16,12 +16,14 @@ export class DbInterface {
     migrate30DayData() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
             let query = 
-            "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " +
-            "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, count(nullif(responded, false)), count(nullif(responded, true)), date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '5 min' as timestamp " +
-            "FROM( SELECT * FROM msp_ping p WHERE  datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid ORDER BY p.device_recid, p.datetime ) AS SUBQUERY " +
+            "BEGIN TRANSACTION; " +
+            "INSERT INTO msp_ping_30 (device_recid, ip_address, ms_response, response_count, datetime) " +
+            "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, round((count(nullif(responded, false))::decimal/5),1), date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '5 min' as timestamp " +
+            "FROM( SELECT * FROM msp_ping p WHERE  datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.responded ORDER BY p.device_recid, p.datetime ) AS SUBQUERY " +
             "GROUP BY timestamp, device_recid " + 
             "ORDER BY device_recid, timestamp; " +
-            "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval); " +
+            "END TRANSACTION; ";
 
             db.any(query).then(data => {
                 fulfill([data,true]);
@@ -39,11 +41,13 @@ export class DbInterface {
     migrate60DayData() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
             let query = 
+                "BEGIN TRANSACTION; " +
                 "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " + 
                 "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, (round(sum(response_count),1)::decimal) as ping_success_rate, date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '25 min' as timestamp " +
                 "FROM(SELECT * FROM msp_ping_30 p WHERE  datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.response_count ORDER BY p.device_recid, p.datetime) AS SUBQUERY " +
                 "GROUP BY timestamp, device_recid ORDER BY device_recid, timestamp; " +
-                "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+                "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval); " +
+                "END TRANSACTION; ";
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
