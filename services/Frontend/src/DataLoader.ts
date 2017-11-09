@@ -94,16 +94,16 @@ export class DataLoader{
                             "ping_recid": 2388,
                             "device_recid": 1007,
                             "ip_address": "78a90765364c.sn.mynetname.net",
-                            "ms_response": 40,
-                            "responded": true,
+                            "ms_response": null,
+                            "responded": false,
                             "datetime": "2017-11-09T13:58:54.000Z"
                         },
                         {
                             "ping_recid": 2374,
                             "device_recid": 1007,
                             "ip_address": "78a90765364c.sn.mynetname.net",
-                            "ms_response": 59,
-                            "responded": true,
+                            "ms_response": null,
+                            "responded": false,
                             "datetime": "2017-11-09T13:58:15.000Z"
                         },
                         {
@@ -118,7 +118,7 @@ export class DataLoader{
                             "ping_recid": 2349,
                             "device_recid": 1007,
                             "ip_address": "78a90765364c.sn.mynetname.net",
-                            "ms_response": 75,
+                            "ms_response": 50,
                             "responded": true,
                             "datetime": "2017-11-09T13:57:55.000Z"
                         },
@@ -126,8 +126,8 @@ export class DataLoader{
                             "ping_recid": 2333,
                             "device_recid": 1007,
                             "ip_address": "78a90765364c.sn.mynetname.net",
-                            "ms_response": 30,
-                            "responded": true,
+                            "ms_response": null,
+                            "responded": false,
                             "datetime": "2017-11-09T13:57:26.000Z"
                         }]
                 },{

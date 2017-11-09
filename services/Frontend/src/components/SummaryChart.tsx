@@ -71,7 +71,10 @@ export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
                 backgroundColor: "rgba(0,0,0,0)",
                 borderColor: colors[(2*j)%colors.length],
                 hoverBorderColor: colors[(2*j+1)%colors.length],
-                borderWidth: 2
+                borderWidth: 2,
+                pointRadius: [],
+                pointStyle: [],
+                pointBorderColor: []
             })
             for (let i = 0; i < device.ping_records.length; i ++) {
                 let curRecord: PingRecord = device.ping_records[i];
@@ -80,9 +83,16 @@ export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
                 if (j == 0) data.labels.push(dateString);
                 if (curRecord.responded) {
                     data.datasets[j].data.push(curRecord.ms_response);
+                    data.datasets[j].pointRadius.push(4);
+                    data.datasets[j].pointStyle.push('circle');
+                    data.datasets[j].pointBorderColor.push(colors[(2*j+1)%colors.length]);
                 } else {
                     data.datasets[j].data.push(0);
+                    data.datasets[j].pointRadius.push(6);
+                    data.datasets[j].pointStyle.push('crossRot');
+                    data.datasets[j].pointBorderColor.push("rgba(255,0,0,1)");
                 }
+                
             }
         }
         
