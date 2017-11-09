@@ -1,48 +1,98 @@
 import * as React from "react";
 var PropTypes = require('prop-types')
 import { withStyles } from 'material-ui/styles';
-import { Device, PingRecord } from 'uniserve.m8s.types';
+import { Site, Device, PingRecord } from 'uniserve.m8s.types';
 import { Line } from 'react-chartjs-2';
 
-const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label: 'My First dataset',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderCapStyle: 'butt',
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: 'rgba(75,192,192,1)',
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data: [65, 59, 80, 81, 56, 55, 40]
-      }
-    ]
-  };
 
-export class SummaryChart extends React.Component<{ Device: Device }, {Data: any}> {
-    constructor(props: { Device: Device }) {
-        super(props);
-        this.state = {Data: data};
+const options = {
+    maintainAspectRatio: false,
+    scales: {
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: "response (ms)"
+            },
+            gridLines: {
+                display: true,
+                color: "rgba(255,99,132,0.2)"
+            }
+        }],
+        xAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: "time"
+            },
+            gridLines: {
+                display: false
+            }
+        }]
     }
-    extractData() {
+}
+
+const colors = [
+    "rgba(220, 57, 18, 0.5)",
+    "rgba(220, 57, 18, 1)",
+    "rgba(51, 102, 204, 0.5)",
+    "rgba(51, 102, 204, 1)",
+    "rgba(255, 153, 0, 0.5)",
+    "rgba(255, 153, 0, 1)",
+    "rgba(16, 150, 24, 0.5)",
+    "rgba(16, 150, 24, 1)",
+    "rgba(153, 0, 153, 0.5)",
+    "rgba(153, 0, 153, 1)",
+    "rgba(59, 62, 172, 0.5)",
+    "rgba(59, 62, 172, 1)"
+]
+
+export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
+    constructor(props: { Site: Site }) {
+        super(props);
+        this.state = {Data: {}};
+    }
+    componentWillReceiveProps(next: {Site: Site}){
+        this.setState((prevstate,props) => {
+            let data = this.extractData(next.Site);
+            return {Data: data};
+        })
+    }
+    extractData(site: Site) {
+        if (site.devices.length == 0 || site.devices[0].ping_records.length == 0) return {};
+        var data: any = {
+            labels: [],
+            datasets: []
+        }
+
+        for (let j = 0; j < site.devices.length; j++) {
+            var device = site.devices[j];
+            data.datasets.push({
+                data: [],
+                label: device.description,
+                backgroundColor: "rgba(0,0,0,0)",
+                borderColor: colors[(2*j)%colors.length],
+                hoverBorderColor: colors[(2*j+1)%colors.length],
+                borderWidth: 2
+            })
+            for (let i = 0; i < device.ping_records.length; i ++) {
+                let curRecord: PingRecord = device.ping_records[i];
+                var date = new Date(curRecord.datetime);
+                var dateString: string = date.getHours() + ":" + date.getMinutes();
+                if (j == 0) data.labels.push(dateString);
+                if (curRecord.responded) {
+                    data.datasets[j].data.push(curRecord.ms_response);
+                } else {
+                    data.datasets[j].data.push(0);
+                }
+            }
+        }
+        
         return data;
     }
     render() {
         return (
-            <div>
+            <div id="chartcontainer">
                 <Line data={this.state.
-                    Data} />
+                    Data} options={options} />
             </div>
         );
     }
