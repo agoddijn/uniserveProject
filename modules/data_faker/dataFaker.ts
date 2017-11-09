@@ -46,6 +46,7 @@ export class DataFaker {
         return returnDevices;
     }
 
+
     generatePingRecords(howMany: number, timeStamp: Date): PingRecord[] {
         // create a ping record for howMany amount of devices
 
@@ -83,6 +84,7 @@ export class DataFaker {
     }
 
     addDataSet(jsonObjects: any) {
+        // transport JSON objects into list called links
     let that = this;
 
     that.links = [];
@@ -102,6 +104,7 @@ export class DataFaker {
 }
 
     generateDeviceList(links: Array<Device>) {
+        // device list with *ip address & id* as well as other attributes added
     let that = this;
     let device: Device; 
 
@@ -117,11 +120,11 @@ export class DataFaker {
         device.ip_address = address,
         device.device_recid = id,
         device.site_recid = 0, 
-        device.device_id = "fake_id", 
-        device.manufacturer = "fake_manufacturer", 
-        device.description = "fake_description", 
-        device.device_type = "fake_type", 
-        device.mac_address = "fake_mac");
+        device.device_id = "fake_id" + device.device_recid, 
+        device.manufacturer = "fake_manufacturer" + device.device_recid, 
+        device.description = "fake_description" +  device.device_recid, 
+        device.device_type = "fake_type" +  device.device_recid, 
+        device.mac_address = "fake_mac" +  device.device_recid);
 
         devices.push(device);
         id++;
@@ -130,6 +133,17 @@ export class DataFaker {
     return devices;
     }
 
+    // generate fake companys and sites
+    // look to see if we can generate fake addresses for them
+    // have the sites containing companys 
+
+    generateCompanies() {
+        // stub
+    }
+
+    generateSites() {
+        // stub
+    }
 }
 
 
