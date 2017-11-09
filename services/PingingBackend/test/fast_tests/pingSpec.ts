@@ -1,9 +1,9 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
-import Pinger from '../src/Pinger';
-import PingStorage from '../src/PingStorage';
-import {DbInterface} from 'uniserve.m8s.utils';
+import Pinger from '../../src/Pinger';
+import PingStorage from '../../src/PingStorage';
+import {DbInterface} from 'uniserve.m8s.web.db_interface';
 
 var expect = chai.expect;
 chai.use(sinonChai);
@@ -14,29 +14,27 @@ describe("Pinger spec", () => {
         console.log('Before: pingSpec');
         
         // DbInterface stub
-        sinon.stub(DbInterface.prototype, 'getAllDevices').callsFake(() => {
-            return new Promise((fulfill, reject) => {
-                var devices = require('./data/testDevices');
-                fulfill(devices);
-            });
-        });
+        var devices = require('../data/testDevices');
+        this.dbStub = sinon.stub(DbInterface.prototype, 'getAllDevices').resolves(devices);
 
         this.pinger = new Pinger();
     })
 
     after(() => {
         console.log('After: pingSpec');
+
+        this.dbStub.restore();
     })
 
     it("Should attempt to load data from database", (done) => {
-        var fakeDevices = require('./data/testDevices');
+        var fakeDevices = require('../data/testDevices');
         expect(this.pinger.devices).to.deep.equal(fakeDevices);
 
         done();
     })
 
     it("Should correctly convert a valid ping response", (done) => {
-        let validResponse = require('./data/validPingResponse');
+        let validResponse = require('../data/validPingResponse');
         let converted = this.pinger.responseToRecord(validResponse);
 
         expect(converted.ping_recid).to.be.a('null');
@@ -50,7 +48,7 @@ describe("Pinger spec", () => {
     })
 
     it("Should correctly convert an invalid ping response", (done) => {
-        let invalidResponse = require('./data/invalidPingResponse');
+        let invalidResponse = require('../data/invalidPingResponse');
         let converted = this.pinger.responseToRecord(invalidResponse);
         
         expect(converted.ping_recid).to.be.a('null');
@@ -61,20 +59,6 @@ describe("Pinger spec", () => {
         expect(converted.ip_address).to.equal(invalidResponse.device.ip_address);
 
         done();
-    })
-
-    it("Should ping a device with two attempts", (done) => {
-        var fakeDevices = require('./data/testDevices');
-        this.pinger.ping(fakeDevices[0])
-        .then((pingResponse) => {
-            expect(pingResponse.device).to.deep.equal(fakeDevices[0]);
-            expect(pingResponse.alive).to.be.a('boolean');
-
-            done();
-        })
-        .catch((e) => {
-            done(e);
-        })
     })
 
 })

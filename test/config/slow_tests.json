@@ -1,0 +1,4 @@
+[
+    "/services/WebBackend/test/slow_tests",
+    "/services/PingingBackend/test/slow_tests"
+]

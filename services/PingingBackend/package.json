@@ -9,12 +9,14 @@
     "dev": "node ./src/PingingBackend.js",
     "watch": "tsc -w",
     "build": "tsc || echo done",
-    "test": "(npm run build && mocha --timeout 10000 -R list)"
+    "test": "node ./test/test-runner.js fast",
+    "testall": "node ./test/test-runner.js all"
   },
   "dependencies": {
     "ping": "^0.2.2",
     "typescript": "^2.5.3",
-    "uniserve.m8s.utils": "1.0.0"
+    "uniserve.m8s.utils": "1.0.0",
+    "uniserve.m8s.data_faker": "1.0.0"    
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",

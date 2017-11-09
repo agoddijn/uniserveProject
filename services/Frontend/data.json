@@ -1,0 +1,400 @@
+[{
+    "site_recid": 1000,
+    "company_recid": 1000,
+    "description": "Marketing Web Server",
+    "address1": "1410 Olympic Way SE",
+    "address2": "",
+    "city": "Calgary",
+    "province": "AB",
+    "postal_code": "T2G2W1",
+    "latitude": "",
+    "longitude": "",
+    "devices": [{
+        "device_recid": 1000,
+        "site_recid": 1000,
+        "device_id": "WebHost 1",
+        "manufacturer": "Mikrotik",
+        "description": "Marketing Web Server",
+        "device_type": "Web Server",
+        "mac_address": "",
+        "ip_address": "78A907570944.sn.mynetname.net",
+        "ping_records": [{
+            "ping_recid": 12354,
+            "device_recid": 1000,
+            "ip_address": "78a907570944.sn.mynetname.net",
+            "ms_response": 15,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:45.000Z"
+        }, {
+            "ping_recid": 12342,
+            "device_recid": 1000,
+            "ip_address": "78a907570944.sn.mynetname.net",
+            "ms_response": 19,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:35.000Z"
+        }, {
+            "ping_recid": 12326,
+            "device_recid": 1000,
+            "ip_address": "78a907570944.sn.mynetname.net",
+            "ms_response": 17,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:25.000Z"
+        }, {
+            "ping_recid": 12314,
+            "device_recid": 1000,
+            "ip_address": "78a907570944.sn.mynetname.net",
+            "ms_response": 13,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:15.000Z"
+        }, {
+            "ping_recid": 12298,
+            "device_recid": 1000,
+            "ip_address": "78a907570944.sn.mynetname.net",
+            "ms_response": 18,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:05.000Z"
+        }]
+    }]
+}, {
+    "site_recid": 1003,
+    "company_recid": 1000,
+    "description": "Office Wifi Router",
+    "address1": "12415 - 102 Ave",
+    "address2": "",
+    "city": "Edmonton",
+    "province": "AB",
+    "postal_code": "T5N0M2",
+    "latitude": "",
+    "longitude": "",
+    "devices": [{
+        "device_recid": 1001,
+        "site_recid": 1003,
+        "device_id": "Main Office Router",
+        "manufacturer": "Mikrotik",
+        "description": "Office Wifi Router",
+        "device_type": "Router",
+        "mac_address": "",
+        "ip_address": "78A9077F9070.sn.mynetname.net",
+        "ping_records": [{
+            "ping_recid": 12359,
+            "device_recid": 1001,
+            "ip_address": "78a9077f9070.sn.mynetname.net",
+            "ms_response": 18,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:45.000Z"
+        }, {
+            "ping_recid": 12340,
+            "device_recid": 1001,
+            "ip_address": "78a9077f9070.sn.mynetname.net",
+            "ms_response": 18,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:35.000Z"
+        }, {
+            "ping_recid": 12327,
+            "device_recid": 1001,
+            "ip_address": "78a9077f9070.sn.mynetname.net",
+            "ms_response": 14,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:25.000Z"
+        }, {
+            "ping_recid": 12312,
+            "device_recid": 1001,
+            "ip_address": "78a9077f9070.sn.mynetname.net",
+            "ms_response": 13,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:15.000Z"
+        }, {
+            "ping_recid": 12299,
+            "device_recid": 1001,
+            "ip_address": "78a9077f9070.sn.mynetname.net",
+            "ms_response": 22,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:05.000Z"
+        }]
+    }]
+}, {
+    "site_recid": 1001,
+    "company_recid": 1000,
+    "description": "Western Inventory Control",
+    "address1": "570 Pembina Hwy",
+    "address2": "",
+    "city": "Winnipeg",
+    "province": "MB",
+    "postal_code": "R3M2M5",
+    "latitude": "",
+    "longitude": "",
+    "devices": [{
+        "device_recid": 1002,
+        "site_recid": 1001,
+        "device_id": "Procurement 1",
+        "manufacturer": "Virtual Server",
+        "description": "Western Inventory Control",
+        "device_type": "Web Server",
+        "mac_address": "",
+        "ip_address": "78A907457024.sn.mynetname.net",
+        "ping_records": [{
+            "ping_recid": 12360,
+            "device_recid": 1002,
+            "ip_address": "78a907457024.sn.mynetname.net",
+            "ms_response": 16,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:45.000Z"
+        }, {
+            "ping_recid": 12346,
+            "device_recid": 1002,
+            "ip_address": "78a907457024.sn.mynetname.net",
+            "ms_response": 24,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:35.000Z"
+        }, {
+            "ping_recid": 12332,
+            "device_recid": 1002,
+            "ip_address": "78a907457024.sn.mynetname.net",
+            "ms_response": 13,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:25.000Z"
+        }, {
+            "ping_recid": 12318,
+            "device_recid": 1002,
+            "ip_address": "78a907457024.sn.mynetname.net",
+            "ms_response": 19,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:15.000Z"
+        }, {
+            "ping_recid": 12304,
+            "device_recid": 1002,
+            "ip_address": "78a907457024.sn.mynetname.net",
+            "ms_response": 28,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:05.000Z"
+        }]
+    }]
+}, {
+    "site_recid": 1004,
+    "company_recid": 1000,
+    "description": "Billing Database",
+    "address1": "587 Third Line",
+    "address2": "",
+    "city": "Oakville",
+    "province": "ON",
+    "postal_code": "L6L4A8",
+    "latitude": "",
+    "longitude": "",
+    "devices": [{
+        "device_recid": 1004,
+        "site_recid": 1004,
+        "device_id": "DB 2",
+        "manufacturer": "Amazon EC2",
+        "description": "Billing Database",
+        "device_type": "Database Server",
+        "mac_address": "",
+        "ip_address": "78A9078DC78B.sn.mynetname.net",
+        "ping_records": [{
+            "ping_recid": 12361,
+            "device_recid": 1004,
+            "ip_address": "78a9078dc78b.sn.mynetname.net",
+            "ms_response": 27,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:45.000Z"
+        }, {
+            "ping_recid": 12347,
+            "device_recid": 1004,
+            "ip_address": "78a9078dc78b.sn.mynetname.net",
+            "ms_response": 26,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:35.000Z"
+        }, {
+            "ping_recid": 12333,
+            "device_recid": 1004,
+            "ip_address": "78a9078dc78b.sn.mynetname.net",
+            "ms_response": 27,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:25.000Z"
+        }, {
+            "ping_recid": 12319,
+            "device_recid": 1004,
+            "ip_address": "78a9078dc78b.sn.mynetname.net",
+            "ms_response": 26,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:15.000Z"
+        }, {
+            "ping_recid": 12305,
+            "device_recid": 1004,
+            "ip_address": "78a9078dc78b.sn.mynetname.net",
+            "ms_response": 27,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:05.000Z"
+        }]
+    }]
+}, {
+    "site_recid": 1005,
+    "company_recid": 1000,
+    "description": "CSR Interface",
+    "address1": "148 Simcoe ST",
+    "address2": "",
+    "city": "Toronto",
+    "province": "ON",
+    "postal_code": "M5H3G4",
+    "latitude": "",
+    "longitude": "",
+    "devices": [{
+        "device_recid": 1005,
+        "site_recid": 1005,
+        "device_id": "WebHost 2",
+        "manufacturer": "Amazon EC2",
+        "description": "CSR Interface",
+        "device_type": "Web Server",
+        "mac_address": "",
+        "ip_address": "78A907CBDA96.sn.mynetname.net",
+        "ping_records": [{
+            "ping_recid": 12362,
+            "device_recid": 1005,
+            "ip_address": "78a907cbda96.sn.mynetname.net",
+            "ms_response": 13,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:45.000Z"
+        }, {
+            "ping_recid": 12348,
+            "device_recid": 1005,
+            "ip_address": "78a907cbda96.sn.mynetname.net",
+            "ms_response": 20,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:35.000Z"
+        }, {
+            "ping_recid": 12334,
+            "device_recid": 1005,
+            "ip_address": "78a907cbda96.sn.mynetname.net",
+            "ms_response": 15,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:25.000Z"
+        }, {
+            "ping_recid": 12320,
+            "device_recid": 1005,
+            "ip_address": "78a907cbda96.sn.mynetname.net",
+            "ms_response": 16,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:15.000Z"
+        }, {
+            "ping_recid": 12306,
+            "device_recid": 1005,
+            "ip_address": "78a907cbda96.sn.mynetname.net",
+            "ms_response": 26,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:05.000Z"
+        }]
+    }]
+}, {
+    "site_recid": 1006,
+    "company_recid": 1000,
+    "description": "Eastern Inventory Control",
+    "address1": "721 Ashburnham Drive",
+    "address2": "",
+    "city": "Peterborough",
+    "province": "ON",
+    "postal_code": "K9L1P7",
+    "latitude": "",
+    "longitude": "",
+    "devices": [{
+        "device_recid": 1006,
+        "site_recid": 1006,
+        "device_id": "Procurement 2",
+        "manufacturer": "Amazon EC2",
+        "description": "Eastern Inventory Control",
+        "device_type": "Web Server",
+        "mac_address": "",
+        "ip_address": "78A90785626E.sn.mynetname.net",
+        "ping_records": [{
+            "ping_recid": 12363,
+            "device_recid": 1006,
+            "ip_address": "78a90785626e.sn.mynetname.net",
+            "ms_response": 11,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:45.000Z"
+        }, {
+            "ping_recid": 12349,
+            "device_recid": 1006,
+            "ip_address": "78a90785626e.sn.mynetname.net",
+            "ms_response": 18,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:35.000Z"
+        }, {
+            "ping_recid": 12335,
+            "device_recid": 1006,
+            "ip_address": "78a90785626e.sn.mynetname.net",
+            "ms_response": 13,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:25.000Z"
+        }, {
+            "ping_recid": 12321,
+            "device_recid": 1006,
+            "ip_address": "78a90785626e.sn.mynetname.net",
+            "ms_response": 15,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:15.000Z"
+        }, {
+            "ping_recid": 12307,
+            "device_recid": 1006,
+            "ip_address": "78a90785626e.sn.mynetname.net",
+            "ms_response": 29,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:05.000Z"
+        }]
+    }]
+}, {
+    "site_recid": 1002,
+    "company_recid": 1000,
+    "description": "Sales Database",
+    "address1": "306 Terminal Ave",
+    "address2": "",
+    "city": "Vancouver",
+    "province": "BC",
+    "postal_code": "V6A3W9",
+    "latitude": "",
+    "longitude": "",
+    "devices": [{
+        "device_recid": 1003,
+        "site_recid": 1002,
+        "device_id": "DB 1",
+        "manufacturer": "Mikrotik",
+        "description": "Sales Database",
+        "device_type": "Database Server",
+        "mac_address": "",
+        "ip_address": "78A907F7CB17.sn.mynetname.net",
+        "ping_records": [{
+            "ping_recid": 12355,
+            "device_recid": 1003,
+            "ip_address": "78a907f7cb17.sn.mynetname.net",
+            "ms_response": 17,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:45.000Z"
+        }, {
+            "ping_recid": 12341,
+            "device_recid": 1003,
+            "ip_address": "78a907f7cb17.sn.mynetname.net",
+            "ms_response": 16,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:35.000Z"
+        }, {
+            "ping_recid": 12328,
+            "device_recid": 1003,
+            "ip_address": "78a907f7cb17.sn.mynetname.net",
+            "ms_response": 14,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:25.000Z"
+        }, {
+            "ping_recid": 12313,
+            "device_recid": 1003,
+            "ip_address": "78a907f7cb17.sn.mynetname.net",
+            "ms_response": 14,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:15.000Z"
+        }, {
+            "ping_recid": 12300,
+            "device_recid": 1003,
+            "ip_address": "78a907f7cb17.sn.mynetname.net",
+            "ms_response": 75,
+            "responded": true,
+            "datetime": "2017-11-04T11:56:05.000Z"
+        }]
+    }]
+}]

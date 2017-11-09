@@ -1,4 +1,5 @@
-import {Log, DbInterface} from 'uniserve.m8s.utils';
+import {Log} from 'uniserve.m8s.utils';
+import {DbInterface} from "../../../modules/db_interface/DbInterface";
 import {PingRecord, Device} from 'uniserve.m8s.types';
 import PingStorage from './PingStorage';
 import * as sysPing from 'ping'
@@ -30,27 +31,29 @@ export default class Pinger {
         });
     }
 
-    public doPing() {
+    public doPing(): Promise<boolean> {
         var that = this;
         this.storage.sendRecords();
-        var date = new Date();
-        let pingPromises: Promise<any>[] = [];
-        for (let device of that.devices) {
-           //  console.log("found a device with ip " + device.ip_address);
-            pingPromises.push(that.ping(device));
-        }
-        Promise.all(pingPromises)
-        .then((data: any[]) => {
-           //  console.log("Got some data");
-            var records: PingRecord[] = [];
-            for (let pingResponse of data) {
-                records.push(that.responseToRecord(pingResponse));
+        return new Promise((fulfill, reject) => {
+            var date = new Date();
+            let pingPromises: Promise<any>[] = [];
+            for (let device of that.devices) {
+                pingPromises.push(that.ping(device));
             }
-            that.storage.addPingRecords(date, records);
-        })
-        .catch(e => {
-            console.log("Error: " + JSON.stringify(e));
-        });
+            Promise.all(pingPromises)
+            .then((data: any[]) => {
+                var records: PingRecord[] = [];
+                for (let pingResponse of data) {
+                    records.push(that.responseToRecord(pingResponse));
+                }
+                that.storage.addPingRecords(date, records);
+                fulfill(true);
+            })
+            .catch(e => {
+                console.log("Error: " + e);
+                fulfill(false);
+            });
+        })   
     }
     
     public ping(device: Device): Promise<any> {

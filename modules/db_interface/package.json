@@ -1,0 +1,22 @@
+{
+    "name": "uniserve.m8s.web.db_interface",
+    "version": "1.0.0",
+    "description": "Database Interface",
+    "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+    "license": "MIT",
+    "main": "./index.js",
+    "scripts": {
+      "watch": "tsc -w",
+      "build": "tsc || echo done"
+    },
+    "dependencies": {
+      "pg-promise": "^6.10.2",      
+      "typescript": "^2.5.3",
+      "uniserve.m8s.types": "1.0.0",
+      "uniserve.m8s.utils": "1.0.0"
+    },
+    "devDependencies": {
+      "@types/node": "^8.0.31"
+    }
+  }
+  

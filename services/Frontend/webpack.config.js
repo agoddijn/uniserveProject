@@ -20,7 +20,12 @@ module.exports = {
 
     devServer: {
         port: 8080,
-        hot: true
+        hot: true,
+        proxy: {
+            "/login": "http://localhost:3035",
+            "/logout": "http://localhost:3035",
+            "/ajax": "http://localhost:3035"
+        }
     },
 
     resolve: {

@@ -38,6 +38,11 @@
     border-radius: 10px;
     float: left;
 }
+#chartcontainer{
+    position: relative;
+    height: 80%;
+    width: 100%;
+}
 .AppBar div{
     background-color: #D0021B;
     border: 1px solid #D0021B;
@@ -64,9 +69,9 @@ iframe{
     height: 40vh;
     border: 0;
 }
-td .responseCircle{
-    width:5vw;
-    height: 5vh;
+.responseCircle div{
+    width:3vw;
+    height: 3vh;
     border: 1px;
     border-radius: 30vh;
     color: green;
@@ -76,6 +81,9 @@ td .responseCircle{
     overflow-x: 'auto';
 }
 .tableroot th{
+    text-align: left;
+}
+.tableroot td{
     text-align: left;
 }
 
