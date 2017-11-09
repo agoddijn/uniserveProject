@@ -9,14 +9,6 @@ import {DbInterface} from "uniserve.m8s.web.db_interface";
 
 const app = express();
 
-//TODO remove this once frontend has dev server and apache is figured out
-app.use(express.static(path.normalize(__dirname + "/../../Frontend/public")));
-app.get('/', function(req,res) {
-    res.sendFile(path.normalize(__dirname + "/../../Frontend/public/index.html"));
-});
-
-let test : Company = {company_name: "test", company_recid: 1, company_id: "1"};
-
 let dbInt = new DbInterface;
 let dbTest = new DbTesting;
 
