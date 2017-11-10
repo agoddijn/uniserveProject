@@ -22,9 +22,16 @@ export class TabularViewContainer extends React.Component<{Sites:Site[], SelectS
         }
     } 
     render() {
-        return <div id="listcontainer">
-            <ContainerBar Title={"Device List"}/>
-            <PresentationalTable Sites={this.state.Sites} tabular={true} SelectSite={this.state.SelectSite} SelectedSite={this.state.SelectedSite}/>
+        return <div className="myContainer">
+            {/* <ContainerBar Title={"Device List"}/> */}
+            <div className={"container-bar"}>
+                <h5 className="title">
+                    Sites
+                </h5>
+            </div>
+            <div className={"container-inner"}>
+                <PresentationalTable Sites={this.state.Sites} tabular={true} SelectSite={this.state.SelectSite} SelectedSite={this.state.SelectedSite}/>
+            </div> 
         </div>;
     }
 }

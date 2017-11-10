@@ -15,49 +15,29 @@
     height: 100vh;
     background: lightgrey;
 }
-#listcontainer{
+.myContainer{
     position: relative;
-    /* left: 2vw;
-    top: 2vh;
-    width: 50vw; 
-    height: 90vh; */
     height: 100%;
     width: 100%;
     background-color: white;
     border: 1px solid lightgrey;
-    border-radius: 10px;
+    border-radius: 5px;
     float: left;
     overflow-y: scroll;
 }
-#mapcontainer{
-    position: relative;
-    /* left: 4vw;
-    top: 2vh;
-    width: 44vw; 
-    height: 40vh; */
-    height: 100%;
-    width: 100%;
-    background-color: white;
-    border: 1px solid lightgrey;
-    border-radius: 10px;
-    float: left;
-}
 #summarycontainer{
     position: relative;
-    /* left: 4vw;
-    top: 12vh;
-    width: 44vw; 
-    height: 40vh; */
     height: 100%;
     width: 100%;
     background-color: white;
     border: 1px solid lightgrey;
-    border-radius: 10px;
+    border-radius: 5px;
     float: left;
+    overflow-y: scroll;
 }
 #chartcontainer{
     position: relative;
-    height: 85%;
+    height: 100%;
     width: 100%;
 }
 #tableRow:hover{
@@ -84,17 +64,17 @@
 }
 .title{
     margin: auto;
+    padding-top: 10px;
 }
 iframe{
     width: 100%;
-    height: 85%;
+    height: 100%;
 }
 .responseCircle > div{
     width: 30px;
     height: 30px;
     border: 1px;
     border-radius: 50%;
-    background-color: green;
     margin-left: 1.5vw;
 }
 .tableroot{
@@ -107,4 +87,25 @@ iframe{
 .tableroot td{
     text-align: left;
 }
-
+.container-bar{
+    width: 100%;
+    height: 45px;
+    text-align: center;
+    background-color: var(--primary-color);
+    border: 1px;
+    border-color: var(--primary-color);
+    color: white;
+}
+.container-bar:hover {
+    cursor: pointer;
+}
+.container-inner {
+    /* Firefox */
+    height: -moz-calc(100% - 45px);
+    /* WebKit */
+    height: -webkit-calc(100% - 45px);
+    /* Opera */
+    height: -o-calc(100% - 45px);
+    /* Standard */
+    height: calc(100% - 45px);
+}

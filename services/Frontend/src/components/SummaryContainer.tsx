@@ -41,9 +41,15 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
             var date: Date = new Date(this.state.Site.devices[0].ping_records[0].datetime);
             title += formatDate(date);
         }
-        return <div id="summarycontainer">
-            <ContainerBar Title={title} />
-            <SummaryChart Site={this.state.Site} />
+        return <div className="myContainer">
+            <div className={"container-bar"}>
+                    <h5 className="title">
+                        {title}
+                    </h5>
+            </div>
+            <div className={"container-inner"}>
+                <SummaryChart Site={this.state.Site} />
+            </div>
         </div>;
     }
 }

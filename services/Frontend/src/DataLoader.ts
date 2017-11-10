@@ -201,7 +201,47 @@ export class DataLoader{
                     "device_type": "Database Server",
                     "mac_address": "",
                     "ip_address": "78A907F7CB17.sn.mynetname.net",
-                    "ping_records": []
+                    "ping_records": [
+                        {
+                            "ping_recid": 2388,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 124,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:54.000Z"
+                        },
+                        {
+                            "ping_recid": 2374,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 47,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:15.000Z"
+                        },
+                        {
+                            "ping_recid": 2361,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 35,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:05.000Z"
+                        },
+                        {
+                            "ping_recid": 2349,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 38,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:57:55.000Z"
+                        },
+                        {
+                            "ping_recid": 2333,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 77,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:57:26.000Z"
+                        }]
                 },{
                     "device_recid": 1003,
                     "site_recid": 1002,
@@ -211,7 +251,47 @@ export class DataLoader{
                     "device_type": "Database Server",
                     "mac_address": "",
                     "ip_address": "78A907F7CB17.sn.mynetname.net",
-                    "ping_records": []
+                    "ping_records": [
+                        {
+                            "ping_recid": 2388,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 124,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:54.000Z"
+                        },
+                        {
+                            "ping_recid": 2374,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 47,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:15.000Z"
+                        },
+                        {
+                            "ping_recid": 2361,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 35,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:05.000Z"
+                        },
+                        {
+                            "ping_recid": 2349,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 38,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:57:55.000Z"
+                        },
+                        {
+                            "ping_recid": 2333,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 77,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:57:26.000Z"
+                        }]
                 },{
                     "device_recid": 1003,
                     "site_recid": 1002,
@@ -221,7 +301,47 @@ export class DataLoader{
                     "device_type": "Database Server",
                     "mac_address": "",
                     "ip_address": "78A907F7CB17.sn.mynetname.net",
-                    "ping_records": []
+                    "ping_records": [
+                        {
+                            "ping_recid": 2388,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 124,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:54.000Z"
+                        },
+                        {
+                            "ping_recid": 2374,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 47,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:15.000Z"
+                        },
+                        {
+                            "ping_recid": 2361,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 35,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:58:05.000Z"
+                        },
+                        {
+                            "ping_recid": 2349,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 38,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:57:55.000Z"
+                        },
+                        {
+                            "ping_recid": 2333,
+                            "device_recid": 1007,
+                            "ip_address": "78a90765364c.sn.mynetname.net",
+                            "ms_response": 77,
+                            "responded": false,
+                            "datetime": "2017-11-09T23:57:26.000Z"
+                        }]
                 }]
             }]
             let promises:Promise<number>[] = datasets.map((data:Site) => {

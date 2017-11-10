@@ -51,10 +51,7 @@ export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
         this.state = {Data: {}};
     }
     componentWillReceiveProps(next: {Site: Site}){
-        this.setState((prevstate,props) => {
-            let data = this.extractData(next.Site);
-            return {Data: data};
-        })
+        this.setState({Data: this.extractData(next.Site)});
     }
     extractData(site: Site) {
         if (site.devices.length == 0 || site.devices[0].ping_records.length == 0) return {};
@@ -95,14 +92,14 @@ export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
                 
             }
         }
-        
+
         return data;
     }
     render() {
         return (
             <div id="chartcontainer">
                 <Line data={this.state.
-                    Data} options={options} />
+                    Data} options={options} redraw/>
             </div>
         );
     }

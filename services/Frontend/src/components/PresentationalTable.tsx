@@ -36,7 +36,22 @@ export class PresentationalTable extends React.Component<{ Sites: Site[], tabula
           </TableHead>
           <TableBody>
             {this.props.Sites.map((n: Site, key: number) => {
-              let backgroundColorCode = key % 2 === 0 ? "#e6e6e6" : "white";
+              var statusColor = "green";
+              var unresponsive = 0, pings = 0;
+              for (let device of n.devices) {
+                for (let ping of device.ping_records) {
+                  pings += 1;
+                  if (!ping.responded) {
+                    unresponsive += 1;
+                  }
+                }
+              }
+              if (unresponsive > 0) {
+                statusColor = "orange";
+                if (unresponsive == pings) {
+                  statusColor = "red";
+                }
+              }
               return (
                 <TableRow
                   hover
@@ -46,7 +61,7 @@ export class PresentationalTable extends React.Component<{ Sites: Site[], tabula
                   selected={this.state.SelectedSite.site_recid === n.site_recid}
                 >
                   <TableCell>
-                    <td className="responseCircle"><div></div></td>
+                    <td className="responseCircle"><div style={{backgroundColor: statusColor}}></div></td>
                   </TableCell>
                   <TableCell>{n.description}</TableCell>
                   <TableCell>{"response time here"}</TableCell>
