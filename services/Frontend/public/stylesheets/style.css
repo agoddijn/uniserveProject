@@ -1,5 +1,15 @@
+:root{
+    --primary-color: #D4321C;
+    --status-green: green;
+    --status-orange: orange;
+    --status-red: red;
+}
 *{
     box-sizing: border-box;
+}
+.grid-container{
+    height: 100vh;
+    overflow-y: scroll; 
 }
 #container{
     height: 100vh;
@@ -7,21 +17,26 @@
 }
 #listcontainer{
     position: relative;
-    left: 2vw;
+    /* left: 2vw;
     top: 2vh;
     width: 50vw; 
-    height: 90vh;
+    height: 90vh; */
+    height: 100%;
+    width: 100%;
     background-color: white;
     border: 1px solid lightgrey;
     border-radius: 10px;
     float: left;
+    overflow-y: scroll;
 }
 #mapcontainer{
     position: relative;
-    left: 4vw;
+    /* left: 4vw;
     top: 2vh;
     width: 44vw; 
-    height: 40vh;
+    height: 40vh; */
+    height: 100%;
+    width: 100%;
     background-color: white;
     border: 1px solid lightgrey;
     border-radius: 10px;
@@ -29,10 +44,12 @@
 }
 #summarycontainer{
     position: relative;
-    left: 4vw;
+    /* left: 4vw;
     top: 12vh;
     width: 44vw; 
-    height: 40vh;
+    height: 40vh; */
+    height: 100%;
+    width: 100%;
     background-color: white;
     border: 1px solid lightgrey;
     border-radius: 10px;
@@ -40,21 +57,22 @@
 }
 #chartcontainer{
     position: relative;
-    height: 80%;
+    height: 85%;
     width: 100%;
 }
 #tableRow:hover{
     cursor: pointer;
 }
 .AppBar div{
-    background-color: #D0021B;
-    border: 1px solid #D0021B;
+    background-color: var(--primary-color);
+    border: 2px solid var(--primary-color);
     border-top-left-radius:10px;
     border-top-right-radius:10px;
+    height: 20% !important;
 }
 .AppBar header{
-    background-color: #D0021B;
-    border: 1px solid #D0021B;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     border-top-left-radius:10px;
     border-top-right-radius:10px;
 }
@@ -68,16 +86,16 @@
     margin: auto;
 }
 iframe{
-    width: 44vw;
-    height: 40vh;
-    border: 0;
+    width: 100%;
+    height: 85%;
 }
-.responseCircle div{
-    width:3vw;
-    height: 3vh;
+.responseCircle > div{
+    width: 30px;
+    height: 30px;
     border: 1px;
-    border-radius: 30vh;
-    color: green;
+    border-radius: 50%;
+    background-color: green;
+    margin-left: 1.5vw;
 }
 .tableroot{
     width: 100%;
