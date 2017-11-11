@@ -44,7 +44,7 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
                 cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
                 rowHeight={rowHeight}>
                 <div key="a">
-                    <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite}/>
+                    <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)}/>
                 </div>
                 <div key="b">
                     <MapContainer Device={{}} />
