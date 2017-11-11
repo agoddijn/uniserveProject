@@ -22,15 +22,28 @@ describe('dataFakerTest', function() {
     });
 
     it("test: getDevices", function() {
-        
+        let numDevices = 1000;
+        let returnedDevices = [];
+
+        returnedDevices = dataFaker.getDevices(numDevices);
+
+        expect(returnedDevices.length).to.equal(1000);
     });
 
     it("test: generatePingRecords", function() {
-
+        let numDevices = 500;
+        let date: Date = new Date();
+        
+        
+        //let generatedPingR = dataFaker.generatePingRecords(numDevices, date.);
     });
 
     it("test: generateDeviceList", function() {
-        
+        let devices = [];
+        let links = dataFaker.links;
+
+        devices = dataFaker.generateDeviceList(links);
+        expect(devices.length).to.equal(10000);
     });
 
 });

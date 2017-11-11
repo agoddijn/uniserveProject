@@ -1,6 +1,4 @@
-import {Company} from "uniserve.m8s.types";
-import {Device} from "uniserve.m8s.types";
-import {PingRecord} from "uniserve.m8s.types";
+import {Device, PingRecord, Company, Site} from "uniserve.m8s.types";
 
 let fs = require('fs');
 
@@ -15,8 +13,11 @@ export class DataFaker {
         that.json = require('./data/top10000.json'); 
     }
 
+    /*
+    *   
+    *   returns the first "number" of devices
+    */
     getDevices(howMany: number): Device[] {
-        // returns the first "number" of devices
         let that = this;
 
         let returnDevices = [];
@@ -34,8 +35,11 @@ export class DataFaker {
 
     }
 
+    /*
+    *
+    * returns the first "number" of devices
+    */
     getTopDevices(howMany: number): Device[] {
-        // returns the first "number" of devices
         let that = this;
 
         let returnDevices = [];
@@ -58,9 +62,11 @@ export class DataFaker {
         return returnDevices;
     }
 
-
+    /*
+    *
+    *  create a ping record for howMany amount of devices
+    */
     generatePingRecords(howMany: number, timeStamp: Date): PingRecord[] {
-        // create a ping record for howMany amount of devices
 
         let that = this;
         
@@ -84,6 +90,10 @@ export class DataFaker {
         
     }
 
+    /*
+    * helper for generatePingRecords
+    * given device id and date returns a ping record
+    */
     generatePingRecord(device_id: any, date: Date): PingRecord {
         let pingRecord: PingRecord;
 
@@ -95,6 +105,10 @@ export class DataFaker {
         return pingRecord;
     }
 
+    /*
+    * given a json object file 
+    * returns list of website links 
+    */
     addDataSet(jsonObjects: any) {
         // transport JSON objects into list called links
     let that = this;
@@ -113,8 +127,12 @@ export class DataFaker {
     }
 
     return that.links;
-}
+    }
 
+    /*
+    * given an array of website links
+    * returns a list of devices
+    */
     generateDeviceList(links: Array<Device>) {
         // device list with *ip address & id* as well as other attributes added
     let that = this;
@@ -149,12 +167,27 @@ export class DataFaker {
     // look to see if we can generate fake addresses for them
     // have the sites containing companys 
 
-    generateCompanies() {
+    /*
+    *
+    * returns list of companies
+    */
+    generateCompanies(): Company[] {
         // stub
+        let company: Company;
+        let companies: Company[];
+        return  companies;
     }
 
-    generateSites() {
+
+    /*
+    *
+    * returns list of sites
+    */
+    generateSites(): Site[] {
         // stub
+        let site: Site;
+        let sites: Site[];
+        return sites;
     }
 }
 
