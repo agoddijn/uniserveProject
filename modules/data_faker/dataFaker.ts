@@ -4,7 +4,7 @@ let fs = require('fs');
 let Chance = require('chance');
 var fakerator = require("fakerator")("hu-HU");
 
-class PingR implements PingRecord {
+class PingRecordClass implements PingRecord {
     ping_recid = 0;
     device_recid = 0;
     ip_address = "";
@@ -13,7 +13,7 @@ class PingR implements PingRecord {
     datetime = null;
 }
 
-class dev implements Device {
+class DeviceClass implements Device {
     device_recid = 0;
     site_recid = 0;
     device_id = "";
@@ -22,6 +22,25 @@ class dev implements Device {
     device_type = "";
     mac_address = "";
     ip_address = "";
+}
+
+class CompanyClass implements Company {
+    company_recid = 0;
+    company_id = "";
+    company_name = "";
+}
+
+class SiteClass implements Site {
+    site_recid = 0;
+    company_recid = 0;
+    description = "";
+    address1 = "";
+    address2 = "";
+    city = "";
+    province = "";
+    postal_code = "";
+    latitude = "";
+    longitude = "";
 }
 
 export class DataFaker {
@@ -125,7 +144,7 @@ export class DataFaker {
      */
     generatePingRecord(device_id: any, date: Date): PingRecord {
         let that = this;
-        let pingRecord: PingRecord = new PingR();
+        let pingRecord: PingRecord = new PingRecordClass();
 
         pingRecord.datetime = date;
         pingRecord.device_recid = device_id;
@@ -169,7 +188,7 @@ export class DataFaker {
     generateDeviceList(links: Array<Device>): Device[] {
         // TODO: promisify this function
     let that = this;
-    let device: Device = new dev();
+    let device: Device = new DeviceClass();
 
     let devices = [];
     let id: number = 1;
@@ -205,8 +224,8 @@ export class DataFaker {
      */
     generateCompanies(howMany: number): Company[] {
         let that = this;
-        let company: Company = null;
-        let companies: Company[] = null;
+        let company: Company = new CompanyClass();
+        let companies: Company[] = [];
         let numOfSitesForCompany: number; 
          
 
@@ -233,8 +252,8 @@ export class DataFaker {
      */
     generateSites(c_recid: number, numSites: number): Site[] {
         let that = this;
-        let site: Site = null;
-        let sites: Site[] = null;
+        let site: Site = new SiteClass();
+        let sites: Site[] = [];
         let rec_id: number = 1;
         
         let entity: JSON = fakerator.entity.address();
