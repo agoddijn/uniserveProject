@@ -234,7 +234,7 @@ export class DbInterface {
                 fulfill(devices);
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false]);
+                reject([]);
             })
         })
     }
@@ -267,7 +267,7 @@ export class DbInterface {
                 fulfill(pingRecords);
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false]);
+                reject([]);
             })
         })
     }
@@ -366,7 +366,6 @@ export class DbInterface {
     */
    parseAllDevices(results:any) :  Device[] {
        let deviceRecords: Device[] = [];
-       // console.log(JSON.stringify(results));
         for (var key in results){
            let device : Device = {
                device_recid : results[key]["device_recid"],
@@ -390,7 +389,6 @@ export class DbInterface {
      */
     parseDevices(results:any, company_recid, site_recid, that) {
         let deviceRecords: Device[] = [];
-       // console.log(JSON.stringify(results));
         for (var key in results){
             if (results.hasOwnProperty(key) && results[key]["company_recid"] == company_recid && results[key]["site_recid"] == site_recid){
                 let device : Device = {
@@ -402,7 +400,6 @@ export class DbInterface {
                     device_type : results[key]["device_type"],
                     mac_address : results[key]["mac_address"],
                     ip_address : results[key]["ip_address"],
-                //    ping_records : that.parsePings(site)
                 }
                 deviceRecords.push(device)
             }
