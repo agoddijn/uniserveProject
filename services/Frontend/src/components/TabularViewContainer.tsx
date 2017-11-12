@@ -1,23 +1,38 @@
 import * as React from "react";
-import { Device } from "uniserve.m8s.types";
 import { ContainerBar } from "./PresentationalContainerBar"
 import { PresentationalTable } from "./PresentationalTable"
+import { SiteTable } from "./PresentationalSiteTable"
+import { Site, Device } from "uniserve.m8s.types";
 
-export interface DataType{
-    response_time:number,
-    name: string,
-    usage:number,
-    time_stamp:string,
-}
-
-export class TabularViewContainer extends React.Component<any, {}> {
-    constructor(props: any) {
+export class TabularViewContainer extends React.Component<{Sites:Site[], SelectSite: any}, {Sites:Site[], SelectSite: any, SelectedSite: any}> {
+    constructor(props: {Sites:Site[], SelectSite: any, SelectedSite: any}) {
         super(props);
+        this.state = {
+            Sites: [], 
+            SelectSite: {}, 
+            SelectedSite: {}
+        };
     }
+    componentWillReceiveProps(next:{Sites:Site[], SelectSite:any, SelectedSite: any}){
+        this.setState({SelectSite: next.SelectSite});
+        if(next.Sites.length !== this.props.Sites.length){
+            this.setState({Sites: next.Sites});
+        }
+        if(next.SelectedSite){
+            this.setState({SelectedSite: next.SelectedSite});
+        }
+    } 
     render() {
-        return <div id="listcontainer">
-            <ContainerBar Title={"Device List"} />
-            <PresentationalTable data={[{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",},{response_time:100,name: "Total Tire Kelowna",usage: 30,time_stamp: "Feburary 2 2014",}]} />
+        return <div className="myContainer">
+            {/* <ContainerBar Title={"Device List"}/> */}
+            <div className={"container-bar"}>
+                <h5 className="title">
+                    Sites
+                </h5>
+            </div>
+            <div className={"container-inner"}>
+                <SiteTable Sites={this.state.Sites}  SelectSite={this.state.SelectSite} />
+            </div> 
         </div>;
     }
 }

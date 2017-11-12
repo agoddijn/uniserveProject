@@ -1,0 +1,20 @@
+{
+  "name": "uniserve.m8s.data.aggregator",
+  "version": "1.0.0",
+  "description": "Data Aggregator",
+  "repository": "https://github.com/CPSC319-2017w1/uniserve.m8s.git",
+  "license": "MIT",
+  "main": "./src/WebBackend.js",
+  "scripts": {
+    "watch": "tsc -w",
+    "build": "tsc || echo done"
+  },
+  "dependencies": {
+    "typescript": "^2.5.3",
+    "uniserve.m8s.utils": "1.0.0",
+    "uniserve.m8s.types":  "1.0.0" 
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.31"
+  }
+}

@@ -1,12 +1,11 @@
 import {Request, Response, NextFunction } from "express";
 import {HTTPMainPageResponse, Site, Device} from "uniserve.m8s.types";
-import {Log, DbInterface} from "uniserve.m8s.utils";
-
+import {Log} from "uniserve.m8s.utils";
+import {DbInterface} from "uniserve.m8s.web.db_interface";
 
 export let devices = async (req: Request, res: Response) => {
     //might be a string tbh
-    const request_id = <number> parseInt(req.params.company_recid);
-    Log.trace("API:devices");
+    const request_id = parseInt(req.params.company_recid);
     Log.info("API:devices # company_recid: " + request_id);
 
     try {
@@ -16,7 +15,7 @@ export let devices = async (req: Request, res: Response) => {
         
         for(const site of sites){
             for(const device of site.devices){
-                const dbpings = await db.getRecentPings(device.device_recid);
+                const dbpings = await db.getRecentPings(device.device_recid,5);
                 device.ping_records = dbpings[0];
             }
         }
@@ -24,8 +23,8 @@ export let devices = async (req: Request, res: Response) => {
         res.json(sites);  
 
     } catch(e) {
-        //TODO proper errors
-        res.json("error");
+        res.status(400);
+        res.json("Error: " + JSON.stringify(e));
     }
 
 }

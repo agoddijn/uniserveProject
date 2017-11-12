@@ -1,5 +1,6 @@
-import {Log, DbInterface} from 'uniserve.m8s.utils';
-import {PingRecord} from 'uniserve.m8s.types'
+import {Log} from 'uniserve.m8s.utils';
+import {DbInterface} from "uniserve.m8s.web.db_interface";
+import {PingRecord} from 'uniserve.m8s.types';
 
 export default class PingStorage {
 

@@ -8,9 +8,15 @@ export class MapContainer extends React.Component<any, {}> {
         super(props);
     }
     render() {
-        return <div id="mapcontainer">
-            <ContainerBar Title={"Map"} />
-            <MapIframeContainer />
+        return <div className="myContainer">
+            <div className={"container-bar"}>
+                <h5 className={"title"}>
+                    Map
+                </h5>
+            </div>
+            <div className={"container-inner"}>
+                <MapIframeContainer />
+            </div>
         </div>;
     }
 }

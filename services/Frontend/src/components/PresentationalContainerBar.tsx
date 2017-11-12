@@ -19,9 +19,12 @@ export const ContainerBar = (props: { Title: string }) => {
                         <h5 className="title">
                             {props.Title}
                         </h5>
-                        <Button color="contrast">Gear</Button>
+                        <IconButton className="layoutButton" color="contrast" aria-label="Menu">
+                            <Icon color="primary" style={{ fontSize: 30 }}>
+                                settings
+                            </Icon>
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
-                
             </div>)
 }

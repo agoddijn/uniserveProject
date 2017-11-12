@@ -8,27 +8,44 @@
   "workspaces": [
     "services/*",
     "modules/*",
-    "utils/"
+    "utils/",
+    "test/"
   ],
   "scripts": {
+    "buildDataFaker": "(cd ./modules/data_faker && npm run build)",   
+
     "buildWebBackend": "(cd ./services/WebBackend && npm run build)",
     "watchWebBackend": "(cd ./services/WebBackend && npm run watch)",
     
     "buildUtils": "(cd ./utils && npm run build)",
     "watchUtils": "(cd ./utils && npm run watch)",
-    
+
+    "buildModules": "(cd ./modules && npm run build)",
+    "watchModules": "(cd ./modules && npm run watch)",
+   
     "buildPingingBackend": "(cd ./services/PingingBackend && npm run build)",
-    "watchPingingBackend": "(cd ./services/PingingBackend && npm run watch)",
+    "watchPingingBackend": "(cd ./services/PingingBackend && npm run watch)", 
     
     "buildTypes": "(cd ./modules/common_types/ && npm run build)",
     "watchTypes": "(cd ./modules/common_types/ && npm run watch)",
-
+    
     "buildShim": "(cd ./modules/php_shim/ && npm run build)",
+
+    "buildDbInterface": "(cd ./modules/db_interface/ && npm run build)",
+    "buildDBconnection": "(cd ./modules/db_connection/ && npm run build)",
     
-    "build": "npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim",
-    "build staging": "npm run build && (cd ./services/Frontend/ && npm run buildstaging)",
+    "buildAggregator": "(cd ./services/DataAggregator/ && npm run build)",
+    "watchAggregator": "(cd ./services/DataAggregator/ && npm run watch)",
     
-    "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes"
+    "buildstaging": "npm run build && (cd ./services/Frontend/ && npm run buildstaging)",
+    "build": "npm run buildDataFaker && npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim && npm run buildAggregator && npm run buildDbInterface && npm run buildDBconnection",  
+    "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes",
+
+    "buildTests": "(cd ./test && npm run build)",
+
+    "test": "(cd ./test && npm run test)",
+    "testall": "(cd ./test && npm run test)"
+    
   }
 }
 
