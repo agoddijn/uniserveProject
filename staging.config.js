@@ -38,7 +38,7 @@ module.exports = {
     "deploy" : {
       "staging" : {
         "user" : "ubc03",
-        "host" : "lab3.uniserve.com",
+        "host" : "lab3.uniserve.ca",
         // Branch
         "ref"  : "origin/development",
         // Git repository to clone
