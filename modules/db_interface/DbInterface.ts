@@ -227,8 +227,18 @@ export class DbInterface {
      * Return true if succesful, false otherwise
      */
     getAllDevices(): Promise<Device[]> {
-        return db.any("SELECT * FROM msp_device;");
+        return new Promise ((fulfill, reject) => {
+            let query = "SELECT * FROM msp_device;";
+            db.any(query).then(data => {
+                let devices = this.parseAllDevices(data);
+                fulfill(devices);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        })
     }
+
 
     /*
      * Retrieve all devices belonging to a specific site.
@@ -243,6 +253,23 @@ export class DbInterface {
                 reject([null,true]);
             })
         });
+    }
+
+    /*
+     * Retrieve all pings
+     * Return true if succesful, false otherwise
+     */
+    getAllPings(): Promise<PingRecord[]> {
+        return new Promise ((fulfill, reject) => {
+            let query = "SELECT * FROM msp_ping;";
+            db.any(query).then(data => {
+                let pingRecords = this.parsePings(data);
+                fulfill(pingRecords);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([null,false]);
+            })
+        })
     }
 
     /*
@@ -333,6 +360,31 @@ export class DbInterface {
     }
 
     /*
+    *
+    * Retrieve a specific company's devices
+    * Return true if succesful, false otherwise
+    */
+   parseAllDevices(results:any) :  Device[] {
+       let deviceRecords: Device[] = [];
+       // console.log(JSON.stringify(results));
+        for (var key in results){
+           let device : Device = {
+               device_recid : results[key]["device_recid"],
+               site_recid : results[key]["site_recid"],
+               device_id : results[key]["device_id"],
+               manufacturer : results[key]["manufacturer"],
+               description : results[key]["description"],
+               device_type : results[key]["device_type"],
+               mac_address : results[key]["mac_address"],
+               ip_address : results[key]["ip_address"],
+           }
+           deviceRecords.push(device)
+        }
+        return deviceRecords;
+    }
+       
+
+    /*
      * Retrieve a specific company's devices
      * Return true if succesful, false otherwise
      */
@@ -363,7 +415,7 @@ export class DbInterface {
      * Parse pings in order to create Ping objects
      * Return true if succesful, false otherwise
      */
-    parsePings(device:any) {
+    parsePings(device:any) : PingRecord[] {
         let pingRecords : PingRecord[] = [];
         let ping : PingRecord = {
             ping_recid : device["ping_recid"],
