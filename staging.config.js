@@ -44,7 +44,7 @@ module.exports = {
         // Git repository to clone
         "repo" : "git@github.com:CPSC319-2017w1/uniserve.m8s.git",
         // Path of the application on target servers
-        "path" : "~/",
+        "path" : "~/uniserve.m8s",
         // Commands to be executed on the server after the repo has been cloned
         "post-deploy" : "yarn install && npm run buildstaging && pm2 startOrRestart staging.config.js"
       },
