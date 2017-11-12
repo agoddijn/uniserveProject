@@ -10,7 +10,7 @@ module.exports = {
         script    : './services/WebBackend/src/WebBackend.js',
         env : {
           "NODE_ENV": 'staging',
-          "PORT"    : 3031,
+          "WEBBACKEND_PORT": 3031,
           "PHP_AUTH_TOKEN": "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ",
           "DB_HOST" : 'localhost',
           "DB_PORT" : 5432,
@@ -26,7 +26,6 @@ module.exports = {
         script    : './services/PingingBackend/src/PingingBackend.js',
         env : {
           "NODE_ENV": 'staging',
-          "PORT"    : 3031,
           "DB_HOST" : 'localhost',
           "DB_PORT" : 5432,
           "DB_NAME" : 'ubc03',
@@ -39,10 +38,9 @@ module.exports = {
     "deploy" : {
       "staging" : {
         "user" : "ubc03",
-        // Multi host is possible, just by passing IPs/hostname as an array
         "host" : "lab3.uniserve.com",
         // Branch
-        "ref"  : "origin/staging",
+        "ref"  : "origin/development",
         // Git repository to clone
         "repo" : "git@github.com:CPSC319-2017w1/uniserve.m8s.git",
         // Path of the application on target servers
