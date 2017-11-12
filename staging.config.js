@@ -39,7 +39,6 @@ module.exports = {
       "staging" : {
         "user" : "ubc03",
         "host" : "lab3.uniserve.ca",
-        "key": "home/ubc03/.ssh/m8sgitkey",
         // Branch
         "ref"  : "origin/deployment",
         // Git repository to clone
