@@ -4,6 +4,16 @@ import {PingRecord} from '../../../modules/common_types/types/PingRecord'
 import {GeoCodingMapper} from './GeoCodingMapper';
 //change back to Site[]|string
 export class DataLoader{
+    private dataset:Site[] = [];
+    findSiteById(id:number, sites:Site[]):Site{
+        let site:Site;
+        for(let i=0;i<sites.length;i++){
+            if(sites[i].site_recid === id){
+                site = sites[i];
+            }
+        }
+        return site;
+    }
     loader():Promise<any[]>{
         return new Promise<any[]>((resolve,reject)=>{
             // function loadHelper() {
@@ -344,13 +354,25 @@ export class DataLoader{
                         }]
                 }]
             }]
-            let promises:Promise<number>[] = datasets.map((data:Site) => {
-                return GeoCodingMapper.mapper(data);
-            })
-            Promise.all(promises).then((result:any[]) => {
-                // console.log(result[0][0].geometry.location);
-                resolve(result);
-            })
+            if(this.dataset.length === 0){
+                let promises:Promise<number>[] = datasets.map((data:Site) => {
+                    return GeoCodingMapper.mapper(data);
+                })
+                Promise.all(promises).then((result:any[]) => {
+                    // console.log(result[0][0].geometry.location);
+                    this.dataset = result;
+                    resolve(result);
+                })
+            }else{
+                this.dataset.map((s:Site) => {
+                    let old_site:Site = this.findSiteById(s.site_recid, this.dataset);
+                    s.latitude = old_site.latitude;
+                    s.longitude = old_site.longitude;
+                    return s;
+                })
+                resolve(datasets);
+            }
+            
         })
     }
     
