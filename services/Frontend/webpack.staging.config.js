@@ -9,9 +9,8 @@ module.exports = {
     ],
 
     output: {
-        filename: "bundle.js",
-        path: path.join(__dirname, "/build"),
-        publicPath: "/build/",        
+        filename: "m8sbuild.js",
+        path: path.join(__dirname, "/../../php_root/js_src")
     },
 
     resolve: {
