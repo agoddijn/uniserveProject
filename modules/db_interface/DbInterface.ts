@@ -93,9 +93,7 @@ export class DbInterface {
                 }
                 //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
                 let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
-                
-              //  let query = "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (" + record.device_recid 
-               // + ", \'" + record.ip_address + "\', " + record.ms_response + ", " + record.responded + ", \'" +  psqlDate + "\');"
+
                 let query = Query.INSERT_RECORDS
                     .replace("deviceRecID",`${record.device_recid}`)
                     .replace("IPAddress",`${record.ip_address}`)
