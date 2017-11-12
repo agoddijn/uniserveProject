@@ -3,10 +3,12 @@ import * as mocha from 'mocha';
 import {Company} from "uniserve.m8s.types";
 import {Device} from "uniserve.m8s.types";
 import { DataFaker } from '../DataFaker';
+import { exec } from 'child_process';
+import { PingRecord } from '../../common_types/types/PingRecord';
 var assert = require('assert');
 var describe = mocha.describe;
 var it = mocha.it;
-var before = mocha.before;
+var beforeEach = mocha.beforeEach;
 
 describe('dataFakerTest', function() {
     console.log("Entering Data Faker Test")
@@ -15,7 +17,7 @@ describe('dataFakerTest', function() {
     const dataFaker = new DataFaker();
     let file = dataFaker.json;
 
-    before(function (done) {
+    beforeEach(function () {
         dataFaker.addDataSet(file);
     });
 

@@ -4,6 +4,26 @@ let fs = require('fs');
 let Chance = require('chance');
 var fakerator = require("fakerator")("hu-HU");
 
+class PingR implements PingRecord {
+    ping_recid = 0;
+    device_recid = 0;
+    ip_address = "";
+    ms_response = 0;
+    responded = true;
+    datetime = null;
+}
+
+class dev implements Device {
+    device_recid = 0;
+    site_recid = 0;
+    device_id = "";
+    manufacturer = "";
+    description = "";
+    device_type = "";
+    mac_address = "";
+    ip_address = "";
+}
+
 export class DataFaker {
     links: Device[];
     json: any; 
@@ -76,8 +96,8 @@ export class DataFaker {
     generatePingRecords(howMany: number, timeStamp: Date): PingRecord[] {
         let that = this;
         
-        let pingRec: PingRecord; 
-        let generatedPingRecords: PingRecord[] = null;
+        let pingRec: PingRecord;
+        let generatedPingRecords: PingRecord[] = [];
 
         let limit = howMany;
         let device_id = 1;
@@ -104,7 +124,8 @@ export class DataFaker {
      * @param date 
      */
     generatePingRecord(device_id: any, date: Date): PingRecord {
-        let pingRecord: PingRecord = null;
+        let that = this;
+        let pingRecord: PingRecord = new PingR();
 
         pingRecord.datetime = date;
         pingRecord.device_recid = device_id;
@@ -130,8 +151,8 @@ export class DataFaker {
         let keys = Object.keys(object);
 
         for (let key of keys) {
-            if(object[key] == typeof String) {
-                that.links.push(Object[key]);
+            if(key == "url") {
+                that.links.push(object[key]);
             }
         }
     }
@@ -145,9 +166,10 @@ export class DataFaker {
      * returns a list of devices
      * @param links 
      */
-    generateDeviceList(links: Array<Device>) {
+    generateDeviceList(links: Array<Device>): Device[] {
+        // TODO: promisify this function
     let that = this;
-    let device: Device = null; 
+    let device: Device = new dev();
 
     let devices = [];
     let id: number = 1;
@@ -248,6 +270,7 @@ export class DataFaker {
 
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
 }
 
 
