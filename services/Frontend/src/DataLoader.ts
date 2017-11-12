@@ -354,25 +354,32 @@ export class DataLoader{
                         }]
                 }]
             }]
-            if(this.dataset.length === 0){
-                let promises:Promise<number>[] = datasets.map((data:Site) => {
-                    return GeoCodingMapper.mapper(data);
-                })
-                Promise.all(promises).then((result:any[]) => {
-                    // console.log(result[0][0].geometry.location);
-                    this.dataset = result;
-                    resolve(result);
-                })
-            }else{
-                this.dataset.map((s:Site) => {
-                    let old_site:Site = this.findSiteById(s.site_recid, this.dataset);
-                    s.latitude = old_site.latitude;
-                    s.longitude = old_site.longitude;
-                    return s;
-                })
-                resolve(datasets);
-            }
-            
+            // if(this.dataset.length === 0){
+            //     let promises:Promise<number>[] = datasets.map((data:Site) => {
+            //         return GeoCodingMapper.mapper(data);
+            //     })
+            //     Promise.all(promises).then((result:any[]) => {
+            //         // console.log(result[0][0].geometry.location);
+            //         this.dataset = result;
+            //         resolve(result);
+            //     })
+            // }else{
+            //     this.dataset.map((s:Site) => {
+            //         let old_site:Site = this.findSiteById(s.site_recid, this.dataset);
+            //         s.latitude = old_site.latitude;
+            //         s.longitude = old_site.longitude;
+            //         return s;
+            //     })
+            //     resolve(datasets);
+            // }
+            let promises:Promise<number>[] = datasets.map((data:Site) => {
+                return GeoCodingMapper.mapper(data);
+            })
+            Promise.all(promises).then((result:any[]) => {
+                // console.log(result[0][0].geometry.location);
+                this.dataset = result;
+                resolve(result);
+            })
         })
     }
     
