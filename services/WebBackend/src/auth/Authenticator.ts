@@ -17,8 +17,6 @@ export let authenticate = (req: Request, res: Response, next: NextFunction) => {
     
     Log.error("Authenticator::authenticate HARD ERROR PHP TOKEN AUTH FAILURE SHOULD NOT HAPPEN EVER URL:" + req.url);
 
-    //TODO
-    //errors will get added on php side right if server responds with nothing
-    //should probably actually be made more explicit
-    res.send();
+    res.statusCode = 400;
+    res.json("Error: Middleware Authentication failed.");
 }
