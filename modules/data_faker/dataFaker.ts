@@ -1,22 +1,26 @@
 import {Device, PingRecord, Company, Site} from "uniserve.m8s.types";
 
 let fs = require('fs');
-
+let Chance = require('chance');
+var fakerator = require("fakerator")("hu-HU");
 
 export class DataFaker {
     links: Device[];
     json: any; 
+    chance = new Chance();
+    
 
     constructor() {
         console.log("Init::DataFaker")
         let that = this;
-        that.json = require('./data/top10000.json'); 
+        that.json = require('./data/top10000.json');
     }
 
-    /*
-    *   
-    *   returns the first "number" of devices
-    */
+
+    /**
+     * returns the first "number" of devices
+     * @param howMany 
+     */
     getDevices(howMany: number): Device[] {
         let that = this;
 
@@ -35,10 +39,11 @@ export class DataFaker {
 
     }
 
-    /*
-    *
-    * returns the first "number" of devices
-    */
+
+    /**
+     * returns the first "number" of devices
+     * @param howMany 
+     */
     getTopDevices(howMany: number): Device[] {
         let that = this;
 
@@ -62,16 +67,17 @@ export class DataFaker {
         return returnDevices;
     }
 
-    /*
-    *
-    *  create a ping record for howMany amount of devices
-    */
-    generatePingRecords(howMany: number, timeStamp: Date): PingRecord[] {
 
+    /**
+     * create a ping record for howMany amount of devices
+     * @param howMany 
+     * @param timeStamp 
+     */
+    generatePingRecords(howMany: number, timeStamp: Date): PingRecord[] {
         let that = this;
         
         let pingRec: PingRecord; 
-        let generatedPingRecords: PingRecord[];
+        let generatedPingRecords: PingRecord[] = null;
 
         let limit = howMany;
         let device_id = 1;
@@ -90,12 +96,15 @@ export class DataFaker {
         
     }
 
-    /*
-    * helper for generatePingRecords
-    * given device id and date returns a ping record
-    */
+
+    /**
+     * helper for generatePingRecords
+     * given device id and date returns a ping record
+     * @param device_id 
+     * @param date 
+     */
     generatePingRecord(device_id: any, date: Date): PingRecord {
-        let pingRecord: PingRecord;
+        let pingRecord: PingRecord = null;
 
         pingRecord.datetime = date;
         pingRecord.device_recid = device_id;
@@ -105,12 +114,13 @@ export class DataFaker {
         return pingRecord;
     }
 
-    /*
-    * given a json object file 
-    * returns list of website links 
-    */
+
+    /**
+     * given a json object file
+     * returns list of website links
+     * @param jsonObjects 
+     */  
     addDataSet(jsonObjects: any) {
-        // transport JSON objects into list called links
     let that = this;
 
     that.links = [];
@@ -129,14 +139,15 @@ export class DataFaker {
     return that.links;
     }
 
-    /*
-    * given an array of website links
-    * returns a list of devices
-    */
+
+    /**
+     * given an array of website links
+     * returns a list of devices
+     * @param links 
+     */
     generateDeviceList(links: Array<Device>) {
-        // device list with *ip address & id* as well as other attributes added
     let that = this;
-    let device: Device; 
+    let device: Device = null; 
 
     let devices = [];
     let id: number = 1;
@@ -159,35 +170,83 @@ export class DataFaker {
         devices.push(device);
         id++;
     }
-
+    
     return devices;
+    
     }
 
-    // generate fake companys and sites
-    // look to see if we can generate fake addresses for them
-    // have the sites containing companys 
 
-    /*
-    *
-    * returns list of companies
-    */
-    generateCompanies(): Company[] {
-        // stub
-        let company: Company;
-        let companies: Company[];
+    /**
+     * given 
+     * returns list of companies
+     * @param howMany 
+     */
+    generateCompanies(howMany: number): Company[] {
+        let that = this;
+        let company: Company = null;
+        let companies: Company[] = null;
+        let numOfSitesForCompany: number; 
+         
+
+        let c_recid: number = 1;
+        let c_id: string = "Fake Company ID";
+        
+        for (var i = 0; i < howMany; i++) {
+            numOfSitesForCompany = Math.floor(Math.random() * 4) + 1;
+
+            company.company_recid = c_recid;
+            company.company_id = c_id;
+            company.company_name = fakerator.company.name();
+            company.sites = that.generateSites(c_recid, numOfSitesForCompany);
+            companies.push(company);
+            c_recid++;
+        }
+        
         return  companies;
     }
 
 
-    /*
-    *
-    * returns list of sites
-    */
-    generateSites(): Site[] {
-        // stub
-        let site: Site;
-        let sites: Site[];
+    /**
+     * returns list of sites
+     */
+    generateSites(c_recid: number, numSites: number): Site[] {
+        let that = this;
+        let site: Site = null;
+        let sites: Site[] = null;
+        let rec_id: number = 1;
+        
+        let entity: JSON = fakerator.entity.address();
+
+        for (var i = 0; i < numSites; i++) {
+            site.site_recid = rec_id;
+            site.company_recid = c_recid;
+            site.description = "Fake Company Description";
+            site.address1 = 
+            site.address2 = " ";
+            site.city = that.chance.city();
+            site.province = that.chance.province
+        }
+
         return sites;
+    }
+
+
+    /**
+     * helper to add companies to sites
+     */
+    addToSite() {
+
+    }
+
+    /**
+     * returns a random number between min and mix for the number
+     * of sites wanted for a company
+     * @param max number of sites wanted for a company
+     * @param min number of sites wanted for a company
+     */
+    generateRandomNumOfSites(max: number, min: number): Number {
+
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
 

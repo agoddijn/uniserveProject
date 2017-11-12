@@ -3,7 +3,10 @@ import * as mocha from 'mocha';
 import {Company} from "uniserve.m8s.types";
 import {Device} from "uniserve.m8s.types";
 import { DataFaker } from '../DataFaker';
-
+var assert = require('assert');
+var describe = mocha.describe;
+var it = mocha.it;
+var before = mocha.before;
 
 describe('dataFakerTest', function() {
     console.log("Entering Data Faker Test")
@@ -33,9 +36,11 @@ describe('dataFakerTest', function() {
     it("test: generatePingRecords", function() {
         let numDevices = 500;
         let date: Date = new Date();
+        date.setFullYear(2017, 11, 11);
+        date.setHours(3, 25, 50);
         
-        
-        //let generatedPingR = dataFaker.generatePingRecords(numDevices, date.);
+        let generatedPingR = dataFaker.generatePingRecords(numDevices, date);
+        expect(generatedPingR.length).to.equal(numDevices);
     });
 
     it("test: generateDeviceList", function() {
