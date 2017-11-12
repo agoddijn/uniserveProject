@@ -1,5 +1,6 @@
 import {Company, Site, Device, PingRecord} from 'uniserve.m8s.types'
 import {dbObj} from '../db_connection/db_connection'
+import {Query} from './query'
 const path = require('path');
 let db = dbObj;
 export class DbInterface {
@@ -15,15 +16,7 @@ export class DbInterface {
      */
     migrate30DayData() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = 
-            "BEGIN TRANSACTION; " +
-            "INSERT INTO msp_ping_30 (device_recid, ip_address, ms_response, response_count, datetime) " +
-            "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, round((count(nullif(responded, false))::decimal/5),1), date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '5 min' as timestamp " +
-            "FROM( SELECT * FROM msp_ping p WHERE  datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.responded ORDER BY p.device_recid, p.datetime ) AS SUBQUERY " +
-            "GROUP BY timestamp, device_recid " + 
-            "ORDER BY device_recid, timestamp; " +
-            "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval); " +
-            "END TRANSACTION; ";
+            let query = Query.MIGRATE_30;
 
             db.any(query).then(data => {
                 fulfill([data,true]);
@@ -40,14 +33,7 @@ export class DbInterface {
      */
     migrate60DayData() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = 
-                "BEGIN TRANSACTION; " +
-                "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " + 
-                "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, (round(sum(response_count),1)::decimal) as ping_success_rate, date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '25 min' as timestamp " +
-                "FROM(SELECT * FROM msp_ping_30 p WHERE  datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.response_count ORDER BY p.device_recid, p.datetime) AS SUBQUERY " +
-                "GROUP BY timestamp, device_recid ORDER BY device_recid, timestamp; " +
-                "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval); " +
-                "END TRANSACTION; ";
+            let query = Query.MIGRATE_60;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -65,7 +51,7 @@ export class DbInterface {
      */
     delete30DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval);";
+            let query = Query.DELETE_30_DAYS;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -81,7 +67,7 @@ export class DbInterface {
      */
     delete60DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            let query = Query.DELETE_60_DAYS;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -105,6 +91,7 @@ export class DbInterface {
                 if (isNaN(record.ms_response) || record.ms_response === null) {
                     record.ms_response = -1
                 }
+                //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
                 let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
                 
                 let query = "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (" + record.device_recid 
@@ -170,8 +157,9 @@ export class DbInterface {
      */
     getAllCompanies() : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = "SELECT * FROM msp_company;";
+            let query = Query.GET_ALL_COMPANIES;
             db.any(query).then(data => {
+                console.log(JSON.stringify(data));
                 fulfill([data, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -199,7 +187,7 @@ export class DbInterface {
     // Retrieves all sites
     getAllSites() : Promise<[any, boolean]>{
         return new Promise ((fulfill, reject) => {
-            let query = "SELECT * FROM msp_site;";
+            let query = Query.GET_ALL_SITES;
             db.any(query).then(data => {
                 fulfill([data, true]); 
             }).catch(e => {
@@ -228,7 +216,7 @@ export class DbInterface {
      */
     getAllDevices(): Promise<Device[]> {
         return new Promise ((fulfill, reject) => {
-            let query = "SELECT * FROM msp_device;";
+            let query = Query.GET_ALL_DEVICES;
             db.any(query).then(data => {
                 let devices = this.parseAllDevices(data);
                 fulfill(devices);
@@ -261,7 +249,7 @@ export class DbInterface {
      */
     getAllPings(): Promise<PingRecord[]> {
         return new Promise ((fulfill, reject) => {
-            let query = "SELECT * FROM msp_ping;";
+            let query = Query.GET_ALL_PINGS;
             db.any(query).then(data => {
                 let pingRecords = this.parsePings(data);
                 fulfill(pingRecords);
@@ -296,7 +284,7 @@ export class DbInterface {
      */
     get30DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = "SELECT * FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY device_recid, ping_recid ORDER BY device_recid, datetime";
+            let query = Query.GET_30_DAYS_OLD_PINGS;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -312,7 +300,7 @@ export class DbInterface {
      */
     get60DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = "SELECT * FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY device_recid, ping_recid ORDER BY device_recid, datetime";
+            let query = Query.GET_60_DAYS_OLD_PINGS;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
