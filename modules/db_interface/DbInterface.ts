@@ -94,9 +94,14 @@ export class DbInterface {
                 //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
                 let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
                 
-                let query = "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (" + record.device_recid 
-                + ", \'" + record.ip_address + "\', " + record.ms_response + ", " + record.responded + ", \'" +  psqlDate + "\');"
-                
+              //  let query = "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (" + record.device_recid 
+               // + ", \'" + record.ip_address + "\', " + record.ms_response + ", " + record.responded + ", \'" +  psqlDate + "\');"
+                let query = Query.INSERT_RECORDS
+                    .replace("deviceRecID",`${record.device_recid}`)
+                    .replace("IPAddress",`${record.ip_address}`)
+                    .replace("msResponse",`${record.ms_response}`)
+                    .replace("respondedResult",`${record.responded}`)
+                    .replace("psqlDate",`${psqlDate}`)
                 db.any(query)
                 .then(data => {
                     console.log("Sent data");
@@ -119,11 +124,8 @@ export class DbInterface {
     getCompanyDevices(companyID: number)/*: Promise<[any, boolean]>*/ {
         return new Promise((fulfill, reject) => {
             let that = this;
-            let query = "SELECT * FROM msp_company c, msp_site s, msp_device d "
-                +"WHERE c.company_recid = " + companyID + " "
-                +"AND c.company_recid = s.company_recid "
-                +"AND s.site_recid = d.device_recid;"
-            //   +"AND d.device_recid = p.device_recid;";
+            let query = Query.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
+            console.log(query);
             db.any(query).then(data => {
                 let compiledResult = that.compileResults(data, that);
                 console.log(JSON.stringify(compiledResult));
@@ -139,10 +141,12 @@ export class DbInterface {
      * Get a device's recent pings
      * Return true if succesful, false otherwise
      */
-    getRecentPings(deviceRecID:any, limit:number) : Promise<[any, boolean]>{
+    getRecentPings(deviceRecID:any, limitNum:number = 5) : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = "SELECT * FROM msp_ping where device_recid=\'" + deviceRecID + "\' order by datetime desc, ping_recid, device_recid limit " + limit + ";";
+            let query = Query.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
+            console.log(query);
             db.any(query).then(data => {
+                console.log(data);
                 fulfill([data, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -174,7 +178,7 @@ export class DbInterface {
      */
     getCompanyID(username) : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = "SELECT company_recid FROM msp_company WHERE username=\'" + username + "\';";
+            let query = Query.GET_COMPANY.replace("username",`${username}`);
             db.any(query).then(data => {
                 fulfill([data, true]); 
             }).catch(e => {
@@ -200,7 +204,7 @@ export class DbInterface {
     // Retrieves the site IDs based on the given Company ID.
     getSites(companyID){
         return new Promise ((fulfill, reject) => {
-            let query = "SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';";
+            let query = Query.GET_SITES_BY_COMPANY.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
                 fulfill([data, true]); 
             }).catch(e => {
@@ -233,8 +237,9 @@ export class DbInterface {
      * Return true if succesful, false otherwise
      */
     getDevices(siteID): Promise<[any, boolean]> {
-        return new Promise((fulfill, reject) => {            
-            db.any("SELECT device_recid FROM msp_device WHERE site_recid=\'" + siteID + "\';").then(data => {
+        return new Promise((fulfill, reject) => {
+            let query = Query.GET_SITE_DEVICES.replace("siteID",`${siteID}`);
+            db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
                 console.log("Error: " + e);
@@ -267,7 +272,7 @@ export class DbInterface {
     getDevicePings(deviceRecID:any) : Promise<[any, boolean]>{
         let that = this;
         return new Promise((fulfill, reject) => {
-            let query = "SELECT * from msp_ping where msp_ping.device_recid=\'" + deviceRecID + "\' order by datetime";
+            let query = Query.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
             db.any(query).then(data => {
                 let pingRecords = that.parsePings(data)
                 fulfill([pingRecords, true]); 
