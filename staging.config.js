@@ -39,8 +39,9 @@ module.exports = {
       "staging" : {
         "user" : "ubc03",
         "host" : "lab3.uniserve.ca",
+        "key": "home/ubc03/.ssh/m8sgitkey",
         // Branch
-        "ref"  : "origin/development",
+        "ref"  : "origin/deployment",
         // Git repository to clone
         "repo" : "git@github.com:CPSC319-2017w1/uniserve.m8s.git",
         // Path of the application on target servers
