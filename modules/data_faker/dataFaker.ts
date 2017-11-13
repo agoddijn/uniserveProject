@@ -2,7 +2,7 @@ import {Device, PingRecord, Company, Site} from "uniserve.m8s.types";
 
 let fs = require('fs');
 let Chance = require('chance');
-var fakerator = require("fakerator")("hu-HU");
+var fakerator = require("fakerator")("en-CA");
 
 class PingRecordClass implements PingRecord {
     ping_recid = 0;
@@ -233,7 +233,7 @@ export class DataFaker {
         let c_id: string = "Fake Company ID";
         
         for (var i = 0; i < howMany; i++) {
-            numOfSitesForCompany = Math.floor(Math.random() * 4) + 1;
+            numOfSitesForCompany = that.generateRandomNumOfSites(4, 1);
 
             company.company_recid = c_recid;
             company.company_id = c_id;
@@ -285,8 +285,7 @@ export class DataFaker {
      * @param max number of sites wanted for a company
      * @param min number of sites wanted for a company
      */
-    generateRandomNumOfSites(max: number, min: number): Number {
-
+    generateRandomNumOfSites(max: number, min: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
