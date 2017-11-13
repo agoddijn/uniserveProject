@@ -184,7 +184,7 @@ export class DataLoader{
             }, {
                 "site_recid": 2,
                 "company_recid": 1,
-                "description": "test",
+                "description": "test2",
                 "address1": "350 W Georgia St",
                 "address2": "",
                 "city": "Vancouver",

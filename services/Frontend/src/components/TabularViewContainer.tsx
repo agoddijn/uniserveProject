@@ -2,23 +2,20 @@ import * as React from "react";
 import { ContainerBar } from "./PresentationalContainerBar"
 import { PresentationalTable } from "./PresentationalTable"
 import { Site, Device } from "uniserve.m8s.types";
+import { Table } from "./Table";
 
-export class TabularViewContainer extends React.Component<{Sites:Site[], SelectSite: any, SelectedSite: any}, {Sites:Site[], SelectSite: any, SelectedSite: any}> {
+export class TabularViewContainer extends React.Component<{Sites:Site[], SelectSite: any}, {Sites:Site[], SelectSite: any}> {
     constructor(props: {Sites:Site[], SelectSite: any, SelectedSite: any}) {
         super(props);
         this.state = {
             Sites: [], 
-            SelectSite: {}, 
-            SelectedSite: {}
+            SelectSite: {}
         };
     }
     componentWillReceiveProps(next:{Sites:Site[], SelectSite:any, SelectedSite: any}){
         this.setState({SelectSite: next.SelectSite});
         if(next.Sites.length !== this.props.Sites.length){
             this.setState({Sites: next.Sites});
-        }
-        if(next.SelectedSite){
-            this.setState({SelectedSite: next.SelectedSite});
         }
     } 
     render() {
@@ -30,7 +27,7 @@ export class TabularViewContainer extends React.Component<{Sites:Site[], SelectS
                 </h5>
             </div>
             <div className={"container-inner"}>
-                <PresentationalTable Sites={this.state.Sites} tabular={true} SelectSite={this.state.SelectSite} SelectedSite={this.state.SelectedSite}/>
+                <Table sites={this.state.Sites} SelectSite={this.state.SelectSite}/>
             </div> 
         </div>;
     }

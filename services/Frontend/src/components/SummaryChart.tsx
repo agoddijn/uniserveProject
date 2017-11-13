@@ -71,7 +71,8 @@ export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
                 borderWidth: 2,
                 pointRadius: [],
                 pointStyle: [],
-                pointBorderColor: []
+                pointBorderColor: [],
+                pointHoverRadius: 6
             })
             for (let i = 0; i < device.ping_records.length; i ++) {
                 let curRecord: PingRecord = device.ping_records[i];

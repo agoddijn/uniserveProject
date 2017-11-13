@@ -6,6 +6,7 @@ import { DataLoader } from './DataLoader';
 import { Site } from "uniserve.m8s.types";
 import { Responsive, WidthProvider } from 'react-grid-layout'
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
+import { Table } from './components/Table';
 
 export default class main extends React.Component<any, {Sites:Site[], SelectedSite: any, ViewHeight: number}> {
     constructor(props: any) {
@@ -21,30 +22,40 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
         let that:any = this;
         dt.loader().then((data: Site[]) => {
             console.log(data);
-            this.setState({Sites: data, SelectedSite: data[0]});
+            this.setState({Sites: data, SelectedSite: data[0], ViewHeight: window.innerHeight - 150});
         }).catch((str: string) => {
             alert(str);
         })
     }
-    setSelectedSite(site: Site){
-        this.setState({SelectedSite: site});
+    setSelectedSite(siteID: number){
+        for (let site of this.state.Sites) {
+            if (siteID == site.site_recid) {
+                this.setState({SelectedSite: site});
+                return;
+            }
+        }
     }
     render() {
         var layout = [
-            {i: 'a', x: 0, y: 0, w: 6, h: 12},
-            {i: 'b', x: 6, y: 0, w: 6, h: 6},
-            {i: 'c', x: 6, y: 7, w: 6, h: 6}
+            {i: 'a', x: 0, y: 0, w: 2, h: 4},
+            {i: 'b', x: 2, y: 0, w: 2, h: 2},
+            {i: 'c', x: 2, y: 2, w: 2, h: 2}
         ];
-        var layouts = {lg: layout};
-        var rowHeight = Math.floor(this.state.ViewHeight / 12);
+        var layoutSm = [
+            {i: 'a', x: 0, y: 0, w: 2, h: 2},
+            {i: 'b', x: 0, y: 2, w: 2, h: 2},
+            {i: 'c', x: 2, y: 4, w: 2, h: 2}
+        ]
+        var layouts = {lg: layout, md: layout, sm: layoutSm, xs: layoutSm, xxs: layoutSm};
+        var rowHeight = Math.floor(this.state.ViewHeight / 4);
         return <div className={"grid-container"}>
             <ResponsiveReactGridLayout 
                 className="layout"
                 layouts={layouts} 
-                cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
+                cols={{lg: 4, md: 4, sm: 2, xs: 2, xxs: 2}}
                 rowHeight={rowHeight}>
                 <div key="a">
-                    <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite}/>
+                    <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)}/>
                 </div>
                 <div key="b">
                     <MapContainer Device={{}} />
