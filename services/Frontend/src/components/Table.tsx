@@ -12,7 +12,7 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 
-export class Table extends React.Component<{ sites: Site[], SelectSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, filters: any }>{
+export class Table extends React.Component<{ sites: Site[], SelectSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any }>{
     constructor(props: { sites: Site[], SelectSite: any }) {
         super(props);
 
@@ -26,20 +26,25 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any }, {
             rows: this.generateRows(this.props.sites),
             SelectSite: {},
             selection: [0],
-            filters: []
+            expanded: [0]
         };
     }
     componentWillReceiveProps(next: { sites: Site[], SelectSite: any }) {
         this.setState({ rows: this.generateRows(next.sites), SelectSite: next.SelectSite });
     }
     handleRowSelection(selection: any) {
+        let selected = [selection[selection.length - 1]]
+        let empty = [];
         if (selection.length > 1) {
-            this.setState({selection: [selection[selection.length - 1]]});
+            this.setState({selection: selected, expanded: selected});
             this.state.SelectSite(this.state.rows[selection[selection.length - 1]].siteID);
+        } else {
+            if (this.state.expanded.length == 1) {
+                this.setState({ expanded: empty});
+            } else {
+                this.setState({ expanded: this.state.selection});
+            }
         }
-    }
-    handleFilters(filters: any) {
-        console.log(filters);
     }
     rowDetailTemplate(detailContent: any) {
         return (
@@ -78,7 +83,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any }, {
         return data;
     }
     render() {
-        const { rows, columns, selection, filters } = this.state;
+        const { rows, columns, selection, expanded} = this.state;
         return (
             <Grid
                 rows={rows}
@@ -91,8 +96,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any }, {
                     }}
                 />
                 <FilteringState 
-                    filters={filters}
-                    onFiltersChange={this.handleFilters.bind(this)}
+                    defaultFilters={[]}
                 />
                 <SortingState
                     defaultSorting={[
@@ -100,7 +104,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any }, {
                     ]}
                 />
                 <RowDetailState 
-                    expandedRows={selection} 
+                    expandedRows={expanded} 
                 />
                 <SelectionState 
                     selection={selection} 
