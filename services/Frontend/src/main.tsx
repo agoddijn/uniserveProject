@@ -36,11 +36,17 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
             console.log(this.count);
             this.dt.loader().then((data: Site[]) => {
                 // console.log(data);
-                this.setState({Sites: data});
+                let i = 0;
+                for (i = 0; i < data.length; i++) {
+                    if (data[i].site_recid == this.state.SelectedSite.site_recid) {
+                        break;
+                    }
+                }
+                this.setState({Sites: data, SelectedSite: data[i]});
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 5000)
+        }, 60000)
     }
     setSelectedSite(siteID: any){
         for (let site of this.state.Sites) {
@@ -50,7 +56,7 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
     render() {
         this.timer = window.clearTimeout(this.timer);
         var layout = [
-            {i: 'a', x: 0, y: 0, w: 2, h: 4, static: true},
+            {i: 'a', x: 0, y: 0, w: 2, h: 4},
             {i: 'b', x: 2, y: 0, w: 2, h: 2},
             {i: 'c', x: 2, y: 2, w: 2, h: 2}
         ];
@@ -66,7 +72,8 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
                 className="layout"
                 layouts={layouts} 
                 cols={{lg: 4, md: 4, sm: 2, xs: 2, xxs: 2}}
-                rowHeight={rowHeight}>
+                rowHeight={rowHeight}
+                draggableHandle={".container-bar"}>
                 <div key="a">
                     <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)}/>
                 </div>

@@ -26,17 +26,18 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any }, {
             rows: this.generateRows(this.props.sites),
             SelectSite: {},
             selection: [0],
-            expanded: [0]
+            expanded: []
         };
     }
     componentWillReceiveProps(next: { sites: Site[], SelectSite: any }) {
-        this.setState({ rows: this.generateRows(next.sites), SelectSite: next.SelectSite });
+        let siteData = this.generateRows(next.sites);
+        this.setState({ rows: siteData, SelectSite: next.SelectSite });
     }
     handleRowSelection(selection: any) {
         let selected = [selection[selection.length - 1]]
         let empty = [];
         if (selection.length > 1) {
-            this.setState({selection: selected, expanded: selected});
+            this.setState({selection: selected, expanded: empty});
             this.state.SelectSite(this.state.rows[selection[selection.length - 1]].siteID);
         } else {
             if (this.state.expanded.length == 1) {
@@ -67,7 +68,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any }, {
                 }
             }
             avResponse = Math.round(avResponse / (pings - unresponsive));
-            if (unresponsive > 0) {
+            if (unresponsive > 0 || pings == 0) {
                 status = "orange";
                 if (unresponsive == pings) status = "red";
             }

@@ -15,13 +15,10 @@ export class TabularViewContainer extends React.Component<{Sites:Site[], SelectS
     }
     componentWillReceiveProps(next:{Sites:Site[], SelectSite:any, SelectedSite: any}){
         this.setState({SelectSite: next.SelectSite});
-        if(next.Sites.length !== this.props.Sites.length){
-            this.setState({Sites: next.Sites});
-        }
+        this.setState({Sites: next.Sites});
     } 
     render() {
         return <div className="myContainer">
-            {/* <ContainerBar Title={"Device List"}/> */}
             <div className={"container-bar"}>
                 <h5 className="title">
                     Sites
