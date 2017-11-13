@@ -272,7 +272,7 @@ export class DbInterface {
         return new Promise((fulfill, reject) => {
             let query = Query.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
             db.any(query).then(data => {
-                let pingRecords = that.parsePings(data)
+                let pingRecords = that.parsePings(data);
                 fulfill([pingRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -313,9 +313,31 @@ export class DbInterface {
         });
     }
 
+    /*
+     * Retrieve all pings that are within the date range.
+     * Return true if succesful, false otherwise
+     */
+    getPingRecordsByDate(deviceID: number, after : Date, before: Date) : Promise<[PingRecord[], boolean]>{
+        return new Promise((fulfill,reject) => {
+            //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
+            let psqlAfter = new Date(after).toISOString().slice(0, 19).replace('T', ' ');
+            let psqlBefore = new Date(before).toISOString().slice(0, 19).replace('T', ' ');
+            let query = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlAfter/g,`${psqlAfter}`).replace(/psqlBefore/g,`${psqlBefore}`);
+            console.log(query);
+            db.any(query).then(data => {
+                let pingRecords = this.parsePings(data);
+                console.log(pingRecords);
+                fulfill([pingRecords,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([[],false]);
+            })
+        });
+    }
+
     // HELPERS
 
-    
+
     /*
      * Compile results and construct Company/Site objcts.
      * Return true if succesful, false otherwise
@@ -403,18 +425,21 @@ export class DbInterface {
      * Parse pings in order to create Ping objects
      * Return true if succesful, false otherwise
      */
-    parsePings(device:any) : PingRecord[] {
+    parsePings(results:any) : PingRecord[] {
         let pingRecords : PingRecord[] = [];
-        let ping : PingRecord = {
-            ping_recid : device["ping_recid"],
-            device_recid : device["device_recid"],
-            ip_address : device["ip_address"],
-            ms_response : device["ms_response"],
-            responded : device["responded"],
-            datetime : device["datetime"],
+        for (var key in results) {
+            if (results.hasOwnProperty(key)) {
+                let ping : PingRecord = {
+                    ping_recid : results[key]["ping_recid"],
+                    device_recid : results[key]["device_recid"],
+                    ip_address : results[key]["ip_address"],
+                    ms_response : results[key]["ms_response"],
+                    responded : results[key]["responded"],
+                    datetime : results[key]["datetime"],
+                }
+                pingRecords.push(ping);
+            }
         }
-        pingRecords.push(ping);
-     
         return pingRecords;
     }    
 }
