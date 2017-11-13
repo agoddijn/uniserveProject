@@ -1,5 +1,6 @@
 import * as React from "react";
 import { TabularViewContainer } from "./components/TabularViewContainer";
+// import {NewMapContainer} from "./components/NewMapContainer";
 import { MapContainer } from "./components/MapContainer";
 import { SummaryContainer } from "./components/SummaryContainer";
 import { DataLoader } from './DataLoader';
@@ -17,7 +18,6 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
         }
         
     }
-    private count:number = 0;
     private timer:any;
     private dt:any = new DataLoader();
     componentDidMount(){
@@ -31,15 +31,13 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
     }
     componentDidUpdate(){
         this.timer = window.setTimeout(()=>{
-            this.count++;
-            console.log(this.count);
             this.dt.loader().then((data: Site[]) => {
-                // console.log(data);
+                console.log(data[0].latitude);
                 this.setState({Sites: data, SelectedSite: data[0]});
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 5000)
+        }, 20000)
     }
     setSelectedSite(site: Site){
         this.setState({SelectedSite: site});
@@ -63,7 +61,7 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
                     <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)}/>
                 </div>
                 <div key="b">
-                    <MapContainer Device={{}} />
+                    <MapContainer Sites={this.state.Sites} />
                 </div>
                 <div key="c">
                     <SummaryContainer Site={this.state.SelectedSite}/>

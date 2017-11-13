@@ -354,7 +354,7 @@ export class DataLoader{
                         }]
                 }]
             }]
-            if(this.dataset.length === 0){
+            // if(this.dataset.length === 0){
                 let promises:Promise<number>[] = datasets.map((data:Site) => {
                     return GeoCodingMapper.mapper(data);
                 })
@@ -364,17 +364,18 @@ export class DataLoader{
                     this.dataset = result;
                     resolve(result);
                 })
-            }else{
-                console.log("without geocoding")
-                this.dataset.map((s:Site) => {
-                    let old_site:Site = this.findSiteById(s.site_recid, this.dataset);
-                    s.latitude = old_site.latitude;
-                    s.longitude = old_site.longitude;
-                    return s;
-                })
-                this.dataset = datasets;
-                resolve(datasets);
-            }
+            // }else{
+            //     console.log("without geocoding")
+            //     this.dataset.map((s:Site) => {
+            //         let old_site:Site = this.findSiteById(s.site_recid, this.dataset);
+            //         console.log(old_site.latitude)
+            //         s.latitude = old_site.latitude;
+            //         s.longitude = old_site.longitude;
+            //         return s;
+            //     })
+            //     this.dataset = datasets;
+            //     resolve(datasets);
+            // }
             // let promises:Promise<number>[] = datasets.map((data:Site) => {
             //     return GeoCodingMapper.mapper(data);
             // })
