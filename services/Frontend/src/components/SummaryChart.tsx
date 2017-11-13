@@ -27,6 +27,9 @@ const options = {
                 display: false
             }
         }]
+    },
+    animation: {
+        duration: 0
     }
 }
 
@@ -100,7 +103,7 @@ export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
         return (
             <div id="chartcontainer">
                 <Line data={this.state.
-                    Data} options={options} redraw/>
+                    Data} options={options} redraw />
             </div>
         );
     }

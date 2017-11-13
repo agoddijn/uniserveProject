@@ -5,16 +5,17 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 import Paper from 'material-ui/Paper';
 import { DeviceTable } from './DeviceTable';
 
-export class PresentationalTable extends React.Component<{ Sites: Site[], tabular: boolean, SelectSite: any, SelectedSite: any }, { UpdateSite: any, SelectedSite: any }> {
-  constructor(props: { Sites: Site[], tabular: boolean, SelectSite: any, SelectedSite: any }) {
+export class PresentationalTable extends React.Component<{ Sites: Site[], tabular: boolean, SelectSite: any}, { Sites:Site[], UpdateSite: any, SelectedSite: any }> {
+  constructor(props: { Sites: Site[], tabular: boolean, SelectSite: any}) {
     super(props);
     this.state = {
+      Sites:[],
       UpdateSite: this.updateSite,
       SelectedSite: {}
     }
   }
-  componentWillReceiveProps(next: { Sites: Site[], SelectedSite: any }) {
-    this.setState({ SelectedSite: next.SelectedSite });
+  componentWillReceiveProps(next: { Sites: Site[]}) {
+    this.setState({ Sites:next.Sites });
   }
   updateSite(n: Site, e: any) {
     this.props.SelectSite(n);
@@ -22,7 +23,6 @@ export class PresentationalTable extends React.Component<{ Sites: Site[], tabula
   }
   render() {
     let element: any;
-    if (this.props.tabular) {
       element = (<Paper className={"tableroot"}>
         <Table className={"tablebody"}>
           <TableHead>
@@ -78,34 +78,7 @@ export class PresentationalTable extends React.Component<{ Sites: Site[], tabula
           </TableBody>
         </Table>
       </Paper>)
-    } else {
-      element = (<Paper className={"tableroot"}>
-        <Table className={"tablebody"}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Status</TableCell>
-              <TableCell numeric>Name</TableCell>
-              <TableCell numeric>Report</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.props.Sites.map((n: Site, key: number) => {
-              {/* let colorCode:string = n.response_time>100? "red":"green"; */ }
-              let colorCode: string = "green";
-              let resStyle = { backgroundColor: colorCode, borderRadius: '50%', width: '30px', height: '30px', marginLeft: '1.5vw' };
-              let backgroundColorCode: string = key % 2 === 0 ? "#e6e6e6" : "white";
-              return (
-                <TableRow key={key} style={{ backgroundColor: backgroundColorCode }}>
-                  <td className="responseCircle"><div style={resStyle}></div></td>
-                  <TableCell>{n.description}</TableCell>
-                  <TableCell>report</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>)
-    }
+
     return element;
   }
 }

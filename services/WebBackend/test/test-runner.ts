@@ -1,3 +1,5 @@
+require('dotenv').config({path: '../../.env'});
+
 import * as Mocha from "mocha";
 import * as fs from "fs";
 import * as path from "path";

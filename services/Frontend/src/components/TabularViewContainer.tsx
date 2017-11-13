@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ContainerBar } from "./PresentationalContainerBar"
 import { PresentationalTable } from "./PresentationalTable"
+import { SiteTable } from "./PresentationalSiteTable"
 import { Site, Device } from "uniserve.m8s.types";
 import { Table } from "./Table";
 
