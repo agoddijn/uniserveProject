@@ -112,6 +112,22 @@ export class DbInterface {
         });
     }
 
+    /*
+     * Updates a site's latitude and longitude coordinates
+     * Return true if succesful, false otherwise
+     */
+    updateSiteLocation(siteID: number, newLat: number, newLon: number) : Promise<boolean>{
+        return new Promise((fulfill, reject) => {
+            let query = Query.UPDATE_SITE_LOCATION.replace("siteID",`${siteID}`).replace("newLat",`${newLat}`).replace("newLon",`${newLon}`);
+            db.any(query).then(data => {
+                fulfill(true);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject(false);
+            })
+        })
+    }
+
     // RETRIEVAL COMMANDS
 
 
@@ -123,10 +139,8 @@ export class DbInterface {
         return new Promise((fulfill, reject) => {
             let that = this;
             let query = Query.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
-            console.log(query);
             db.any(query).then(data => {
                 let compiledResult = that.compileResults(data, that);
-                console.log(JSON.stringify(compiledResult));
                 fulfill([compiledResult, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -218,9 +232,10 @@ export class DbInterface {
      */
     getAllDevices(): Promise<Device[]> {
         return new Promise ((fulfill, reject) => {
+            let that = this;
             let query = Query.GET_ALL_DEVICES;
             db.any(query).then(data => {
-                let devices = this.parseAllDevices(data);
+                let devices = that.parseAllDevices(data);
                 fulfill(devices);
             }).catch(e => {
                 console.log("Error: " + e);
@@ -252,9 +267,10 @@ export class DbInterface {
      */
     getAllPings(): Promise<PingRecord[]> {
         return new Promise ((fulfill, reject) => {
+            let that = this;
             let query = Query.GET_ALL_PINGS;
             db.any(query).then(data => {
-                let pingRecords = this.parsePings(data);
+                let pingRecords = that.parsePings(data);
                 fulfill(pingRecords);
             }).catch(e => {
                 console.log("Error: " + e);
@@ -319,13 +335,14 @@ export class DbInterface {
      */
     getPingRecordsByDate(deviceID: number, after : Date, before: Date) : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
+            let that = this;
             //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
             let psqlAfter = new Date(after).toISOString().slice(0, 19).replace('T', ' ');
             let psqlBefore = new Date(before).toISOString().slice(0, 19).replace('T', ' ');
             let query = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlAfter/g,`${psqlAfter}`).replace(/psqlBefore/g,`${psqlBefore}`);
-            console.log(query);
+
             db.any(query).then(data => {
-                let pingRecords = this.parsePings(data);
+                let pingRecords = that.parsePings(data);
                 console.log(pingRecords);
                 fulfill([pingRecords,true]);
             }).catch(e => {
