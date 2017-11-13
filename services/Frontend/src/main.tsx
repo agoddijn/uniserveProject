@@ -15,21 +15,37 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
             SelectedSite: {},
             ViewHeight: 700
         }
+        
     }
+    private count:number = 0;
+    private timer:any;
+    private dt:any = new DataLoader();
     componentDidMount(){
-        let dt = new DataLoader();
         let that:any = this;
-        dt.loader().then((data: Site[]) => {
-            console.log(data);
+        this.dt.loader().then((data: Site[]) => {
+            // console.log(data);
             this.setState({Sites: data, SelectedSite: data[0]});
         }).catch((str: string) => {
             alert(str);
         })
     }
+    componentDidUpdate(){
+        this.timer = window.setTimeout(()=>{
+            this.count++;
+            console.log(this.count);
+            this.dt.loader().then((data: Site[]) => {
+                // console.log(data);
+                this.setState({Sites: data, SelectedSite: data[0]});
+            }).catch((str: string) => {
+                alert(str);
+            })
+        }, 5000)
+    }
     setSelectedSite(site: Site){
         this.setState({SelectedSite: site});
     }
     render() {
+        this.timer = window.clearTimeout(this.timer);
         var layout = [
             {i: 'a', x: 0, y: 0, w: 6, h: 12},
             {i: 'b', x: 6, y: 0, w: 6, h: 6},
