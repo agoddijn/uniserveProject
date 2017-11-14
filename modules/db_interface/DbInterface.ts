@@ -395,7 +395,6 @@ export class DbInterface {
         return new Promise((fulfill,reject) => {
             let query = Query.GET_60_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
             db.any(query).then(data => {
-                console.log("60 " + data[0]["uptime"]);
                 fulfill([data[0]["uptime"],true]);
             }).catch(e => {
                 console.log("Error : " + e);
@@ -412,7 +411,6 @@ export class DbInterface {
         return new Promise((fulfill,reject) => {
             let query = Query.GET_90_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
             db.any(query).then(data => {
-                console.log("90 " + data[0]["uptime"]);
                 fulfill([data[0]["uptime"],true]);
             }).catch(e => {
                 console.log("Error : " + e);
