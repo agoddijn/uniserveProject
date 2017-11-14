@@ -5,6 +5,13 @@
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/grid-style.css">
 <link rel="stylesheet" href="/css/resizeable-styles.css">
+
+
+
+<script  type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyBPUUMxqRaHjBgeaedmPmBHBjWfmEFihiw">
+</script>
+
 <div id="m8sbody">
 
     <div id="m8scontainer">
