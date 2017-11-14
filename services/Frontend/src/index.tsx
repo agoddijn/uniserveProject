@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { AppContainer } from 'react-hot-loader';
 import main from './main';
-import { Site } from "../../../modules/common_types/types/Site"
+import { Site } from "uniserve.m8s.types"
 
 
 const render = (Component: any) => {
@@ -13,7 +13,7 @@ const render = (Component: any) => {
         document.getElementById("container")
     );
 }
-console.log('sth');
+
 render(main);
 
 // Webpack Hot Module Replacement API

@@ -9,8 +9,6 @@ const expect = chai.expect;
 chai.use(sinonChai);
 chai.use(chaiHttp);
 
-console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\n" + JSON.stringify(process.env.DB_PORT) + "\n");
-
 import * as webserver from '../../../services/WebBackend/src/WebBackend';
 import * as phpshim from '../../../modules/php_shim/php_shim';
 

@@ -1,77 +1,84 @@
 import * as React from "react";
-import { Device } from "../../../../modules/common_types/types/Device"
-import { ContainerBar } from "./PresentationalContainerBar"
-var PropTypes = require('prop-types')
+import { Site, Device } from "uniserve.m8s.types"
 import { withStyles } from 'material-ui/styles';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
+import { DeviceTable } from './DeviceTable';
 
-
-export class PresentationalTable extends React.Component<{Devices:Device[],tabular:boolean}, any> {
-  constructor(props: {Devices:Device[],tabular:boolean}) {
+export class PresentationalTable extends React.Component<{ Sites: Site[], tabular: boolean, SelectSite: any}, { Sites:Site[], UpdateSite: any, SelectedSite: any }> {
+  constructor(props: { Sites: Site[], tabular: boolean, SelectSite: any}) {
     super(props);
+    this.state = {
+      Sites:[],
+      UpdateSite: this.updateSite,
+      SelectedSite: {}
+    }
+  }
+  componentWillReceiveProps(next: { Sites: Site[]}) {
+    this.setState({ Sites:next.Sites });
+  }
+  updateSite(n: Site, e: any) {
+    this.props.SelectSite(n);
+    this.setState({ SelectedSite: n });
   }
   render() {
-    let element:any;
-    if(this.props.tabular){
+    let element: any;
       element = (<Paper className={"tableroot"}>
-      <Table className={"tablebody"}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Status</TableCell>
-            <TableCell numeric>Name</TableCell>
-            <TableCell numeric>Usage</TableCell>
-            <TableCell numeric>Last Response</TableCell>
-            <TableCell numeric>Report</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {this.props.Devices.map((n: Device, key: number) => {
-            {/* let colorCode:string = n.response_time>100? "red":"green"; */}
-            let colorCode:string = "green";
-            let resStyle = { backgroundColor: colorCode, borderRadius: '50%', width: '30px', height: '30px', marginLeft: '1.5vw' };
-            let backgroundColorCode:string = key%2 === 0? "#e6e6e6" : "white";
-            return (
-              <TableRow key={key} style={{backgroundColor:backgroundColorCode}}>
-                <td className="responseCircle"><div style={resStyle}></div></td>
-                <TableCell>{n.device_id}</TableCell>
-                <TableCell numeric>{"30" + "G"}</TableCell>
-                <TableCell>{"response time here"}</TableCell>
-                <TableCell>report</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </Paper>)
-    }else {
-      element = (<Paper className={"tableroot"}>
-      <Table className={"tablebody"}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Status</TableCell>
-            <TableCell numeric>Name</TableCell>
-            <TableCell numeric>Report</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {this.props.Devices.map((n: Device, key: number) => {
-            {/* let colorCode:string = n.response_time>100? "red":"green"; */}
-            let colorCode:string = "green";
-            let resStyle = { backgroundColor: colorCode, borderRadius: '50%', width: '30px', height: '30px', marginLeft: '1.5vw' };
-            let backgroundColorCode:string = key%2 === 0? "#e6e6e6" : "white";
-            return (
-              <TableRow key={key} style={{backgroundColor:backgroundColorCode}}>
-                <td className="responseCircle"><div style={resStyle}></div></td>
-                <TableCell>{n.device_id}</TableCell>
-                <TableCell>report</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </Paper>)
-    }
+        <Table className={"tablebody"}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Status</TableCell>
+              <TableCell numeric>Site / Device</TableCell>
+              <TableCell numeric>Response (ms)</TableCell>
+              <TableCell numeric>Report</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.props.Sites.map((n: Site, key: number) => {
+              var buffer = [];
+              var statusColor = "green";
+              var unresponsive = 0, pings = 0, averageResponse = 0;
+              for (let device of n.devices) {
+                for (let ping of device.ping_records) {
+                  pings += 1;
+                  if (!ping.responded) {
+                    unresponsive += 1;
+                  } else {
+                    averageResponse += ping.ms_response;
+                  }
+                }
+              }
+              averageResponse = Math.round(averageResponse / (pings - unresponsive));
+              if (unresponsive > 0) {
+                statusColor = "orange";
+                if (unresponsive == pings) {
+                  statusColor = "red";
+                }
+              }
+              buffer.push(
+                <TableRow
+                  hover
+                  key={key}
+                  id="tableRow"
+                  onClick={this.state.UpdateSite.bind(this, n)}
+                  selected={this.state.SelectedSite.site_recid === n.site_recid}>
+                  <TableCell>
+                    <td className="responseCircle"><div style={{ backgroundColor: statusColor, marginLeft: "5px" }}></div></td>
+                  </TableCell>
+                  <TableCell>{n.description}</TableCell>
+                  <TableCell>{averageResponse}</TableCell>
+                  <TableCell>report</TableCell>
+                </TableRow>            
+              );
+              if (this.state.SelectedSite.site_recid === n.site_recid) {
+                buffer.push(<DeviceTable devices={n.devices}></DeviceTable>);
+              }        
+              return buffer;
+            })}
+          </TableBody>
+        </Table>
+      </Paper>)
+
     return element;
   }
 }

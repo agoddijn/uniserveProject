@@ -12,43 +12,21 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet">
     <link rel="stylesheet" href="./public/stylesheets/style.css">
+    <link rel="stylesheet" href="./public/stylesheets/grid-style.css">
+    <link rel="stylesheet" href="./public/stylesheets/resizeable-styles.css">
+    <script  type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyBPUUMxqRaHjBgeaedmPmBHBjWfmEFihiw">
+    </script>
 </head>
 
 <body>
-    <div style="height:100px; border: 3px solid black">
+    <div style="height:54px; border-bottom: 3px solid black; layou">
         Uniserve Header
         <iframe name="foo" style="display:none;"></iframe>                
-        <form target="foo" action="/login" method="post">   company_recid: <input type="number" name="company_recid">   <input type="submit" value="Login">  </form>
-        <form target="foo" action="/logout" method="post">  <input type="submit" value="Logout">  </form>
+        <form style="display: inline-block" target="foo" action="/login" method="post">   company_recid: <input type="number" name="company_recid">   <input type="submit" value="Login">  </form>
+        <form style="display: inline-block" target="foo" action="/logout" method="post">  <input type="submit" value="Logout">  </form>
 
     </div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Devices <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Networks</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Map</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Report</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
 
     <div id="container">
         
@@ -61,6 +39,7 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
         crossorigin="anonymous"></script>
+    
     <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.0.0/umd/react.development.js"></script>
     <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.0.0/umd/react-dom.development.js"></script>
 

@@ -1,5 +1,8 @@
 import {Company, Site, Device, PingRecord} from 'uniserve.m8s.types'
 import {dbObj} from '../db_connection/db_connection'
+import {Query} from './query'
+import {Log} from 'uniserve.m8s.utils'
+
 const path = require('path');
 let db = dbObj;
 export class DbInterface {
@@ -15,13 +18,7 @@ export class DbInterface {
      */
     migrate30DayData() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = 
-            "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " +
-            "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, count(nullif(responded, false)), count(nullif(responded, true)), date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '5 min' as timestamp " +
-            "FROM( SELECT * FROM msp_ping p WHERE  datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid ORDER BY p.device_recid, p.datetime ) AS SUBQUERY " +
-            "GROUP BY timestamp, device_recid " + 
-            "ORDER BY device_recid, timestamp; " +
-            "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            let query = Query.MIGRATE_30;
 
             db.any(query).then(data => {
                 fulfill([data,true]);
@@ -38,12 +35,7 @@ export class DbInterface {
      */
     migrate60DayData() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = 
-                "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " + 
-                "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, (round(sum(response_count),1)::decimal) as ping_success_rate, date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '25 min' as timestamp " +
-                "FROM(SELECT * FROM msp_ping_30 p WHERE  datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.response_count ORDER BY p.device_recid, p.datetime) AS SUBQUERY " +
-                "GROUP BY timestamp, device_recid ORDER BY device_recid, timestamp; " +
-                "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            let query = Query.MIGRATE_60;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -61,7 +53,7 @@ export class DbInterface {
      */
     delete30DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval);";
+            let query = Query.DELETE_30_DAYS;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -77,7 +69,7 @@ export class DbInterface {
      */
     delete60DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);";
+            let query = Query.DELETE_60_DAYS;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -101,11 +93,15 @@ export class DbInterface {
                 if (isNaN(record.ms_response) || record.ms_response === null) {
                     record.ms_response = -1
                 }
+                //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
                 let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
-                
-                let query = "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (" + record.device_recid 
-                + ", \'" + record.ip_address + "\', " + record.ms_response + ", " + record.responded + ", \'" +  psqlDate + "\');"
-                
+
+                let query = Query.INSERT_RECORDS
+                    .replace("deviceRecID",`${record.device_recid}`)
+                    .replace("IPAddress",`${record.ip_address}`)
+                    .replace("msResponse",`${record.ms_response}`)
+                    .replace("respondedResult",`${record.responded}`)
+                    .replace("psqlDate",`${psqlDate}`)
                 db.any(query)
                 .then(data => {
                     console.log("Sent data");
@@ -118,6 +114,22 @@ export class DbInterface {
         });
     }
 
+    /*
+     * Updates a site's latitude and longitude coordinates
+     * Return true if succesful, false otherwise
+     */
+    updateSiteLocation(siteID: number, newLat: string, newLon: string) : Promise<boolean>{
+        return new Promise((fulfill, reject) => {
+            let query = Query.UPDATE_SITE_LOCATION.replace("siteID",`${siteID}`).replace("newLat",`${newLat}`).replace("newLon",`${newLon}`);
+            db.any(query).then(data => {
+                fulfill(true);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject(false);
+            })
+        })
+    }
+
     // RETRIEVAL COMMANDS
 
 
@@ -128,14 +140,9 @@ export class DbInterface {
     getCompanyDevices(companyID: number)/*: Promise<[any, boolean]>*/ {
         return new Promise((fulfill, reject) => {
             let that = this;
-            let query = "SELECT * FROM msp_company c, msp_site s, msp_device d "
-                +"WHERE c.company_recid = " + companyID + " "
-                +"AND c.company_recid = s.company_recid "
-                +"AND s.site_recid = d.device_recid;"
-            //   +"AND d.device_recid = p.device_recid;";
+            let query = Query.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
                 let compiledResult = that.compileResults(data, that);
-                console.log(JSON.stringify(compiledResult));
                 fulfill([compiledResult, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -148,10 +155,12 @@ export class DbInterface {
      * Get a device's recent pings
      * Return true if succesful, false otherwise
      */
-    getRecentPings(deviceRecID:any, limit:number) : Promise<[any, boolean]>{
+    getRecentPings(deviceRecID:any, limitNum:number = 5) : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = "SELECT * FROM msp_ping where device_recid=\'" + deviceRecID + "\' order by datetime desc, ping_recid, device_recid limit " + limit + ";";
+            let query = Query.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
+            Log.debug(query);
             db.any(query).then(data => {
+                Log.debug(data);
                 fulfill([data, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -166,8 +175,9 @@ export class DbInterface {
      */
     getAllCompanies() : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = "SELECT * FROM msp_company;";
+            let query = Query.GET_ALL_COMPANIES;
             db.any(query).then(data => {
+                console.log(JSON.stringify(data));
                 fulfill([data, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -182,7 +192,7 @@ export class DbInterface {
      */
     getCompanyID(username) : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = "SELECT company_recid FROM msp_company WHERE username=\'" + username + "\';";
+            let query = Query.GET_COMPANY.replace("username",`${username}`);
             db.any(query).then(data => {
                 fulfill([data, true]); 
             }).catch(e => {
@@ -195,7 +205,7 @@ export class DbInterface {
     // Retrieves all sites
     getAllSites() : Promise<[any, boolean]>{
         return new Promise ((fulfill, reject) => {
-            let query = "SELECT * FROM msp_site;";
+            let query = Query.GET_ALL_SITES;
             db.any(query).then(data => {
                 fulfill([data, true]); 
             }).catch(e => {
@@ -208,7 +218,7 @@ export class DbInterface {
     // Retrieves the site IDs based on the given Company ID.
     getSites(companyID){
         return new Promise ((fulfill, reject) => {
-            let query = "SELECT site_recid FROM msp_site WHERE company_recid=\'" + companyID + "\';";
+            let query = Query.GET_SITES_BY_COMPANY.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
                 fulfill([data, true]); 
             }).catch(e => {
@@ -223,16 +233,28 @@ export class DbInterface {
      * Return true if succesful, false otherwise
      */
     getAllDevices(): Promise<Device[]> {
-        return db.any("SELECT * FROM msp_device;");
+        return new Promise ((fulfill, reject) => {
+            let that = this;
+            let query = Query.GET_ALL_DEVICES;
+            db.any(query).then(data => {
+                let devices = that.parseAllDevices(data);
+                fulfill(devices);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([]);
+            })
+        })
     }
+
 
     /*
      * Retrieve all devices belonging to a specific site.
      * Return true if succesful, false otherwise
      */
     getDevices(siteID): Promise<[any, boolean]> {
-        return new Promise((fulfill, reject) => {            
-            db.any("SELECT device_recid FROM msp_device WHERE site_recid=\'" + siteID + "\';").then(data => {
+        return new Promise((fulfill, reject) => {
+            let query = Query.GET_SITE_DEVICES.replace("siteID",`${siteID}`);
+            db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
                 console.log("Error: " + e);
@@ -242,15 +264,33 @@ export class DbInterface {
     }
 
     /*
+     * Retrieve all pings
+     * Return true if succesful, false otherwise
+     */
+    getAllPings(): Promise<PingRecord[]> {
+        return new Promise ((fulfill, reject) => {
+            let that = this;
+            let query = Query.GET_ALL_PINGS;
+            db.any(query).then(data => {
+                let pingRecords = that.parsePings(data);
+                fulfill(pingRecords);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([]);
+            })
+        })
+    }
+
+    /*
      * Retrieve all pings for a given device.
      * Return true if succesful, false otherwise
      */
     getDevicePings(deviceRecID:any) : Promise<[any, boolean]>{
         let that = this;
         return new Promise((fulfill, reject) => {
-            let query = "SELECT * from msp_ping where msp_ping.device_recid=\'" + deviceRecID + "\' order by datetime";
+            let query = Query.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
             db.any(query).then(data => {
-                let pingRecords = that.parsePings(data)
+                let pingRecords = that.parsePings(data);
                 fulfill([pingRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
@@ -265,7 +305,7 @@ export class DbInterface {
      */
     get30DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = "SELECT * FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval) GROUP BY device_recid, ping_recid ORDER BY device_recid, datetime";
+            let query = Query.GET_30_DAYS_OLD_PINGS;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -281,7 +321,7 @@ export class DbInterface {
      */
     get60DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = "SELECT * FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY device_recid, ping_recid ORDER BY device_recid, datetime";
+            let query = Query.GET_60_DAYS_OLD_PINGS;
             db.any(query).then(data => {
                 fulfill([data,true]);
             }).catch(e => {
@@ -291,9 +331,32 @@ export class DbInterface {
         });
     }
 
+    /*
+     * Retrieve all pings that are within the date range.
+     * Return true if succesful, false otherwise
+     */
+    getPingRecordsByDate(deviceID: number, after : Date, before: Date) : Promise<[PingRecord[], boolean]>{
+        return new Promise((fulfill,reject) => {
+            let that = this;
+            //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
+            let psqlAfter = new Date(after).toISOString().slice(0, 19).replace('T', ' ');
+            let psqlBefore = new Date(before).toISOString().slice(0, 19).replace('T', ' ');
+            let query = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlAfter/g,`${psqlAfter}`).replace(/psqlBefore/g,`${psqlBefore}`);
+
+            db.any(query).then(data => {
+                let pingRecords = that.parsePings(data);
+                console.log(pingRecords);
+                fulfill([pingRecords,true]);
+            }).catch(e => {
+                console.log("Error: " + e);
+                reject([[],false]);
+            })
+        });
+    }
+
     // HELPERS
 
-    
+
     /*
      * Compile results and construct Company/Site objcts.
      * Return true if succesful, false otherwise
@@ -329,12 +392,35 @@ export class DbInterface {
     }
 
     /*
+    *
+    * Retrieve a specific company's devices
+    * Return true if succesful, false otherwise
+    */
+   parseAllDevices(results:any) :  Device[] {
+       let deviceRecords: Device[] = [];
+        for (var key in results){
+           let device : Device = {
+               device_recid : results[key]["device_recid"],
+               site_recid : results[key]["site_recid"],
+               device_id : results[key]["device_id"],
+               manufacturer : results[key]["manufacturer"],
+               description : results[key]["description"],
+               device_type : results[key]["device_type"],
+               mac_address : results[key]["mac_address"],
+               ip_address : results[key]["ip_address"],
+           }
+           deviceRecords.push(device)
+        }
+        return deviceRecords;
+    }
+       
+
+    /*
      * Retrieve a specific company's devices
      * Return true if succesful, false otherwise
      */
     parseDevices(results:any, company_recid, site_recid, that) {
         let deviceRecords: Device[] = [];
-       // console.log(JSON.stringify(results));
         for (var key in results){
             if (results.hasOwnProperty(key) && results[key]["company_recid"] == company_recid && results[key]["site_recid"] == site_recid){
                 let device : Device = {
@@ -346,7 +432,6 @@ export class DbInterface {
                     device_type : results[key]["device_type"],
                     mac_address : results[key]["mac_address"],
                     ip_address : results[key]["ip_address"],
-                //    ping_records : that.parsePings(site)
                 }
                 deviceRecords.push(device)
             }
@@ -359,18 +444,21 @@ export class DbInterface {
      * Parse pings in order to create Ping objects
      * Return true if succesful, false otherwise
      */
-    parsePings(device:any) {
+    parsePings(results:any) : PingRecord[] {
         let pingRecords : PingRecord[] = [];
-        let ping : PingRecord = {
-            ping_recid : device["ping_recid"],
-            device_recid : device["device_recid"],
-            ip_address : device["ip_address"],
-            ms_response : device["ms_response"],
-            responded : device["responded"],
-            datetime : device["datetime"],
+        for (var key in results) {
+            if (results.hasOwnProperty(key)) {
+                let ping : PingRecord = {
+                    ping_recid : results[key]["ping_recid"],
+                    device_recid : results[key]["device_recid"],
+                    ip_address : results[key]["ip_address"],
+                    ms_response : results[key]["ms_response"],
+                    responded : results[key]["responded"],
+                    datetime : results[key]["datetime"],
+                }
+                pingRecords.push(ping);
+            }
         }
-        pingRecords.push(ping);
-     
         return pingRecords;
     }    
 }
