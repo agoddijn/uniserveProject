@@ -37,7 +37,7 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 5000)
+        }, 500000)
     }
     setSelectedSite(siteID: number){
         for (let site of this.state.Sites) {
