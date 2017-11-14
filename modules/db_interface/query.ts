@@ -39,7 +39,8 @@ export var Query = {
         "SELECT * FROM msp_company c, msp_site s, msp_device d " +
         "WHERE c.company_recid = companyID " +
         "AND c.company_recid = s.company_recid " +
-        "AND s.site_recid = d.device_recid;",
+        "AND s.site_recid = d.site_recid " +
+        "ORDER BY d.site_recid, d.device_recid;",
     GET_SITE_DEVICES :
         "SELECT device_recid FROM msp_device WHERE site_recid=\'siteID\';",
     GET_ALL_PINGS :
@@ -58,4 +59,11 @@ export var Query = {
         "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_30 WHERE datetime>='psqlAfter' AND datetime<'psqlBefore' AND device_recid=deviceID " +
         "UNION " + 
         "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_60 WHERE datetime>='psqlAfter' AND datetime<'psqlBefore' AND device_recid=deviceID ORDER BY datetime;",
+    GET_30_DAY_UPTIME :
+        "SELECT (count(nullif(responded, false))::decimal)/count(*) AS uptime FROM msp_ping where device_recid=deviceRecID;",
+    GET_60_DAY_UPTIME :
+        "SELECT sum(response_count)/count(*) AS uptime FROM msp_ping_30 where device_recid=deviceRecID",
+    GET_90_DAY_UPTIME :
+        "SELECT sum(response_count)/count(*) AS uptime FROM msp_ping_60 where device_recid=deviceRecID",
+    
 }
