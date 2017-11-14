@@ -137,7 +137,7 @@ export class DbInterface {
      * Retrieve a specific company's devices
      * Return true if succesful, false otherwise
      */
-    getCompanyDevices(companyID: number)/*: Promise<[any, boolean]>*/ {
+    getCompanyDevices(companyID: number): Promise<[Company, boolean]> {
         return new Promise((fulfill, reject) => {
             let that = this;
             let query = Query.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
@@ -182,6 +182,7 @@ export class DbInterface {
             db.any(query).then(data => {
                 console.log(JSON.stringify(data));
                 let companyRecords = that.parseAllCompanies(data);
+                console.log(companyRecords);
                 fulfill([companyRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
