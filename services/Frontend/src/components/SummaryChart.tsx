@@ -48,8 +48,8 @@ const colors = [
     "rgba(59, 62, 172, 1)"
 ]
 
-export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
-    constructor(props: { Site: Site }) {
+export class SummaryChart extends React.Component<{ Site: Site, FromDate: string, ToDate: string }, {Data: any}> {
+    constructor(props: { Site: Site, FromDate: string, ToDate: string }) {
         super(props);
         this.state = {Data: {}};
     }

@@ -63,6 +63,10 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
+"@types/googlemaps@^3.29.2":
+  version "3.29.2"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.29.2.tgz#6af8b3f6b94a2d4f590b95c738b905a49b97aa91"
+
 "@types/lodash@^4.14.84":
   version "4.14.84"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.84.tgz#ede7e6bbb4f0d35adf8b32d57b44bf125f7a2a41"

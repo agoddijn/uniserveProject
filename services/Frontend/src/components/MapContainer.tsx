@@ -43,7 +43,7 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                 </GoogleMap>
             )
         })
-        let map_ele: any = <Map containerElement={<div className={"container-inner"} style={{ height: "100%", width: "100%" }}></div>} mapElement={<div style={{ height: "100%", width: "100%" }}></div>} />
+        let map_ele: any = <Map containerElement={<div className={"container-inner"} style={{width: "100%", position: "absolute"}}></div>} mapElement={<div style={{ height: "100%", width: "100%" }}></div>} />
         this.setState({ Map: map_ele });
     }
     render() {
@@ -52,11 +52,11 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                 <h5 className={"title"}>
                     Map
                 </h5>
-                <IconButton onClick={this.props.SetLayout.bind(this, "default")}>
-                    <ViewModule />
+                <IconButton onClick={this.props.SetLayout.bind(this, "fullmap")} className={"bar-button"}>
+                    <AspectRatio style={{color: "white"}}/>
                 </IconButton>
-                <IconButton onClick={this.props.SetLayout.bind(this, "fullmap")}>
-                    <AspectRatio />
+                <IconButton onClick={this.props.SetLayout.bind(this, "default")} className={"bar-button"}>
+                    <ViewModule style={{color: "white"}}/>
                 </IconButton>
             </div>
             {this.state.Map}
