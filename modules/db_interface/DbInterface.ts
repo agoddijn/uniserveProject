@@ -262,14 +262,16 @@ export class DbInterface {
      * Retrieve all devices belonging to a specific site.
      * Return true if succesful, false otherwise
      */
-    getDevices(siteID): Promise<[any, boolean]> {
+    getDevices(siteID): Promise<[Device[], boolean]> {
         return new Promise((fulfill, reject) => {
+            let that = this;
             let query = Query.GET_SITE_DEVICES.replace("siteID",`${siteID}`);
             db.any(query).then(data => {
-                fulfill([data,true]);
+                let deviceRecords = that.parseAllDevices(data);
+                fulfill([deviceRecords,true]);
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,true]);
+                reject([[],true]);
             })
         });
     }
@@ -296,7 +298,7 @@ export class DbInterface {
      * Retrieve all pings for a given device.
      * Return true if succesful, false otherwise
      */
-    getDevicePings(deviceRecID:any) : Promise<[any, boolean]>{
+    getDevicePings(deviceRecID:any) : Promise<[PingRecord[], boolean]>{
         let that = this;
         return new Promise((fulfill, reject) => {
             let query = Query.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
@@ -305,7 +307,7 @@ export class DbInterface {
                 fulfill([pingRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false])
+                reject([[],false])
             })  
         });     
     }
