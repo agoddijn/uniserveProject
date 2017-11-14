@@ -10,8 +10,6 @@ module.exports = {
         './src/prodindex.tsx'     
     ],
 
-    node: false,
-
     output: {
         filename: "m8sbuild.min.js",
         path: path.join(__dirname, "/../../php_root/js_src")

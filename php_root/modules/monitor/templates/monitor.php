@@ -11,8 +11,8 @@
         
     </div>
     <!-- Dependencies -->
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.1.1/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.1.1/umd/react-dom.production.min.js"></script>
 
     <!-- Main -->
     <script type="text/javascript"> 
