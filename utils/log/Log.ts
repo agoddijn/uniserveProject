@@ -25,6 +25,10 @@ export default class Log {
         public static test(msg: string) {
             console.log("<X> " + new Date().toLocaleString() + ": " + msg);
         }
+        
+        public static debug(msg: any) {
+            if(process.env.DEBUG == "true") console.log("<D> " + new Date().toLocaleString() + ": " + JSON.stringify(msg));
+        }
     }
     
     

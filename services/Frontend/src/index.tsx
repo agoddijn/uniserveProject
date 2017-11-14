@@ -13,7 +13,7 @@ const render = (Component: any) => {
         document.getElementById("container")
     );
 }
-console.log('sth');
+
 render(main);
 
 // Webpack Hot Module Replacement API

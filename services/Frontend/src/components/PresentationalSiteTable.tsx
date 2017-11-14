@@ -18,7 +18,7 @@ export class SiteTable extends React.Component<{ Sites: Site[], SelectSite: any}
   }
   componentWillReceiveProps(next: { Sites: Site[]}) {
     this.setState({ Sites:next.Sites });
-    console.log(next);
+    // console.log(next);
   }
   updateSite(n: Site, e: any) {
     this.props.SelectSite(n);

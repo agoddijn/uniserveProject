@@ -9,8 +9,6 @@ import {DbInterface} from "uniserve.m8s.web.db_interface";
 
 const app = express();
 
-let dbInt = new DbInterface;
-let dbTest = new DbTesting;
 
 app.get("/api/company/:company_recid/devices", Authenticator.authenticate, devicesAPI.devices);
 app.get("/api/company/:company_recid/device/:device_recid", Authenticator.authenticate, deviceAPI.device);

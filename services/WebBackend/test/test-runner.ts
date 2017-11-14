@@ -1,3 +1,5 @@
+require('dotenv').config({path: '../../.env'});
+
 import * as Mocha from "mocha";
 import * as fs from "fs";
 import * as path from "path";
@@ -51,7 +53,5 @@ for(let directory of directories){
 
 // Run the tests.
 mocha.run(function (failures) {
-    process.on('exit', function () {
-        process.exit(failures);  // exit with non-zero status if there were failures
-    });
+  process.exit(failures);  // exit with non-zero status if there were failures
 });

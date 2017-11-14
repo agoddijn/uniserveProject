@@ -22,7 +22,7 @@ export let device = async (req: Request, res: Response) => {
         let device = devices.find( device => device.device_recid === device_recid);
         
         if(device){
-            const pingReconds = await db.getRecentPings(device.device_recid,1800);
+            const pingReconds = await db.getRecentPings(device.device_recid, 1800);
             device.ping_records = pingReconds[0];
             res.json(device);              
         } else {

@@ -13,7 +13,7 @@ export class DeviceBody extends React.Component<{ Devices: Device[], tabular: bo
   render() {
     let tbody: any;
     let displayable:string = this.props.display?"visible":"collapse";
-      tbody = (
+      tbody = this.props.tabular? (
           <TableBody key={this.props.num} style={{visibility:displayable}}>
             {this.props.Devices.map((d: Device, key: number) => {
               var statusColor = "green";
@@ -29,6 +29,25 @@ export class DeviceBody extends React.Component<{ Devices: Device[], tabular: bo
                   </TableCell>
                   <TableCell>{d.description}</TableCell>
                   <TableCell>{"response time here"}</TableCell>
+                  <TableCell>report</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>): (
+          <TableBody key={this.props.num} style={{visibility:displayable}}>
+            {this.props.Devices.map((d: Device, key: number) => {
+              var statusColor = "green";
+              return (
+                <TableRow
+                  hover
+                  key={key} 
+                  id="tableRow"
+                  style={{backgroundColor: "lightgrey"}}
+                >
+                  <TableCell className="responseCircle">
+                    <div style={{backgroundColor: statusColor}}></div>
+                  </TableCell>
+                  <TableCell>{d.description}</TableCell>
                   <TableCell>report</TableCell>
                 </TableRow>
               );
