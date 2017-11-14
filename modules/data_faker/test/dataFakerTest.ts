@@ -15,7 +15,7 @@ describe('dataFakerTest', function() {
     
     let expect = chai.expect;
     const dataFaker = new DataFaker();
-    let file = dataFaker.json;
+    let file = dataFaker.webLinksJSONFile;
 
     beforeEach(function () {
         dataFaker.addDataSet(file);

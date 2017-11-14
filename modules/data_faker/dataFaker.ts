@@ -43,20 +43,78 @@ class SiteClass implements Site {
     longitude = "";
 }
 
+export class Address {
+    address: string;
+    city: string;
+    province: string;
+    postal_code: string;
+}
+
 export class DataFaker {
     links: Device[];
-    json: any; 
+    addresses: Address[];
+    webLinksJSONFile: any = require('./data/top10000.json');
+    addressesJSONFile: any = require('./data/1Kaddresses.json');
     chance = new Chance();
     
 
     constructor() {
         console.log("Init::DataFaker")
         let that = this;
-        that.json = require('./data/top10000.json');
+        that.links = that.addDataSet(that.webLinksJSONFile);
+        that.addresses = that.populateAddresses(that.addressesJSONFile);
     }
+
+    /**
+     * private function to populate addresses field
+     */
+    private populateAddresses(addressesFile: any): Address[] {
+        let that = this;
+        let addressesArray: Address[] = [];
+        let address: Address = new Address();
+
+        let objectValue = addressesFile["AddressesData"];
+        
+        for (let i = 0; i < 1000; i++) {
+            let addressValue = objectValue[i];
+            address.address = addressValue[0];
+            address.city = addressValue[1];
+            address.province = addressValue[2];
+            address.postal_code = addressValue[3];
+            addressesArray.push(address);
+        }
+        
+        return addressesArray;
+    }
+
+    /**
+     * private function to populate links array
+     * given a json object file
+     * returns list of website links
+     * @param jsonObjects 
+     */  
+    private addDataSet(jsonObjects: any) {
+        let that = this;
+    
+        that.links = [];
+    
+        for (let object of jsonObjects) {
+            //let linkObject = {};
+            let keys = Object.keys(object);
+    
+            for (let key of keys) {
+                if(key == "url") {
+                    that.links.push(object[key]);
+                }
+            }
+        }
+    
+        return that.links;
+        }
 
 
     /**
+     * Can be called after generating device list
      * returns the first "number" of devices
      * @param howMany 
      */
@@ -88,8 +146,8 @@ export class DataFaker {
 
         let returnDevices = [];
 
-        for (let i = 0; i < howMany && i < that.json.length; i++) {
-            var cur = that.json[i];
+        for (let i = 0; i < howMany && i < that.webLinksJSONFile.length; i++) {
+            var cur = that.webLinksJSONFile[i];
             var dev: Device = {
                 device_recid: null,
                 site_recid: null,
@@ -155,30 +213,6 @@ export class DataFaker {
     }
 
 
-    /**
-     * given a json object file
-     * returns list of website links
-     * @param jsonObjects 
-     */  
-    addDataSet(jsonObjects: any) {
-    let that = this;
-
-    that.links = [];
-
-    for (let object of jsonObjects) {
-        //let linkObject = {};
-        let keys = Object.keys(object);
-
-        for (let key of keys) {
-            if(key == "url") {
-                that.links.push(object[key]);
-            }
-        }
-    }
-
-    return that.links;
-    }
-
 
     /**
      * given an array of website links
@@ -227,7 +261,7 @@ export class DataFaker {
         let company: Company = new CompanyClass();
         let companies: Company[] = [];
         let numOfSitesForCompany: number; 
-         
+        let locations = that.addresses;
 
         let c_recid: number = 1;
         let c_id: string = "Fake Company ID";
@@ -238,7 +272,7 @@ export class DataFaker {
             company.company_recid = c_recid;
             company.company_id = c_id;
             company.company_name = fakerator.company.name();
-            company.sites = that.generateSites(c_recid, numOfSitesForCompany);
+            company.sites = that.generateSites(c_recid, numOfSitesForCompany, locations);
             companies.push(company);
             c_recid++;
         }
@@ -250,33 +284,35 @@ export class DataFaker {
     /**
      * returns list of sites
      */
-    generateSites(c_recid: number, numSites: number): Site[] {
+    generateSites(c_recid: number, numSites: number, locations: Address[]): Site[] {
         let that = this;
         let site: Site = new SiteClass();
         let sites: Site[] = [];
         let rec_id: number = 1;
-        
-        let entity: JSON = fakerator.entity.address();
 
         for (var i = 0; i < numSites; i++) {
             site.site_recid = rec_id;
             site.company_recid = c_recid;
             site.description = "Fake Company Description";
-            site.address1 = 
-            site.address2 = " ";
-            site.city = that.chance.city();
-            site.province = that.chance.province
+            that.setAddressOfSite(site, locations);
+            // devices
         }
-
         return sites;
     }
 
 
     /**
-     * helper to add companies to sites
+     * Set the address of the given site
+     * Once set, the set of locations deletes the address used
      */
-    addToSite() {
-
+    setAddressOfSite(site: Site, locations: Address[]): Site {
+        site.address1 = locations[0].address;
+        site.address2 = "";
+        site.city = locations[0].city;
+        site.province = locations[0].province;
+        site.postal_code = locations[0].postal_code;
+        locations.pop;
+        return site;
     }
 
     /**
