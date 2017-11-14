@@ -1,6 +1,8 @@
 import {Company, Site, Device, PingRecord} from 'uniserve.m8s.types'
 import {dbObj} from '../db_connection/db_connection'
 import {Query} from './query'
+import {Log} from 'uniserve.m8s.utils'
+
 const path = require('path');
 let db = dbObj;
 export class DbInterface {
@@ -156,9 +158,9 @@ export class DbInterface {
     getRecentPings(deviceRecID:any, limitNum:number = 5) : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
             let query = Query.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
-            console.log(query);
+            Log.debug(query);
             db.any(query).then(data => {
-                console.log(data);
+                Log.debug(data);
                 fulfill([data, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
