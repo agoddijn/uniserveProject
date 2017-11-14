@@ -6,7 +6,10 @@
 <link rel="stylesheet" href="/css/grid-style.css">
 <link rel="stylesheet" href="/css/resizeable-styles.css">
 
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+        crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
 
 <script  type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyBPUUMxqRaHjBgeaedmPmBHBjWfmEFihiw">
