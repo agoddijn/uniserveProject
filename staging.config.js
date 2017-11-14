@@ -16,7 +16,8 @@ module.exports = {
           "DB_PORT" : 5432,
           "DB_NAME" : 'ubc03',
           "DB_USER" : 'ubc03',
-          "DB_PASS" : 'olivepepsi'
+          "DB_PASS" : 'olivepepsi',
+          "MAPS_KEY": 'AIzaSyDkDqXvVsLgxlM2Wt-c0ixl0Ov2C-9AJDE'          
         }
       },
   

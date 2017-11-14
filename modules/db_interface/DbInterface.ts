@@ -116,7 +116,7 @@ export class DbInterface {
      * Updates a site's latitude and longitude coordinates
      * Return true if succesful, false otherwise
      */
-    updateSiteLocation(siteID: number, newLat: number, newLon: number) : Promise<boolean>{
+    updateSiteLocation(siteID: number, newLat: string, newLon: string) : Promise<boolean>{
         return new Promise((fulfill, reject) => {
             let query = Query.UPDATE_SITE_LOCATION.replace("siteID",`${siteID}`).replace("newLat",`${newLat}`).replace("newLon",`${newLon}`);
             db.any(query).then(data => {
