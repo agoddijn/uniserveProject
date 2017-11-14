@@ -5,6 +5,11 @@ import { MapIframeContainer } from "./MapIframeContainer"
 import { DeviceBody } from "./PresentationalDeviceBody"
 import { MarkerWrapper } from "./MarkerWrapper"
 const { compose } = require("recompose");
+import IconButton from 'material-ui/IconButton';
+import ViewModule from 'material-ui-icons/ViewModule';
+import AspectRatio from 'material-ui-icons/AspectRatio';
+
+
 const {
   withScriptjs,
     withGoogleMap,
@@ -14,7 +19,7 @@ const {
 } = require("react-google-maps");
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 
-export class MapContainer extends React.Component<{ Sites: Site[] }, { Map: any }> {
+export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: any }, { Map: any }> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -47,6 +52,12 @@ export class MapContainer extends React.Component<{ Sites: Site[] }, { Map: any 
                 <h5 className={"title"}>
                     Map
                 </h5>
+                <IconButton onClick={this.props.SetLayout.bind(this, "default")}>
+                    <ViewModule />
+                </IconButton>
+                <IconButton onClick={this.props.SetLayout.bind(this, "fullmap")}>
+                    <AspectRatio />
+                </IconButton>
             </div>
             {this.state.Map}
         </div>;
