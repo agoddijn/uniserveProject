@@ -10,13 +10,16 @@
     "watch": "tsc -w",
     "build": "tsc || echo done",
     "test": "(npm run build & node ./test/test-runner.js fast)",
-    "testall": "(npm run build & node ./test/test-runner.js all)"
+    "testall": "(npm run build & node ./test/test-runner.js all)",
+    "testdebug": "node --debug-brk ./test/test-runner.js fast"
   },
   "dependencies": {
+    "@google/maps": "^0.4.5",
+    "@types/googlemaps": "^3.29.2",
     "express": "^4.15.5",
     "typescript": "^2.5.3",
+    "uniserve.m8s.types": "1.0.0",
     "uniserve.m8s.utils": "1.0.0",
-    "uniserve.m8s.types":  "1.0.0",
     "uniserve.m8s.web.db_interface": "1.0.0"
   },
   "devDependencies": {

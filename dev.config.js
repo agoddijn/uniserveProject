@@ -16,7 +16,8 @@ module.exports = {
         "DB_PORT" : 5432,
         "DB_NAME" : 'ubc03',
         "DB_USER" : 'postgres',
-        "DB_PASS" : ''
+        "DB_PASS" : '',
+        "MAPS_KEY": 'AIzaSyDkDqXvVsLgxlM2Wt-c0ixl0Ov2C-9AJDE'
       }
 
     },
