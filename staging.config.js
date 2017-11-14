@@ -48,7 +48,7 @@ module.exports = {
         // Path of the application on target servers
         "path" : "/home/ubc03/uniserve.m8s",
         //fix for older git version
-        "pre-deploy": "git pull",
+        "pre-deploy": "git reset --hard origin/uniservestaging && git pull",
         // Commands to be executed on the server after the repo has been cloned
         "post-deploy" : "yarn install && npm run buildstaging && pm2 startOrRestart staging.config.js"
       },
