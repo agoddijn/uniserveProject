@@ -2,7 +2,8 @@
 var webpack = require('webpack');
 var path = require("path");
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//uncomment and below in plugins to analyse bundle size
+//var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry:  [
@@ -40,7 +41,8 @@ module.exports = {
           }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new UglifyJSPlugin(),
-        new BundleAnalyzerPlugin()
+        //uncomment and above to analyse bundle size  
+        //new BundleAnalyzerPlugin()
           
     ],
 

@@ -5,8 +5,8 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server",
-    "buildstaging": "webpack --config webpack.staging.config.js",
-    "stagingbuildinfo": "webpack --json --config webpack.staging.config.js | webpack-bundle-size-analyzer"
+    "buildstagingwebpack": "webpack --config webpack.staging.config.js",
+    "buildstagingcss": "cp -R ./public/stylesheets/. ../../php_root/css/"
   },
   "license": "MIT",
   "dependencies": {
