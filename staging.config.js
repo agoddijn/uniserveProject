@@ -41,7 +41,7 @@ module.exports = {
         "user" : "ubc03",
         "host" : "lab3.uniserve.ca",
         // Branch
-        "ref"  : "origin/universestaging",
+        "ref"  : "origin/uniservestaging",
         // Git repository to clone
         "repo" : "git@github.com:CPSC319-2017w1/uniserve.m8s.git",
         // Path of the application on target servers
