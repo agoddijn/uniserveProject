@@ -8,15 +8,25 @@ import { Site } from "uniserve.m8s.types";
 import { Responsive, WidthProvider } from 'react-grid-layout'
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-export default class main extends React.Component<any, {Sites:Site[], SelectedSite: any, ViewHeight: number}> {
+export default class main extends React.Component<any, {Sites:Site[], SelectedSite: any, Layout: any, ViewHeight: number}> {
     constructor(props: any) {
         super(props);
+
+        let height = window.innerHeight;
+        
+        //uniserve header
+        height = height - 190;
+
         this.state = {
             Sites: [],
             SelectedSite: {},
-            ViewHeight: 700
+            Layout: {lg:this.layouts.fullmap},
+            ViewHeight: height
         }
-        
+    }
+    private layouts = {
+        default: [{i: 'sites', x: 0, y: 0, w: 6, h: 12}, {i: 'map', x: 6, y: 0, w: 6, h: 6}, {i: 'summary', x: 6, y: 7, w: 6, h: 6}],
+        fullmap: [{i: 'map', x: 0, y: 0, w: 12, h: 12}, {i: 'sites', x: 0, y: 12, w: 6, h: 6}, {i: 'summary', x: 6, y: 12, w: 6, h: 6}]
     }
     private timer:any;
     private dt:any = new DataLoader();
@@ -28,6 +38,8 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
         }).catch((str: string) => {
             alert(str);
         })
+         
+        
     }
     componentDidUpdate(){
         this.timer = window.setTimeout(()=>{
@@ -37,35 +49,35 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 5000)
+        }, 500000)
     }
     setSelectedSite(siteID: number){
         for (let site of this.state.Sites) {
             if (siteID == site.site_recid) this.setState({SelectedSite: site});
         }
     }
+    setLayout(layout: string | Array<any>){
+        if(typeof layout === 'string') layout = this.layouts[layout];
+        this.setState({Layout:{lg: layout}});
+    }
     render() {
         this.timer = window.clearTimeout(this.timer);
-        var layout = [
-            {i: 'a', x: 0, y: 0, w: 6, h: 12},
-            {i: 'b', x: 6, y: 0, w: 6, h: 6},
-            {i: 'c', x: 6, y: 7, w: 6, h: 6}
-        ];
-        var layouts = {lg: layout};
         var rowHeight = Math.floor(this.state.ViewHeight / 12);
         return <div className={"grid-container"}>
             <ResponsiveReactGridLayout 
                 className="layout"
-                layouts={layouts} 
+                layouts={this.state.Layout} 
                 cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
-                rowHeight={rowHeight}>
-                <div key="a">
+                rowHeight={rowHeight}
+                draggableHandle=".container-bar"
+                >
+                <div key="sites">
                     <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)}/>
                 </div>
-                <div key="b">
-                    <MapContainer Sites={this.state.Sites} />
+                <div key="map">
+                    <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} />
                 </div>
-                <div key="c">
+                <div key="summary">
                     <SummaryContainer Site={this.state.SelectedSite}/>
                 </div>
             </ResponsiveReactGridLayout>
