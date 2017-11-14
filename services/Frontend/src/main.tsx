@@ -33,14 +33,16 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
         this.timer = window.setTimeout(()=>{
             this.dt.loader().then((data: Site[]) => {
                 console.log(data[0].latitude);
-                this.setState({Sites: data, SelectedSite: data[0]});
+                this.setState({Sites: data, SelectedSite: this.state.SelectedSite });
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 20000)
+        }, 5000)
     }
-    setSelectedSite(site: Site){
-        this.setState({SelectedSite: site});
+    setSelectedSite(siteID: number){
+        for (let site of this.state.Sites) {
+            if (siteID == site.site_recid) this.setState({SelectedSite: site});
+        }
     }
     render() {
         this.timer = window.clearTimeout(this.timer);

@@ -139,7 +139,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any }, {
                     
                 />
                 <TableSelection 
-                    selectByRowClick  
+                    selectByRowClick 
                     highlightSelected 
                     showSelectionColumn={false}
                 />
