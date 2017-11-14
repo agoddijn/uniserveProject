@@ -52,11 +52,11 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                 <h5 className={"title"}>
                     Map
                 </h5>
-                <IconButton onClick={this.props.SetLayout.bind(this, "default")}>
-                    <ViewModule />
+                <IconButton onClick={this.props.SetLayout.bind(this, "fullmap")} className={"map-button"}>
+                    <AspectRatio style={{color: "white"}}/>
                 </IconButton>
-                <IconButton onClick={this.props.SetLayout.bind(this, "fullmap")}>
-                    <AspectRatio />
+                <IconButton onClick={this.props.SetLayout.bind(this, "default")} className={"map-button"}>
+                    <ViewModule style={{color: "white"}}/>
                 </IconButton>
             </div>
             {this.state.Map}

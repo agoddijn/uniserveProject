@@ -115,3 +115,14 @@ iframe{
     margin-top: 20px;
     margin-bottom: 20px;
 }
+.map-button{
+    float: right;
+    /* Firefox */
+    top: -moz-calc(5px - var(--container-bar-height));
+    /* WebKit */
+    top: -webkit-calc(5px - var(--container-bar-height));
+    /* Opera */
+    top: -o-calc(5px - var(--container-bar-height));
+    /* Standard */
+    top: calc(5px - var(--container-bar-height));
+}

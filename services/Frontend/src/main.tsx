@@ -20,13 +20,21 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
         this.state = {
             Sites: [],
             SelectedSite: {},
-            Layout: {lg:this.layouts.fullmap},
+            Layout: {lg:this.layouts.default},
             ViewHeight: height
         }
     }
     private layouts = {
-        default: [{i: 'sites', x: 0, y: 0, w: 6, h: 12}, {i: 'map', x: 6, y: 0, w: 6, h: 6}, {i: 'summary', x: 6, y: 7, w: 6, h: 6}],
-        fullmap: [{i: 'map', x: 0, y: 0, w: 12, h: 12}, {i: 'sites', x: 0, y: 12, w: 6, h: 6}, {i: 'summary', x: 6, y: 12, w: 6, h: 6}]
+        default: [
+            {i: 'sites', x: 0, y: 0, w: 2, h: 4}, 
+            {i: 'map', x: 2, y: 0, w: 2, h: 2}, 
+            {i: 'summary', x: 2, y: 2, w: 2, h: 2}
+        ],
+        fullmap: [
+            {i: 'map', x: 0, y: 0, w: 4, h: 4}, 
+            {i: 'sites', x: 0, y: 4, w: 2, h: 2}, 
+            {i: 'summary', x: 2, y: 4, w: 2, h: 2}
+        ]
     }
     private timer:any;
     private dt:any = new DataLoader();
@@ -37,9 +45,7 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
             this.setState({Sites: data, SelectedSite: data[0]});
         }).catch((str: string) => {
             alert(str);
-        })
-         
-        
+        }) 
     }
     componentDidUpdate(){
         this.timer = window.setTimeout(()=>{
@@ -62,12 +68,12 @@ export default class main extends React.Component<any, {Sites:Site[], SelectedSi
     }
     render() {
         this.timer = window.clearTimeout(this.timer);
-        var rowHeight = Math.floor(this.state.ViewHeight / 12);
+        var rowHeight = Math.floor(this.state.ViewHeight / 4);
         return <div className={"grid-container"}>
             <ResponsiveReactGridLayout 
                 className="layout"
                 layouts={this.state.Layout} 
-                cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
+                cols={{lg: 4, md: 4, sm: 4, xs: 2, xxs: 2}}
                 rowHeight={rowHeight}
                 draggableHandle=".container-bar"
                 >
