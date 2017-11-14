@@ -155,16 +155,18 @@ export class DbInterface {
      * Get a device's recent pings
      * Return true if succesful, false otherwise
      */
-    getRecentPings(deviceRecID:any, limitNum:number = 5) : Promise<[any, boolean]>{
+    getRecentPings(deviceRecID:any, limitNum:number = 5) : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill, reject) => {
+            let that = this;
             let query = Query.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
             Log.debug(query);
             db.any(query).then(data => {
                 Log.debug(data);
-                fulfill([data, true]); 
+                let pingRecords = that.parsePings(data);
+                fulfill([pingRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false])
+                reject([[],false])
             })  
         });
     }
@@ -173,15 +175,17 @@ export class DbInterface {
      * Retrieve all companies.
      * Return true if succesful, false otherwise
      */
-    getAllCompanies() : Promise<[any, boolean]>{
+    getAllCompanies() : Promise<[Company[], boolean]>{
         return new Promise((fulfill, reject) => {
+            let that = this;
             let query = Query.GET_ALL_COMPANIES;
             db.any(query).then(data => {
                 console.log(JSON.stringify(data));
-                fulfill([data, true]); 
+                let companyRecords = that.parseAllCompanies(data);
+                fulfill([companyRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false])
+                reject([[],false])
             })  
         });
     }
@@ -190,11 +194,13 @@ export class DbInterface {
      * Retrieve a specific record, based on username.
      * Return true if succesful, false otherwise
      */
-    getCompanyID(username) : Promise<[any, boolean]>{
+    getCompanyID(username) : Promise<[Company, boolean]>{
         return new Promise((fulfill, reject) => {
+            let that = this;
             let query = Query.GET_COMPANY.replace("username",`${username}`);
             db.any(query).then(data => {
-                fulfill([data, true]); 
+                let companyRecord = that.parseAllCompanies(data);
+                fulfill([companyRecord[0], true]); 
             }).catch(e => {
                 console.log("Error: " + e);
                 reject([null,false])
@@ -203,27 +209,31 @@ export class DbInterface {
     }
 
     // Retrieves all sites
-    getAllSites() : Promise<[any, boolean]>{
+    getAllSites() : Promise<[Site[], boolean]>{
         return new Promise ((fulfill, reject) => {
+            let that = this;
             let query = Query.GET_ALL_SITES;
             db.any(query).then(data => {
-                fulfill([data, true]); 
+                let siteRecords = that.parseAllSites(data);
+                fulfill([siteRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false])
+                reject([[],false])
             })  
         });
     }
 
     // Retrieves the site IDs based on the given Company ID.
-    getSites(companyID){
+    getSites(companyID) : Promise<[Site[], boolean]> {
         return new Promise ((fulfill, reject) => {
+            let that = this;
             let query = Query.GET_SITES_BY_COMPANY.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
-                fulfill([data, true]); 
+                let siteRecords = that.parseAllSites(data);
+                fulfill([siteRecords, true]); 
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false])
+                reject([[],false])
             })  
         });
     }
@@ -303,14 +313,16 @@ export class DbInterface {
      * Retrieve all pings that are older than 30 days.
      * Return true if succesful, false otherwise
      */
-    get30DayOldRecords() : Promise<[any, boolean]>{
+    get30DayOldRecords() : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
+            let that = this;
             let query = Query.GET_30_DAYS_OLD_PINGS;
             db.any(query).then(data => {
-                fulfill([data,true]);
+                let pingRecords = that.parsePings(data);
+                fulfill([pingRecords,true]);
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false]);
+                reject([[],false]);
             })
         });
     }
@@ -319,14 +331,16 @@ export class DbInterface {
      * Retrieve all pings that are older than 60 days.
      * Return true if succesful, false otherwise
      */
-    get60DayOldRecords() : Promise<[any, boolean]>{
+    get60DayOldRecords() : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
+            let that= this;
             let query = Query.GET_60_DAYS_OLD_PINGS;
             db.any(query).then(data => {
-                fulfill([data,true]);
+                let pingRecords = that.parsePings(data);
+                fulfill([pingRecords,true]);
             }).catch(e => {
                 console.log("Error: " + e);
-                reject([null,false]);
+                reject([[],false]);
             })
         });
     }
@@ -390,6 +404,49 @@ export class DbInterface {
         }
         return companyRecord
     }
+    
+    /*
+    *
+    * Retrieve a specific company's devices
+    * Return true if succesful, false otherwise
+    */
+    parseAllCompanies(results:any) :  Company[] {
+        let companyRecords: Company[] = [];
+         for (var key in results){
+            let company : Company = {    
+                company_recid : results[key]["company_recid"],
+                company_id : results[key]["company_id"],
+                company_name : results[key]["company_name"],
+            }
+            companyRecords.push(company)
+         }
+         return companyRecords;
+     }
+ 
+    /*
+    *
+    * Retrieve a specific company's devices
+    * Return true if succesful, false otherwise
+    */
+    parseAllSites(results:any) :  Site[] {
+        let siteRecords: Site[] = [];
+         for (var key in results){
+            let site : Site = {    
+                site_recid : results[key]["site_recid"],
+                company_recid : results[key]["company_recid"],
+                description : results[key]["description"],
+                address1 : results[key]["address1"],
+                address2 : results[key]["address2"],
+                city : results[key]["city"],
+                province : results[key]["province"],
+                postal_code : results[key]["postal_code"],
+                latitude : results[key]["latitude"],
+                longitude : results[key]["longitude"]
+            }
+            siteRecords.push(site)
+         }
+         return siteRecords;
+     }
 
     /*
     *
