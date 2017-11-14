@@ -10,6 +10,9 @@ export class DbInterface {
         console.log("DbInterface::Init");
     }
 
+    // AGGREGATION COMMANDS
+
+
     /*
      * Migrate and aggregate all records older than 30 days
      * Return true if succesful, false otherwise
