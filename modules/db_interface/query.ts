@@ -39,7 +39,8 @@ export var Query = {
         "SELECT * FROM msp_company c, msp_site s, msp_device d " +
         "WHERE c.company_recid = companyID " +
         "AND c.company_recid = s.company_recid " +
-        "AND s.site_recid = d.device_recid;",
+        "AND s.site_recid = d.site_recid " +
+        "ORDER BY d.site_recid, d.device_recid;",
     GET_SITE_DEVICES :
         "SELECT device_recid FROM msp_device WHERE site_recid=\'siteID\';",
     GET_ALL_PINGS :

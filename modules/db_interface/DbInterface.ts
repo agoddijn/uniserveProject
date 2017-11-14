@@ -430,8 +430,9 @@ export class DbInterface {
     compileResults(results:any, that:any) {
         let pingRecords: PingRecord[] = [];
         let siteRecords : Site[] = [];
+        let oldSite = -1;
         for (var key in results){
-            if (results.hasOwnProperty(key)){
+            if (results.hasOwnProperty(key) && (oldSite != results[key]["site_recid"])){
                 let tempSite : Site = {
                     site_recid : results[key]["site_recid"],
                     company_recid : results[key]["company_recid"],
@@ -443,9 +444,10 @@ export class DbInterface {
                     postal_code : results[key]["postal_code"],
                     latitude : results[key]["latitude"],
                     longitude : results[key]["longitude"],
-                    devices : that.parseDevices(results, results[key]["company_recid"], results[key]["site_recid"], that)
+                    devices : that.parseDevices(results, results[key]["site_recid"], that)
                 }
                 siteRecords.push(tempSite);
+                oldSite = tempSite.site_recid;
             }
         }
         let companyRecord : Company = {
@@ -528,10 +530,11 @@ export class DbInterface {
      * Retrieve a specific company's devices
      * Return true if succesful, false otherwise
      */
-    parseDevices(results:any, company_recid, site_recid, that) {
+    parseDevices(results:any, site_recid, that) {
         let deviceRecords: Device[] = [];
+        let oldDeviceID : number = -1;
         for (var key in results){
-            if (results.hasOwnProperty(key) && results[key]["company_recid"] == company_recid && results[key]["site_recid"] == site_recid){
+            if (results.hasOwnProperty(key) && results[key]["site_recid"] == site_recid && (oldDeviceID != results[key]["device_recid"])){
                 let device : Device = {
                     device_recid : results[key]["device_recid"],
                     site_recid : results[key]["site_recid"],
@@ -543,6 +546,7 @@ export class DbInterface {
                     ip_address : results[key]["ip_address"],
                 }
                 deviceRecords.push(device)
+                oldDeviceID = device.device_recid;
             }
         }
         return deviceRecords;
