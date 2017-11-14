@@ -79,7 +79,7 @@ export class SummaryChart extends React.Component<{ Site: Site }, {Data: any}> {
             })
             for (let i = 0; i < device.ping_records.length; i ++) {
                 let curRecord: PingRecord = device.ping_records[i];
-                var date = new Date(curRecord.datetime);
+                var date = new Date((curRecord as any).datetime);
                 var dateString: string = date.getHours() + ":" + date.getMinutes();
                 if (j == 0) data.labels.push(dateString);
                 if (curRecord.responded) {
