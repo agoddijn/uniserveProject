@@ -10,8 +10,6 @@ export class DbInterface {
         console.log("DbInterface::Init");
     }
 
-    // AGGREGATION COMMANDS
-
     /*
      * Migrate and aggregate all records older than 30 days
      * Return true if succesful, false otherwise
@@ -359,7 +357,6 @@ export class DbInterface {
             let psqlAfter = new Date(after).toISOString().slice(0, 19).replace('T', ' ');
             let psqlBefore = new Date(before).toISOString().slice(0, 19).replace('T', ' ');
             let query = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlAfter/g,`${psqlAfter}`).replace(/psqlBefore/g,`${psqlBefore}`);
-
             db.any(query).then(data => {
                 let pingRecords = that.parsePings(data);
                 console.log(pingRecords);
@@ -370,6 +367,57 @@ export class DbInterface {
             })
         });
     }
+
+    /*
+     * Retrieve uptime for all pings up to 30 days.
+     * Return true if succesful, false otherwise
+     */
+    get30DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
+        return new Promise((fulfill,reject) => {
+            let query = Query.GET_30_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            db.any(query).then(data => {
+                fulfill([data[0]["uptime"],true]);
+            }).catch(e => {
+                console.log("Error : " + e);
+                reject([-1,false]);
+            })
+        });
+    }
+
+    /*
+     * Retrieve uptime for all pings older than 30 days and up to 60 days.
+     * Return true if succesful, false otherwise
+     */
+    get60DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
+        return new Promise((fulfill,reject) => {
+            let query = Query.GET_60_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            db.any(query).then(data => {
+                console.log("60 " + data[0]["uptime"]);
+                fulfill([data[0]["uptime"],true]);
+            }).catch(e => {
+                console.log("Error : " + e);
+                reject([-1,false]);
+            })
+        });
+    }
+
+    /*
+     * Retrieve uptime for all pings older than 60 days and up to 90 days.
+     * Return true if succesful, false otherwise
+     */
+    get90DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
+        return new Promise((fulfill,reject) => {
+            let query = Query.GET_90_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            db.any(query).then(data => {
+                console.log("90 " + data[0]["uptime"]);
+                fulfill([data[0]["uptime"],true]);
+            }).catch(e => {
+                console.log("Error : " + e);
+                reject([-1,false]);
+            })
+        });
+    }
+
 
     // HELPERS
 
