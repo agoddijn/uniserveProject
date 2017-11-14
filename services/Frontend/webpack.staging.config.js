@@ -1,15 +1,18 @@
 
 var webpack = require('webpack');
 var path = require("path");
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry:  [
-        'react-hot-loader/patch',
-        './src/index.tsx'     
+        './src/prodindex.tsx'     
     ],
 
+    node: false,
+
     output: {
-        filename: "m8sbuild.js",
+        filename: "m8sbuild.min.js",
         path: path.join(__dirname, "/../../php_root/js_src")
     },
 
@@ -32,9 +35,13 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-              'NODE_ENV': JSON.stringify('staging')
+              'NODE_ENV': JSON.stringify('production')
             }
-          })
+          }),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new UglifyJSPlugin(),
+        new BundleAnalyzerPlugin()
+          
     ],
 
     // When importing a module whose path matches one of the following, just

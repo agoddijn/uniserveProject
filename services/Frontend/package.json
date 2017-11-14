@@ -5,7 +5,8 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server",
-    "buildstaging": "webpack --config webpack.staging.config.js"
+    "buildstaging": "webpack --config webpack.staging.config.js",
+    "stagingbuildinfo": "webpack --json --config webpack.staging.config.js | webpack-bundle-size-analyzer"
   },
   "license": "MIT",
   "dependencies": {
@@ -16,6 +17,7 @@
     "@types/react-dom": "^16.0.1",
     "@types/react-grid-layout": "^0.16.1",
     "chart.js": "^2.7.1",
+    "es6-promise": "^4.1.1",
     "jshint": "^2.9.5",
     "lodash": "^4.17.4",
     "material-ui": "^1.0.0-beta.16",
@@ -26,6 +28,7 @@
     "react-dom": "^16.0.0",
     "react-grid-layout": "^0.16.0",
     "react-hot-loader": "^3.1.1",
+    "uglifyjs-webpack-plugin": "^1.0.1",
     "uniserve.m8s.types": "1.0.0",
     "webpack": "^3.7.1"
   },
@@ -35,6 +38,8 @@
     "react-hot-loader": "^3.1.1",
     "source-map-loader": "^0.2.2",
     "typescript": "^2.5.3",
+    "webpack-bundle-analyzer": "^2.9.1",
+    "webpack-bundle-size-analyzer": "^2.7.0",
     "webpack-dev-server": "^2.9.2",
     "webpack-hot-middleware": "^2.20.0"
   }

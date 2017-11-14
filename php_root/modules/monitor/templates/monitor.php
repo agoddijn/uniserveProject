@@ -16,7 +16,7 @@
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.js"></script>
 
     <!-- Main -->
-    <script type="text/javascript" src="/js_src/m8sbuild.js"></script>
+    <script type="text/javascript" src="/js_src/m8sbuild.min.js"></script>
 
 
 </div>

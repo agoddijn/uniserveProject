@@ -1,3 +1,4 @@
+require('es6-promise').polyfill();
 import * as React from "react";
 import { TabularViewContainer } from "./components/TabularViewContainer";
 import { MapContainer } from "./components/MapContainer";
