@@ -38,7 +38,7 @@ export class MapContainer extends React.Component<{ Sites: Site[] }, { Map: any 
                 </GoogleMap>
             )
         })
-        let map_ele: any = <Map containerElement={<div className={"container-inner"} style={{ height: "100%", width: "100%" }}></div>} mapElement={<div style={{ height: "41vh", width: "49vw" }}></div>} />
+        let map_ele: any = <Map containerElement={<div className={"container-inner"} style={{ height: "100%", width: "100%" }}></div>} mapElement={<div style={{ height: "100%", width: "100%" }}></div>} />
         this.setState({ Map: map_ele });
     }
     render() {
