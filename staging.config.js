@@ -39,6 +39,7 @@ module.exports = {
     "deploy" : {
       "staging" : {
         "user" : "ubc03",
+        "key": "~/.ssh/uniservekey",
         "host" : "lab3.uniserve.ca",
         // Branch
         "ref"  : "origin/uniservestaging",
