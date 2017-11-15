@@ -43,18 +43,26 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
         }
     }
     render(){
-        var title = "Summary";
         var style = {};
+        var title = (
+            <h5 className="title" style={style}>
+                Summary
+            </h5>
+        )
         if (this.state.Site && this.state.Site.devices && this.state.Site.devices.length > 0 && this.state.Site.devices[0].ping_records.length > 0) {
-            title = this.state.Site.description;
-            style = {float: "left", marginLeft: "40px"};
+            style = {float: "left", paddingTop: "0px", paddingRight: "20px"};
+            title = (
+                <div className={"summary-title"}>
+                    <h5 className="title" style={style}>
+                        {this.state.Site.description}
+                    </h5>
+                </div>
+            )
         }
         let toDate = new Date();
         return <div className="myContainer">
             <div className={"container-bar"}>
-                <h5 className="title" style={style}>
-                    {title}
-                </h5>
+                {title}
                 <form 
                     className={"date-field"} 
                     noValidate
