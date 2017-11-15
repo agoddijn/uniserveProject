@@ -8,4 +8,4 @@ setInterval(() => {
         if (success) console.log("Successful ping");
         else console.log("Error, unsuccessful ping");
     })
-}, 10000);
+}, 60000);
