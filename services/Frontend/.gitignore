@@ -1,2 +1,3 @@
 .awcache
 .data
+!webpack.staging.config.js

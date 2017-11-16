@@ -4,14 +4,16 @@
         "sourceMap": true,
         "noImplicitAny": false,
         "module": "commonjs",
-        "target": "es6",
-        "jsx": "react"
+        "target": "es5",
+        "jsx": "react",
+        "lib": ["es2015.promise","es5", "dom"]
     },
     "awesomeTypescriptLoaderOptions": {
-        "useCache": true,
-        "useTranspileModule": true 
     },
     "include": [
         "./src/**/*"
+    ],
+    "exclude": [
+        "node_modules"        
     ]
 }
