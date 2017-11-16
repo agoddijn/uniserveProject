@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Site, Device } from "uniserve.m8s.types";
-import { ContainerBar } from "./PresentationalContainerBar"
-import { MapIframeContainer } from "./MapIframeContainer"
-import { DeviceBody } from "./PresentationalDeviceBody"
-import { MarkerWrapper } from "./MarkerWrapper"
+import { MapIframeContainer } from "./MapIframeContainer";
+import { MarkerWrapper } from "./MarkerWrapper";
 const { compose } = require("recompose");
 import IconButton from 'material-ui/IconButton';
 import ViewModule from 'material-ui-icons/ViewModule';

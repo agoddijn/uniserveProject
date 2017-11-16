@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Site, Device } from "uniserve.m8s.types";
-import { ContainerBar } from "./PresentationalContainerBar"
 import { MapIframeContainer } from "./MapIframeContainer"
-import { DeviceBody } from "./PresentationalDeviceBody"
 import { DeviceTable } from "./DeviceTable"
 // import { NewMapContainer } from "./NewMapContainer"
 const { compose } = require("recompose");
