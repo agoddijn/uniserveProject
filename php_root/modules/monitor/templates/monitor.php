@@ -20,9 +20,9 @@
     }
     
     if (document.readyState !== 'loading') {
-      m8sready()
+      m8sready();
     } else {
-      document.addEventListener('DOMContentLoaded', m8sready)
+      document.addEventListener('DOMContentLoaded', m8sready);
     }
 </script>
 
