@@ -27,7 +27,13 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         }
     }
     componentWillReceiveProps(next: { Sites: Site[] }) {
-        let Map: any = withGoogleMap((props: any) => {
+        this._renderMap(next.Sites);
+    }
+
+    private _renderMap = (() => {
+        let container = <div className={"container-inner"} style={{width: "100%", position: "absolute"}}></div>
+        let map = <div style={{ height: "100%", width: "100%" }}></div>;
+        let Map = withGoogleMap((props: {markers: MarkerWrapper[]}) => {
             return (
                 <GoogleMap defaultZoom={11} defaultCenter={{ lat: 49.2648641, lng: -123.2536411 }}>
                     <MarkerClusterer 
@@ -36,16 +42,19 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                         gridSize={60}
                         defaultMinimumClusterSize={2}
                         defaultZoomOnClick={true}>
-                        {next.Sites.map((s: Site, key: number) => {
-                            return <MarkerWrapper Site={s} num={key} info={props} />
-                        })}
+                        {props.markers}
                     </MarkerClusterer>
                 </GoogleMap>
             )
-        })
-        let map_ele: any = <Map containerElement={<div className={"container-inner"} style={{width: "100%", position: "absolute"}}></div>} mapElement={<div style={{ height: "100%", width: "100%" }}></div>} />
-        this.setState({ Map: map_ele });
-    }
+        });
+        return function(sites: Site[]) {
+            let map_ele: any = <Map containerElement={container} mapElement={map} markers={sites.map((s: Site, key: number) => {
+                return <MarkerWrapper Site={s} num={key} key={key} />
+            })}/>
+            this.setState({ Map: map_ele });
+        }
+    })();
+
     render() {
         return <div className="myContainer">
             <div className={"container-bar"}>

@@ -11,8 +11,8 @@ const {
     InfoWindow
 } = require("react-google-maps");
 
-export class MarkerWrapper extends React.Component<{ Site: Site, num:number, info:any }, { clicked:boolean }> {
-    constructor(props: { Site: Site, num:number, info:any }) {
+export class MarkerWrapper extends React.Component<{ Site: Site, num:number }, { clicked:boolean }> {
+    constructor(props: { Site: Site, num:number }) {
         super(props);
         this.state = {
             clicked:false
