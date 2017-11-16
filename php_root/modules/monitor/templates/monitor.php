@@ -5,6 +5,10 @@
 <style type="text/css">
 #monitoringframe {
   width: 100vw;
+  border: none;
+  position: relative;
+  left: -60px;
+  top: -10px;
 }
 </style>
 
