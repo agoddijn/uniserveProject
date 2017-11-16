@@ -11,6 +11,7 @@ setInterval(() => {
         if (success) console.log("Successful ping");
         else console.log("Error, unsuccessful ping");
     })
+}, 60000);
     if (count == Math.floor(newDevs / interval)) {
         count = 0;
         pinger.updateDevices();

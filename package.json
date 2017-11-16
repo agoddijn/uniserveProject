@@ -37,6 +37,7 @@
     "buildAggregator": "(cd ./services/DataAggregator/ && npm run build)",
     "watchAggregator": "(cd ./services/DataAggregator/ && npm run watch)",
     
+    "buildstaging": "npm run build && (cd ./services/Frontend/ && npm run buildstaging)",
     "build": "npm run buildDataFaker && npm run buildWebBackend && npm run buildPingingBackend && npm run buildUtils && npm run buildTypes && npm run buildShim && npm run buildAggregator && npm run buildDbInterface && npm run buildDBconnection",  
     "watch": "npm run watchWebBackend & npm run watchPingingBackend & npm run watchUtils & npm run watchTypes",
 
