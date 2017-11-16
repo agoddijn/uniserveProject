@@ -10,8 +10,9 @@
 
 <script type="text/javascript">
     window.location = (""+window.location).replace(/#[A-Za-z0-9_]*$/,'')+"#menu_ul";
-    var iframeheight = window.innerHeight - 156;
+    var iframeheight = window.innerHeight - 50;
     document.getElementById('monitoringframe').style.height = iframeheight + "px";
+    console.log("windowheight: " + window.innerHeight);
 </script>
 
 <iframe src="/monitoringframe.html" title="Monitoring Iframe" id="monitoringframe">
