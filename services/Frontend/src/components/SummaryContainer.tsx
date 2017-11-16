@@ -19,11 +19,26 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
     componentWillReceiveProps(next:{Site:Site}){
         let now = moment();
         let from = moment().subtract(5,'minutes');
-        
+        let changedTo = true, changedFrom = true;
+        if (moment(this.state.ToDate, myFormat).isBefore(moment().subtract(3, 'minutes'))) {
+            changedTo = false;
+            now = moment(this.state.ToDate,myFormat);
+        }
+        if (moment(this.state.FromDate, myFormat).isBefore(moment().subtract(8, 'minutes'))) {
+            changedFrom = false;
+            from = moment(this.state.FromDate,myFormat);
+        }
+
         if (next.Site.devices && next.Site.devices.length > 0) {
-            this.setState({Site: next.Site, FromDate: from.format(myFormat), ToDate: now.format(myFormat)})
+            if (changedFrom || changedTo) {
+                this.setState({Site: next.Site, FromDate: from.format(myFormat), ToDate: now.format(myFormat)})
+            } else {
+                this.setState({Site: next.Site});
+            } 
         } else {
-            this.setState({FromDate: from.format(myFormat), ToDate: now.format(myFormat)});
+            if (changedFrom || changedTo){
+                this.setState({FromDate: from.format(myFormat), ToDate: now.format(myFormat)});
+            } 
         }
     }
     fromDateChange(event: any){
