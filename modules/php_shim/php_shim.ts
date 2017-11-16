@@ -55,7 +55,7 @@ app.get('/ajax/monitoring_api.php', async (req, res) => {
             if(req.query.startdate && req.query.enddate){
                 startdate = req.query.startdate;
                 enddate = req.query.enddate;
-                options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/device/${device}?startdate=${startdate}&enddate=${enddate}&sauthtoken=${process.env.PHP_AUTH_TOKEN}`;                
+                options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/device/${device}?startdate=${startdate}&enddate=${enddate}&authtoken=${process.env.PHP_AUTH_TOKEN}`;                
             } else {
                 options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/device/${device}?authtoken=${process.env.PHP_AUTH_TOKEN}`;
             }
