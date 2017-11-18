@@ -18,7 +18,6 @@ describe('dataFakerTest', function() {
     let file = dataFaker.webLinksJSONFile;
 
     beforeEach(function () {
-        dataFaker.addDataSet(file);
     });
 
     it("test addDataSet", function() {
@@ -46,11 +45,19 @@ describe('dataFakerTest', function() {
     });
 
     it("test: generateDeviceList", function() {
-        let devices = [];
+        let devices: Device[] = [];
         let links = dataFaker.links;
 
         devices = dataFaker.generateDeviceList(links);
         expect(devices.length).to.equal(10000);
     });
+
+    it("test: generateCompanies", function() {
+        let companies: Company[] = [];
+        let howMany = 5;
+
+        companies = dataFaker.generateCompanies(howMany);
+        expect(companies.length).to.equal(5);
+    })
 
 });

@@ -41,6 +41,7 @@ class SiteClass implements Site {
     postal_code = "";
     latitude = "";
     longitude = "";
+    devices = [];
 }
 
 export class Address {
@@ -51,18 +52,19 @@ export class Address {
 }
 
 export class DataFaker {
-    links: Device[];
+    links: any;
     addresses: Address[];
     webLinksJSONFile: any = require('./data/top10000.json');
     addressesJSONFile: any = require('./data/1Kaddresses.json');
     chance = new Chance();
-    
+    devices: Device[] = [];
 
     constructor() {
         console.log("Init::DataFaker")
         let that = this;
-        that.links = that.addDataSet(that.webLinksJSONFile);
+        that.links = that.populateLinks(that.webLinksJSONFile);
         that.addresses = that.populateAddresses(that.addressesJSONFile);
+        that.devices = that.generateDeviceList(that.links);
     }
 
     /**
@@ -71,11 +73,12 @@ export class DataFaker {
     private populateAddresses(addressesFile: any): Address[] {
         let that = this;
         let addressesArray: Address[] = [];
-        let address: Address = new Address();
+
 
         let objectValue = addressesFile["AddressesData"];
         
         for (let i = 0; i < 1000; i++) {
+            let address: Address = new Address();
             let addressValue = objectValue[i];
             address.address = addressValue[0];
             address.city = addressValue[1];
@@ -93,7 +96,7 @@ export class DataFaker {
      * returns list of website links
      * @param jsonObjects 
      */  
-    private addDataSet(jsonObjects: any) {
+    private populateLinks(jsonObjects: any) {
         let that = this;
     
         that.links = [];
@@ -220,40 +223,35 @@ export class DataFaker {
      * @param links 
      */
     generateDeviceList(links: Array<Device>): Device[] {
-        // TODO: promisify this function
     let that = this;
     let device: Device = new DeviceClass();
+    let devices: Device[] = [];
 
-    let devices = [];
     let id: number = 1;
-
-    for (let link of links) {
-        const dns = require('dns');
-        const options = {
+    const dns = require('dns');
+    const options = {
             family: 4
-        };
-        dns.lookup(link, options, (err, address, family) =>
-        device.ip_address = address,
-        device.device_recid = id,
-        device.site_recid = 0, 
-        device.device_id = "fake_id" + device.device_recid, 
-        device.manufacturer = "fake_manufacturer" + device.device_recid, 
-        device.description = "fake_description" +  device.device_recid, 
-        device.device_type = "fake_type" +  device.device_recid, 
-        device.mac_address = "fake_mac" +  device.device_recid);
+    };
+        for (let link of links) {
+            dns.lookup(link, options, (err, address, family) => {
+                    device.ip_address = address;
+                    device.device_recid = id,
+                    device.site_recid = 0,
+                    device.device_id = "fake_id" + device.device_recid,
+                    device.manufacturer = "fake_manufacturer" + device.device_recid,
+                    device.description = "fake_description" +  device.device_recid,
+                    device.device_type = "fake_type" +  device.device_recid,
+                    device.mac_address = "fake_mac" +  device.device_recid});
+            devices.push(device);
+            id++;
+            }
+            return devices;
+    }
 
-        devices.push(device);
-        id++;
-    }
-    
-    return devices;
-    
-    }
 
 
     /**
-     * given 
-     * returns list of companies
+     * returns list of howMany companies
      * @param howMany 
      */
     generateCompanies(howMany: number): Company[] {
@@ -261,7 +259,7 @@ export class DataFaker {
         let company: Company = new CompanyClass();
         let companies: Company[] = [];
         let numOfSitesForCompany: number; 
-        let locations = that.addresses;
+        let locations = that.addresses.copyWithin(0, 0, 1000);
 
         let c_recid: number = 1;
         let c_id: string = "Fake Company ID";
@@ -295,7 +293,10 @@ export class DataFaker {
             site.company_recid = c_recid;
             site.description = "Fake Company Description";
             that.setAddressOfSite(site, locations);
-            // devices
+            for (var j = 0; j < 5; j++) {
+                site.devices.push(that.devices[0]);
+                that.devices.pop();
+            }
         }
         return sites;
     }
@@ -311,7 +312,7 @@ export class DataFaker {
         site.city = locations[0].city;
         site.province = locations[0].province;
         site.postal_code = locations[0].postal_code;
-        locations.pop;
+        locations.splice(0, 1);
         return site;
     }
 
@@ -324,6 +325,8 @@ export class DataFaker {
     generateRandomNumOfSites(max: number, min: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
+
+
 
 }
 
