@@ -12,8 +12,8 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 
-export class Table extends React.Component<{ sites: Site[], SelectSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any }>{
-    constructor(props: { sites: Site[], SelectSite: any }) {
+export class Table extends React.Component<{ sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any}>{
+    constructor(props: { sites: Site[], SelectSite: any, SelectedSite: any }) {
         super(props);
 
         this.state = {
@@ -29,9 +29,18 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any }, {
             expanded: []
         };
     }
-    componentWillReceiveProps(next: { sites: Site[], SelectSite: any }) {
+    componentWillReceiveProps(next: { sites: Site[], SelectSite: any, SelectedSite: any }) {
         let siteData = this.generateRows(next.sites);
-        this.setState({ rows: siteData, SelectSite: next.SelectSite });
+        let index = this.state.selection[0];
+        if (siteData.length > 0 && next.SelectedSite) {
+            for (let i = 0; i < siteData.length; i++) {
+                if (siteData[i].siteID == next.SelectedSite.site_recid) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index]});
     }
     handleRowSelection(selection: any) {
         let selected = [selection[selection.length - 1]]
