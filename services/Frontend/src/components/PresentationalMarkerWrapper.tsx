@@ -2,7 +2,6 @@ import * as React from "react";
 import { Site, Device } from "uniserve.m8s.types";
 import { MapIframeContainer } from "./MapIframeContainer"
 import { DeviceTable } from "./DeviceTable"
-// import { NewMapContainer } from "./NewMapContainer"
 const { compose } = require("recompose");
 const {
     Marker,
@@ -21,7 +20,12 @@ export class MarkerWrapper extends React.Component<{ Site: Site, display:boolean
     }
     render() {
         return <Marker key={this.props.Site.site_recid} position={{ lat: Number(this.props.Site.latitude), lng: Number(this.props.Site.longitude) }} onClick={() => { this.props.SetSelectedSite(this.props.Site.site_recid); }} >
-                    {this.state.clicked && <InfoWindow><div style={{width:"22vw", height:"14vh"}}><DeviceTable devices={this.props.Site.devices} /></div></InfoWindow>}
+                    {this.state.clicked && 
+                    <InfoWindow>
+                        <div style={{width:"22vw", height:"14vh"}}>
+                            <DeviceTable devices={this.props.Site.devices} />
+                        </div>
+                    </InfoWindow>}
                 </Marker>
     }
 }
