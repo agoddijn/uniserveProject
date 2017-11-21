@@ -34,12 +34,12 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         let Map = withGoogleMap((props: {markers:MarkerWrappers,SelectedSite}) => {
             console.log(props.SelectedSite.latitude);
             return (
-                <GoogleMap defaultZoom={12} defaultCenter={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                <GoogleMap defaultZoom={3} defaultCenter={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
                     <MarkerClusterer 
                         averageCenter
                         enableRetinaIcons
                         gridSize={60}
-                        defaultMinimumClusterSize={2}
+                        defaultMinimumClusterSize={5}
                         defaultZoomOnClick={true}>
                         {props.markers}
                     </MarkerClusterer>
