@@ -18,16 +18,18 @@ export class DbInterface {
      * Return true if succesful, false otherwise
      */
     migrate30DayData() : Promise<[any, boolean]>{
-        return new Promise((fulfill,reject) => {
-            let query: string = Query.MIGRATE_30;
-            db.any(query).then(data => {
-                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+        return new Promise((fulfill, reject) => {
+            db.tx(t => {
+                const query = t.none(Query.MIGRATE_30);
+                return t.batch([query]);
+            }).then(data => {
+                Log.info("Query execution successful");
                 fulfill([data,true]);
-            }).catch(e => {
-                Log.error("Error: " + e);
+            }).catch(error => {
+                Log.error("Error: " + error)
                 reject([null,false]);
             })
-        })
+        });
     }
 
     /*
@@ -35,16 +37,18 @@ export class DbInterface {
      * Return true if succesful, false otherwise
      */
     migrate60DayData() : Promise<[any, boolean]>{
-        return new Promise((fulfill,reject) => {
-            let query: string = Query.MIGRATE_60;
-            db.any(query).then(data => {
-                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+        return new Promise((fulfill, reject) => {
+            db.tx(t => {
+                const query = t.none(Query.MIGRATE_60);
+                return t.batch([query]);
+            }).then(data => {
+                Log.info("Query execution successful");
                 fulfill([data,true]);
-            }).catch(e => {
-                Log.error("Error: " + e);
+            }).catch(error => {
+                Log.error("Error: " + error)
                 reject([null,false]);
             })
-        })
+        });
     }
 
     // DELETION COMMANDS
