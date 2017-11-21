@@ -19,11 +19,26 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
     componentWillReceiveProps(next:{Site:Site}){
         let now = moment();
         let from = moment().subtract(5,'minutes');
-        
+        let changedTo = true, changedFrom = true;
+        if (moment(this.state.ToDate, myFormat).isBefore(moment().subtract(3, 'minutes'))) {
+            changedTo = false;
+            now = moment(this.state.ToDate,myFormat);
+        }
+        if (moment(this.state.FromDate, myFormat).isBefore(moment().subtract(8, 'minutes'))) {
+            changedFrom = false;
+            from = moment(this.state.FromDate,myFormat);
+        }
+
         if (next.Site.devices && next.Site.devices.length > 0) {
-            this.setState({Site: next.Site, FromDate: from.format(myFormat), ToDate: now.format(myFormat)})
+            if (changedFrom || changedTo) {
+                this.setState({Site: next.Site, FromDate: from.format(myFormat), ToDate: now.format(myFormat)})
+            } else {
+                this.setState({Site: next.Site});
+            } 
         } else {
-            this.setState({FromDate: from.format(myFormat), ToDate: now.format(myFormat)});
+            if (changedFrom || changedTo){
+                this.setState({FromDate: from.format(myFormat), ToDate: now.format(myFormat)});
+            } 
         }
     }
     fromDateChange(event: any){
@@ -43,20 +58,28 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
         }
     }
     render(){
-        var title = "Summary";
         var style = {};
+        var title = (
+            <h5 className="title" style={style}>
+                Summary
+            </h5>
+        )
         if (this.state.Site && this.state.Site.devices && this.state.Site.devices.length > 0 && this.state.Site.devices[0].ping_records.length > 0) {
-            title = this.state.Site.description;
-            style = {float: "left", marginLeft: "40px"};
+            style = {float: "left", paddingTop: "0px", paddingRight: "20px"};
+            title = (
+                <div className={"summary-title"}>
+                    <h5 className="title" style={style}>
+                        {this.state.Site.description}
+                    </h5>
+                </div>
+            )
         }
         let toDate = new Date();
         return <div className="myContainer">
             <div className={"container-bar"}>
-                <h5 className="title" style={style}>
-                    {title}
-                </h5>
+                {title}
                 <form 
-                    className={"date-field"} 
+                    className={"date-field no-drag"} 
                     noValidate
                 >
                     <p>To</p>
@@ -69,7 +92,7 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
                     />
                 </form>
                 <form 
-                    className={"date-field"}
+                    className={"date-field no-drag"}
                     noValidate
                 >
                     <p>From</p>

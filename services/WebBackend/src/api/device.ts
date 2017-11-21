@@ -6,24 +6,34 @@ import {DbInterface} from "uniserve.m8s.web.db_interface";
 export let device = async (req: Request, res: Response) => {
     const company_recid = parseInt(req.params.company_recid);
     const device_recid  = parseInt(req.params.company_recid);
-    
-    Log.info("API:device # company_recid: " + company_recid + "device_recid " + device_recid);
+    let enddate = new Date();
+    let startdate = new Date();
+    startdate.setHours(startdate.getHours() - 24);
+
+    if(req.query.startdate && req.query.enddate){
+        startdate = new Date(req.query.startdate);
+        enddate = new Date (req.query.enddate); 
+    }
+
+    Log.info("API:device # company_recid: " + company_recid + "device_recid " + device_recid + " startdate " + startdate + " enddate " + enddate);
 
     try {
         const db = new DbInterface();
         const siteData = await db.getCompanyDevices(company_recid);
         const sites: Site[] = siteData[0].sites;
         
+        //Authenticate device owned by user, somewhat ineffecient
         let devices = [];
         sites.forEach(site =>{
             devices = devices.concat(site.devices);
         })
-
         let device = devices.find( device => device.device_recid === device_recid);
+
         
         if(device){
-            const pingReconds = await db.getRecentPings(device.device_recid, 1800);
-            device.ping_records = pingReconds[0];
+            const pingRecords = await db.getPingRecordsByDate(device.device_recid, enddate, startdate);
+            if(!pingRecords[0]) throw new Error("No Ping Records Found");
+            device.ping_records = pingRecords[0];
             res.json(device);              
         } else {
             res.status(404);
