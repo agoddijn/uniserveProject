@@ -24,15 +24,17 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         }
     }
     componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any }) {
-        this._renderMap(next.Sites, next.SelectedSite.site_recid,next.SetSelectedSite);
+    
+        this._renderMap(next.Sites, next.SelectedSite.site_recid,next.SetSelectedSite,next.SelectedSite);
     }
 
     private _renderMap = (() => {
         let container = <div className={"container-inner"} style={{width: "100%", position: "absolute"}}></div>
         let map = <div style={{ height: "100%", width: "100%" }}></div>;
-        let Map = withGoogleMap((props: {markers:MarkerWrappers}) => {
+        let Map = withGoogleMap((props: {markers:MarkerWrappers,SelectedSite}) => {
+            console.log(props.SelectedSite.latitude);
             return (
-                <GoogleMap defaultZoom={5} defaultCenter={{ lat: 49.2648641, lng: -123.2536411 }}>
+                <GoogleMap defaultZoom={12} defaultCenter={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
                     <MarkerClusterer 
                         averageCenter
                         enableRetinaIcons
@@ -44,8 +46,8 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                 </GoogleMap>
             )
         });
-        return function(sites: Site[],ID:number,SetSelectedSite:any) {
-            let map_ele: any = <Map containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={ID} SetSelectedSite={SetSelectedSite} />}/>
+        return function(sites: Site[],ID:number,SetSelectedSite:any,SelectedSite:Site) {
+            let map_ele: any = <Map SelectedSite={SelectedSite} containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={ID} SetSelectedSite={SetSelectedSite} />}/>
             this.setState({ Map: map_ele });
         }
     })();
