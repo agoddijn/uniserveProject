@@ -15,7 +15,7 @@
 <script type="text/javascript">
     function m8sready(){
       window.location = (""+window.location).replace(/#[A-Za-z0-9_]*$/,'')+"#menu_ul";
-      var iframeheight = window.innerHeight - 50;
+      var iframeheight = window.innerHeight - 60;
       document.getElementById('monitoringframe').style.height = iframeheight + "px";
     }
     
