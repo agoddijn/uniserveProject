@@ -32,7 +32,7 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         let map = <div style={{ height: "100%", width: "100%" }}></div>;
         let Map = withGoogleMap((props: {markers:MarkerWrappers}) => {
             return (
-                <GoogleMap defaultZoom={11} defaultCenter={{ lat: 49.2648641, lng: -123.2536411 }}>
+                <GoogleMap defaultZoom={5} defaultCenter={{ lat: 49.2648641, lng: -123.2536411 }}>
                     <MarkerClusterer 
                         averageCenter
                         enableRetinaIcons

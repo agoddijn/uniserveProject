@@ -19,7 +19,6 @@ export class MarkerWrapper extends React.Component<{ Site: Site, display:boolean
     componentWillReceiveProps(next:{ Site: Site, display:boolean, SetSelectedSite:any }){
         this.setState({clicked: next.display})
     }
-    // this.setState({clicked:!this.state.clicked});
     render() {
         return <Marker key={this.props.Site.site_recid} position={{ lat: Number(this.props.Site.latitude), lng: Number(this.props.Site.longitude) }} onClick={() => { this.props.SetSelectedSite(this.props.Site.site_recid); }} >
                     {this.state.clicked && <InfoWindow><div style={{width:"22vw", height:"14vh"}}><DeviceTable devices={this.props.Site.devices} /></div></InfoWindow>}
