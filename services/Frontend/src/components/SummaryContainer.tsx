@@ -79,7 +79,7 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
             <div className={"container-bar"}>
                 {title}
                 <form 
-                    className={"date-field"} 
+                    className={"date-field no-drag"} 
                     noValidate
                 >
                     <p>To</p>
@@ -92,7 +92,7 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
                     />
                 </form>
                 <form 
-                    className={"date-field"}
+                    className={"date-field no-drag"}
                     noValidate
                 >
                     <p>From</p>

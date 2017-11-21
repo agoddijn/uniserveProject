@@ -57,7 +57,7 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
         this.setState({Data: this.extractData(next.Site)});
     }
     extractData(site: Site) {
-        if (site.devices.length == 0 || site.devices[0].ping_records.length == 0) return {};
+        if (!site.devices || site.devices.length == 0 || site.devices[0].ping_records.length == 0) return {};
         var data: any = {
             labels: [],
             datasets: []

@@ -103,10 +103,11 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
                 cols={{ lg: 4, md: 4, sm: 4, xs: 2, xxs: 2 }}
                 rowHeight={rowHeight}
                 draggableHandle=".container-bar"
+                draggableCancel=".no-drag"
                 onLayoutChange={this.handleLayoutChange.bind(this)}
             >
                 <div key="sites">
-                    <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} />
+                    <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
                 </div>
                 <div key="map">
                     <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} SetSelectedSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
