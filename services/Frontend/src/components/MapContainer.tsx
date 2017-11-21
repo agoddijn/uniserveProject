@@ -23,8 +23,8 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
             Map: <div></div>
         }
     }
-    componentWillReceiveProps(next: { Sites: Site[] }) {
-        this._renderMap(next.Sites);
+    componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any }) {
+        this._renderMap(next.Sites, next.SelectedSite.site_recid,next.SetSelectedSite);
     }
 
     private _renderMap = (() => {
@@ -44,8 +44,8 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                 </GoogleMap>
             )
         });
-        return function(sites: Site[]) {
-            let map_ele: any = <Map containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={this.props.SelectedSite.site_recid} SetSelectedSite={this.props.SetSelectedSite} />}/>
+        return function(sites: Site[],ID:number,SetSelectedSite:any) {
+            let map_ele: any = <Map containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={ID} SetSelectedSite={SetSelectedSite} />}/>
             this.setState({ Map: map_ele });
         }
     })();
@@ -67,3 +67,5 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         </div>;
     }
 }
+
+

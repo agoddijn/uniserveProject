@@ -75,7 +75,12 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
     }
     setSelectedSite(siteID: number) {
         for (let site of this.state.Sites) {
-            if (siteID == site.site_recid) this.setState({ SelectedSite: site });
+            if (siteID == site.site_recid) {
+                console.log("update")
+                this.setState({ SelectedSite: site });
+
+            }
+            
         }
     }
     setLayout(layout: string | Array<any>) {
