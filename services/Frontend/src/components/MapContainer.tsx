@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Site, Device } from "uniserve.m8s.types";
-import { MapIframeContainer } from "./MapIframeContainer";
-import { MarkerWrapper } from "./MarkerWrapper";
+import { MarkerWrappers } from "./MarkerWrappers";
 const { compose } = require("recompose");
 import IconButton from 'material-ui/IconButton';
 import ViewModule from 'material-ui-icons/ViewModule';
@@ -17,8 +16,8 @@ const {
 } = require("react-google-maps");
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 
-export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: any }, { Map: any }> {
-    constructor(props: any) {
+export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: any, SetSelectedSite:any, SelectedSite:Site }, { Map: any }> {
+    constructor(props: { Sites: Site[], SetLayout: any, SetSelectedSite:any,SelectedSite:Site }) {
         super(props);
         this.state = {
             Map: <div></div>
@@ -31,7 +30,7 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
     private _renderMap = (() => {
         let container = <div className={"container-inner"} style={{width: "100%", position: "absolute"}}></div>
         let map = <div style={{ height: "100%", width: "100%" }}></div>;
-        let Map = withGoogleMap((props: {markers: MarkerWrapper[]}) => {
+        let Map = withGoogleMap((props: {markers:MarkerWrappers}) => {
             return (
                 <GoogleMap defaultZoom={11} defaultCenter={{ lat: 49.2648641, lng: -123.2536411 }}>
                     <MarkerClusterer 
@@ -46,9 +45,7 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
             )
         });
         return function(sites: Site[]) {
-            let map_ele: any = <Map containerElement={container} mapElement={map} markers={sites.map((s: Site, key: number) => {
-                return <MarkerWrapper Site={s} num={key} key={key} />
-            })}/>
+            let map_ele: any = <Map containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={this.props.SelectedSite.site_recid} SetSelectedSite={this.props.SetSelectedSite} />}/>
             this.setState({ Map: map_ele });
         }
     })();

@@ -104,7 +104,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
                     <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} />
                 </div>
                 <div key="map">
-                    <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} />
+                    <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} SetSelectedSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
                 </div>
                 <div key="summary">
                     <SummaryContainer Site={this.state.SelectedSite} />
