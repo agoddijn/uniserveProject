@@ -381,7 +381,7 @@ export class DbInterface {
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
-                console.log(pingRecords);
+               // console.log(pingRecords);
                 fulfill([pingRecords,true]);
             }).catch(e => {
                 Log.error("Error: " + e);
@@ -589,8 +589,9 @@ export class DbInterface {
                     ip_address : results[key]["ip_address"],
                     ms_response : results[key]["ms_response"],
                     responded : results[key]["responded"],
-                    datetime : results[key]["datetime"],
+                    datetime : new Date(results[key]["datetime"]),
                 }
+                Log.info(ping.datetime.toString());
                 pingRecords.push(ping);
             }
         }
