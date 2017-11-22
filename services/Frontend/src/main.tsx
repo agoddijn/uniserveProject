@@ -22,7 +22,7 @@ function layoutsAreEqual(l1: any, l2: any) {
     }
 }
 
-export default class main extends React.Component<any, { Sites: Site[], SelectedSite: any, Layout: any, ViewHeight: number }> {
+export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, ViewHeight: number }> {
     constructor(props: any) {
         super(props);
 
@@ -33,7 +33,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
 
         this.state = {
             Sites: [],
-            SelectedSite: {},
+            SelectedSite: null,
             Layout: { lg: this.layouts.default },
             ViewHeight: height
         }
@@ -71,7 +71,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 60000)
+        }, 5000)
     }
     setSelectedSite(siteID: number) {
         for (let site of this.state.Sites) {

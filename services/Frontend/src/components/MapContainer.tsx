@@ -24,17 +24,16 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         }
     }
     componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any }) {
-    
         this._renderMap(next.Sites, next.SelectedSite.site_recid,next.SetSelectedSite,next.SelectedSite);
     }
 
     private _renderMap = (() => {
         let container = <div className={"container-inner"} style={{width: "100%", position: "absolute"}}></div>
         let map = <div style={{ height: "100%", width: "100%" }}></div>;
-        let Map = withGoogleMap((props: {markers:MarkerWrappers,SelectedSite}) => {
+        let Map = withGoogleMap((props: {markers:MarkerWrappers,SelectedSite: Site}) => {
             console.log(props.SelectedSite.latitude);
             return (
-                <GoogleMap defaultZoom={3} defaultCenter={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                <GoogleMap defaultZoom={11} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
                     <MarkerClusterer 
                         averageCenter
                         enableRetinaIcons

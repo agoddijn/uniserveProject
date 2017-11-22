@@ -8,10 +8,14 @@ const {
     InfoWindow
 } = require("react-google-maps");
 
-export class MarkerWrapper extends React.Component<{ Site: Site, display:boolean, SetSelectedSite:any }, { clicked:boolean }> {
+export class MarkerWrapper extends React.Component<{ Site: Site, display:boolean, SetSelectedSite:any }, { table: any, clicked:boolean }> {
     constructor(props: { Site: Site, display:boolean,SetSelectedSite:any }) {
         super(props);
         this.state = {
+            table:
+            <div style={{width:"22vw", height:"14vh"}}>
+                <DeviceTable devices={this.props.Site.devices} />
+            </div>,
             clicked:this.props.display
         }
     }
@@ -22,9 +26,7 @@ export class MarkerWrapper extends React.Component<{ Site: Site, display:boolean
         return <Marker key={this.props.Site.site_recid} position={{ lat: Number(this.props.Site.latitude), lng: Number(this.props.Site.longitude) }} onClick={() => { this.props.SetSelectedSite(this.props.Site.site_recid); }} >
                     {this.state.clicked && this.props.Site.devices.length!==0 &&
                     <InfoWindow>
-                        <div style={{width:"22vw", height:"14vh"}}>
-                            <DeviceTable devices={this.props.Site.devices} />
-                        </div>
+                        {this.state.table}
                     </InfoWindow>}
                 </Marker>
     }
