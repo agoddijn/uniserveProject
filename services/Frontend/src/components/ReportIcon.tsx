@@ -16,7 +16,7 @@ export class ReportIcon extends React.Component<{SiteID: number},{SiteID: number
     render() {
         return (
             <IconButton>
-                <Assesment />
+                <Assessment />
             </IconButton>
         )
     }
