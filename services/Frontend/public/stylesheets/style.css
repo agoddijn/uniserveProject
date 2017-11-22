@@ -133,7 +133,7 @@ iframe{
     display: flex;
     flex-wrap: wrap;
     width: var( --datetime-picker-width );
-    overflow-x: scroll;
+    overflow: hidden;
     padding-right: 10px;
     height: 100%;
     float: right;

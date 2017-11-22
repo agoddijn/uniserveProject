@@ -18,13 +18,13 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
     }
     componentWillReceiveProps(next:{Site:Site}){
         let now = moment();
-        let from = moment().subtract(5,'minutes');
+        let from = moment().subtract(1,'days');
         let changedTo = true, changedFrom = true;
         if (moment(this.state.ToDate, myFormat).isBefore(moment().subtract(3, 'minutes'))) {
             changedTo = false;
             now = moment(this.state.ToDate,myFormat);
         }
-        if (moment(this.state.FromDate, myFormat).isBefore(moment().subtract(8, 'minutes'))) {
+        if (moment(this.state.FromDate, myFormat).isBefore(moment().subtract(1, 'days').subtract(3, 'minutes')) || moment(this.state.FromDate, myFormat).isAfter(moment().subtract(1, 'days').add(1, 'minutes'))) {
             changedFrom = false;
             from = moment(this.state.FromDate,myFormat);
         }
@@ -58,6 +58,8 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
         }
     }
     render(){
+        console.log(this.state.FromDate);
+        console.log(this.state.ToDate);
         var style = {};
         var title = (
             <h5 className="title" style={style}>
