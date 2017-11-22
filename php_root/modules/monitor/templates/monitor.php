@@ -26,7 +26,7 @@
     }
 </script>
 
-<iframe src="/monitoringframe.html" title="Monitoring Iframe" id="monitoringframe">
+<iframe src="/monitoringframe.html"  id="monitoringframe">
   <p>Iframes are required for monitoring. Your browser does not support iframes.</p>
 </iframe>
 
