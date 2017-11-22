@@ -18,15 +18,18 @@ export class DbInterface {
      * Return true if succesful, false otherwise
      */
     migrate30DayData() : Promise<[any, boolean]>{
-        return new Promise((fulfill,reject) => {
-            let query: string = Query.MIGRATE_30;
-            db.any(query).then(data => {
+        return new Promise((fulfill, reject) => {
+            db.tx(t => {
+                const query = t.none(Query.MIGRATE_30);
+                return t.batch([query]);
+            }).then(data => {
+                Log.info("Query execution successful");
                 fulfill([data,true]);
-            }).catch(e => {
-                console.log("Error: " + e);
+            }).catch(error => {
+                Log.error("Error: " + error)
                 reject([null,false]);
             })
-        })
+        });
     }
 
     /*
@@ -34,15 +37,18 @@ export class DbInterface {
      * Return true if succesful, false otherwise
      */
     migrate60DayData() : Promise<[any, boolean]>{
-        return new Promise((fulfill,reject) => {
-            let query: string = Query.MIGRATE_60;
-            db.any(query).then(data => {
+        return new Promise((fulfill, reject) => {
+            db.tx(t => {
+                const query = t.none(Query.MIGRATE_60);
+                return t.batch([query]);
+            }).then(data => {
+                Log.info("Query execution successful");
                 fulfill([data,true]);
-            }).catch(e => {
-                console.log("Error: " + e);
+            }).catch(error => {
+                Log.error("Error: " + error)
                 reject([null,false]);
             })
-        })
+        });
     }
 
     // DELETION COMMANDS
@@ -55,9 +61,10 @@ export class DbInterface {
         return new Promise((fulfill,reject) => {
             let query: string = Query.DELETE_30_DAYS;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([null,false]);
             })
         });
@@ -71,9 +78,10 @@ export class DbInterface {
         return new Promise((fulfill,reject) => {
             let query: string = Query.DELETE_60_DAYS;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([null,false]);
             })
         });
@@ -104,10 +112,11 @@ export class DbInterface {
                     .replace("psqlDate",`${psqlDate}`)
                 db.any(query)
                 .then(data => {
+                    Log.info("Query execution successful, execution time is " + data.duration + "ms");
                     console.log("Sent data");
                     fulfill([date, true]); 
                 }).catch(e => {
-                    console.log("Error: " + e);
+                    Log.error("Error: " + e);
                     fulfill([date, false]); 
                 })
             }      
@@ -122,9 +131,10 @@ export class DbInterface {
         return new Promise((fulfill, reject) => {
             let query: string = Query.UPDATE_SITE_LOCATION.replace("siteID",`${siteID}`).replace("newLat",`${newLat}`).replace("newLon",`${newLon}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill(true);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject(false);
             })
         })
@@ -142,10 +152,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let compiledResult = that.compileResults(data, that);
                 fulfill([compiledResult, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([null, false]);
             })
          });
@@ -161,11 +172,11 @@ export class DbInterface {
             let query: string = Query.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
             Log.debug(query);
             db.any(query).then(data => {
-                Log.debug(data);
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill([pingRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false])
             })  
         });
@@ -180,12 +191,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_ALL_COMPANIES;
             db.any(query).then(data => {
-                console.log(JSON.stringify(data));
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let companyRecords = that.parseAllCompanies(data);
-                console.log(companyRecords);
                 fulfill([companyRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false])
             })  
         });
@@ -200,10 +210,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_COMPANY.replace("username",`${username}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let companyRecord = that.parseAllCompanies(data);
                 fulfill([companyRecord[0], true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([null,false])
             })  
         });
@@ -215,10 +226,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_ALL_SITES;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let siteRecords = that.parseAllSites(data);
                 fulfill([siteRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false])
             })  
         });
@@ -230,10 +242,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_SITES_BY_COMPANY.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let siteRecords = that.parseAllSites(data);
                 fulfill([siteRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false])
             })  
         });
@@ -248,10 +261,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_ALL_DEVICES;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let devices = that.parseAllDevices(data);
                 fulfill(devices);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([]);
             })
         })
@@ -267,10 +281,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_SITE_DEVICES.replace("siteID",`${siteID}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let deviceRecords = that.parseAllDevices(data);
                 fulfill([deviceRecords,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],true]);
             })
         });
@@ -285,10 +300,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_ALL_PINGS;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill(pingRecords);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([]);
             })
         })
@@ -303,10 +319,11 @@ export class DbInterface {
         return new Promise((fulfill, reject) => {
             let query: string = Query.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill([pingRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false])
             })  
         });     
@@ -321,10 +338,11 @@ export class DbInterface {
             let that = this;
             let query: string = Query.GET_30_DAYS_OLD_PINGS;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill([pingRecords,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false]);
             })
         });
@@ -339,10 +357,11 @@ export class DbInterface {
             let that= this;
             let query: string = Query.GET_60_DAYS_OLD_PINGS;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill([pingRecords,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false]);
             })
         });
@@ -360,11 +379,12 @@ export class DbInterface {
             let psqlBefore = new Date(before).toISOString().slice(0, 19).replace('T', ' ');
             let query: string = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlAfter/g,`${psqlAfter}`).replace(/psqlBefore/g,`${psqlBefore}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
-                console.log(pingRecords);
+               // console.log(pingRecords);
                 fulfill([pingRecords,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false]);
             })
         });
@@ -378,9 +398,10 @@ export class DbInterface {
         return new Promise((fulfill,reject) => {
             let query: string = Query.GET_30_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data[0]["uptime"],true]);
             }).catch(e => {
-                console.log("Error : " + e);
+                Log.error("Error : " + e);
                 reject([-1,false]);
             })
         });
@@ -394,9 +415,10 @@ export class DbInterface {
         return new Promise((fulfill,reject) => {
             let query: string = Query.GET_60_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data[0]["uptime"],true]);
             }).catch(e => {
-                console.log("Error : " + e);
+                Log.error("Error : " + e);
                 reject([-1,false]);
             })
         });
@@ -410,9 +432,10 @@ export class DbInterface {
         return new Promise((fulfill,reject) => {
             let query: string = Query.GET_90_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data[0]["uptime"],true]);
             }).catch(e => {
-                console.log("Error : " + e);
+                Log.error("Error : " + e);
                 reject([-1,false]);
             })
         });
@@ -566,8 +589,9 @@ export class DbInterface {
                     ip_address : results[key]["ip_address"],
                     ms_response : results[key]["ms_response"],
                     responded : results[key]["responded"],
-                    datetime : results[key]["datetime"],
+                    datetime : new Date(results[key]["datetime"]),
                 }
+                Log.info(ping.datetime.toString());
                 pingRecords.push(ping);
             }
         }

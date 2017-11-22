@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Site, Device, PingRecord } from 'uniserve.m8s.types';
 import { DeviceTable } from './DeviceTable';
+import { ReportIcon } from './ReportIcon';
+
 import {
     SortingState, SelectionState, FilteringState,
     LocalFiltering, LocalSorting, DataTypeProvider, RowDetailState
@@ -40,7 +42,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
                 }
             }
         }
-        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index]});
+        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: [index]});
     }
     handleRowSelection(selection: any) {
         let selected = [selection[selection.length - 1]]
@@ -145,7 +147,12 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
                     allowDragging 
                 />
                 <TableFilterRow 
-                    
+                    filterCellTemplate={({ column, filter, setFilter }) => {
+                        if (column.name === 'status' || column.name === 'report') {
+                          return <p></p>
+                        }
+                        return undefined;
+                      }}
                 />
                 <TableSelection 
                     selectByRowClick 

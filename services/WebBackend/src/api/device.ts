@@ -5,7 +5,7 @@ import {DbInterface} from "uniserve.m8s.web.db_interface";
 
 export let device = async (req: Request, res: Response) => {
     const company_recid = parseInt(req.params.company_recid);
-    const device_recid  = parseInt(req.params.company_recid);
+    const device_recid  = parseInt(req.params.device_recid);
     let enddate = new Date();
     let startdate = new Date();
     startdate.setHours(startdate.getHours() - 24);

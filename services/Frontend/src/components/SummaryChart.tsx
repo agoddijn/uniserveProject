@@ -3,7 +3,10 @@ var PropTypes = require('prop-types')
 import { withStyles } from 'material-ui/styles';
 import { Site, Device, PingRecord } from 'uniserve.m8s.types';
 import { Line } from 'react-chartjs-2';
+import axios from 'axios';
+import * as moment from 'moment';
 
+const myFormat = 'YYYY-MM-DD[T]HH:mm';
 
 const options = {
     maintainAspectRatio: false,
@@ -53,51 +56,69 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
         super(props);
         this.state = {Data: {}};
     }
-    componentWillReceiveProps(next: {Site: Site}){
-        this.setState({Data: this.extractData(next.Site)});
+    componentWillReceiveProps(next: {Site: Site, FromDate: string, ToDate: string}){
+        this.extractData(next.Site, next.FromDate, next.ToDate);
     }
-    extractData(site: Site) {
+    extractData(site: Site, fromDate: string, toDate: string) {
+        let that = this;
         if (!site.devices || site.devices.length == 0 || site.devices[0].ping_records.length == 0) return {};
         var data: any = {
             labels: [],
             datasets: []
         }
-
+        let dataPromises = [];
+        let startdate = moment(fromDate, myFormat).utc().format();
+        let enddate = moment(toDate, myFormat).utc().format();
+        console.log(startdate);
+        console.log(enddate);
         for (let j = 0; j < site.devices.length; j++) {
             var device = site.devices[j];
-            data.datasets.push({
-                data: [],
-                label: device.description,
-                backgroundColor: "rgba(0,0,0,0)",
-                borderColor: colors[(2*j)%colors.length],
-                hoverBorderColor: colors[(2*j+1)%colors.length],
-                borderWidth: 2,
-                pointRadius: [],
-                pointStyle: [],
-                pointBorderColor: [],
-                pointHoverRadius: 6
-            })
-            for (let i = 0; i < device.ping_records.length; i ++) {
-                let curRecord: PingRecord = device.ping_records[i];
-                var date = new Date(curRecord.datetime);
-                var dateString: string = date.getHours() + ":" + date.getMinutes();
-                if (j == 0) data.labels.push(dateString);
-                if (curRecord.responded) {
-                    data.datasets[j].data.push(curRecord.ms_response);
-                    data.datasets[j].pointRadius.push(4);
-                    data.datasets[j].pointStyle.push('circle');
-                    data.datasets[j].pointBorderColor.push(colors[(2*j+1)%colors.length]);
-                } else {
-                    data.datasets[j].data.push(0);
-                    data.datasets[j].pointRadius.push(6);
-                    data.datasets[j].pointStyle.push('crossRot');
-                    data.datasets[j].pointBorderColor.push("rgba(255,0,0,1)");
-                }
-                
-            }
+            let req: string = '/ajax/monitoring_api.php?type=device&device='+ device.device_recid + '&startdate='+ startdate + '&enddate=' + enddate;
+            dataPromises.push(axios.get(req));
         }
-
-        return data;
+        Promise.all(dataPromises)
+        .then((responses: any) => {
+            let devices: Device[] = [];
+            for (let res of responses) {
+                devices.push(res.data);
+            }
+            for (let j = 0; j < devices.length; j++) {
+                device = devices[j];
+                data.datasets.push({
+                    data: [],
+                    label: device.description,
+                    backgroundColor: "rgba(0,0,0,0)",
+                    borderColor: colors[(2*j)%colors.length],
+                    hoverBorderColor: colors[(2*j+1)%colors.length],
+                    borderWidth: 2,
+                    pointRadius: [],
+                    pointStyle: [],
+                    pointBorderColor: [],
+                    pointHoverRadius: 6
+                })
+                for (let i = 0; i < device.ping_records.length; i ++) {
+                    let curRecord: PingRecord = device.ping_records[i];
+                    var date = moment.utc(curRecord.datetime);
+                    var dateString: string = date.format('D[/]M[-]HH[:]mm');
+                    if (j == 0) data.labels.push(dateString);
+                    if (curRecord.responded) {
+                        data.datasets[j].data.push(curRecord.ms_response);
+                        data.datasets[j].pointRadius.push(4);
+                        data.datasets[j].pointStyle.push('circle');
+                        data.datasets[j].pointBorderColor.push(colors[(2*j+1)%colors.length]);
+                    } else {
+                        data.datasets[j].data.push(0);
+                        data.datasets[j].pointRadius.push(6);
+                        data.datasets[j].pointStyle.push('crossRot');
+                        data.datasets[j].pointBorderColor.push("rgba(255,0,0,1)");
+                    } 
+                }
+            }
+            that.setState({Data: data});  
+        })
+        .catch((err: any) => {
+            alert("Error in parsing data for summary chart\n" + err);
+        })
     }
     render() {
         return (
