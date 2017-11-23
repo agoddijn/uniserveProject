@@ -14,8 +14,8 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 
-export class Table extends React.Component<{ sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any}>{
-    constructor(props: { sites: Site[], SelectSite: any, SelectedSite: any }) {
+export class Table extends React.Component<{ SetLayout: any, sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any}>{
+    constructor(props: { SetLayout: any, sites: Site[], SelectSite: any, SelectedSite: any }) {
         super(props);
 
         this.state = {

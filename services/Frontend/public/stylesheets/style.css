@@ -23,7 +23,7 @@
     border: 1px solid lightgrey;
     border-radius: 5px;
     float: left;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 #summarycontainer{
     position: relative;
@@ -110,6 +110,7 @@ iframe{
     height: -o-calc(100% - var(--container-bar-height));
     /* Standard */
     height: calc(100% - var(--container-bar-height));
+    overflow-y: auto;
 }
 .row-detail{
     width: 450px;

@@ -33,8 +33,8 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         this.state = {
             Sites: [],
             SelectedSite: null,
-            Layout: { lg: this.layouts.default },
-            LayoutName: "default",
+            Layout: { lg: this.layouts.report },
+            LayoutName: "report",
             ViewHeight: height,
             layoutupdate:false
         }
@@ -48,6 +48,10 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         ],
         fullmap: [
             { w: 4, h: 4, x: 0, y: 0, i: 'map' }
+        ],
+        report: [
+            { i: 'sites', x: 0, y: 0, w: 2, h: 4 },
+            { i: 'report', x: 2, y: 0, w: 2, h: 4 }
         ]
     }
     
@@ -84,7 +88,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         this.setState({ 
             Layout: { lg: layout },
             layoutupdate:true,
-            LayoutName: layout
+            LayoutName: layoutname
         });
         
     }
@@ -95,16 +99,53 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         }
     }
 
+    renderGridComponents(){
+        let toReturn        =  [];
+        let displaySummary  = (this.state.LayoutName == "default");
+        let displayReport   = (this.state.LayoutName == "report");
+        let displayMap      = (this.state.LayoutName == "default") 
+                                || (this.state.LayoutName == "fullmap");
+        let displaySites    = (this.state.LayoutName == "default") 
+                                || (this.state.LayoutName == "report");
+        if(displaySites){
+            toReturn.push(
+            <div key="sites"><TabularViewContainer
+                    SetLayout={this.setLayout.bind(this)}  
+                    Sites={this.state.Sites} 
+                    SelectSite={this.setSelectedSite.bind(this)} 
+                    SelectedSite={this.state.SelectedSite} /></div>);
+        }
+        if(displayMap){
+            toReturn.push(
+                <div key="map"><MapContainer 
+                    SetLayout={this.setLayout.bind(this)} 
+                    Sites={this.state.Sites} 
+                    SetSelectedSite={this.setSelectedSite.bind(this)} 
+                    SelectedSite={this.state.SelectedSite} 
+                    layoutupdate={this.state.layoutupdate}/>
+                </div>);
+        }
+        if(displaySummary){
+            toReturn.push(
+                <div key="summary">
+                    <SummaryContainer Site={this.state.SelectedSite} />
+                </div>);
+        }
+        if(displayReport){
+            toReturn.push(
+                <div key="report"> 
+                    <ReportContainer SelectedSite={this.state.SelectedSite} SetLayout={this.setLayout.bind(this)} />
+                </div>);
+        }
+
+        return toReturn;
+
+    }
 
     render() {
         this.timer = window.clearTimeout(this.timer);
         var rowHeight = Math.floor(this.state.ViewHeight / 4);
         
-        let displayMap = (this.state.LayoutName == "default") || (this.state.LayoutName == "fullmap");
-        let displaySites = (this.state.LayoutName == "default") || (this.state.LayoutName == "report");
-        let displaySummary = (this.state.LayoutName == "default");
-        let displayReport = (this.state.LayoutName == "report");
-
         return <div className={"grid-container"}>
             <ResponsiveReactGridLayout
                 className="layout"
@@ -114,19 +155,9 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
                 draggableHandle=".container-bar"
                 draggableCancel=".no-drag"
                 onLayoutChange={this.handleLayoutChange.bind(this)}
+                margin={[5,5]}
             >
-                {displaySites && <div key="sites">
-                    <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
-                </div> }
-                {displayMap && <div key="map">
-                    <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} SetSelectedSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} layoutupdate={this.state.layoutupdate}/>
-                </div> }
-                {displaySummary && <div key="summary">
-                    <SummaryContainer Site={this.state.SelectedSite} />
-                </div> }
-                {displayReport && <div key="report"> 
-                    <ReportContainer SelectedSite={this.state.SelectedSite} SetLayout={this.setLayout.bind(this)} />
-                </div> }
+            {this.renderGridComponents()}
             </ResponsiveReactGridLayout>
         </div>;
     }
