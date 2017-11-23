@@ -22,7 +22,7 @@ function layoutsAreEqual(l1: any, l2: any) {
     }
 }
 
-export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, ViewHeight: number }> {
+export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, ViewHeight: number,layoutupdate:boolean}> {
     constructor(props: any) {
         super(props);
 
@@ -35,7 +35,8 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             Sites: [],
             SelectedSite: null,
             Layout: { lg: this.layouts.default },
-            ViewHeight: height
+            ViewHeight: height,
+            layoutupdate:false
         }
     }
 
@@ -57,8 +58,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
     componentDidMount() {
         let that: any = this;
         this.dt.loader().then((data: Site[]) => {
-            // console.log(data);
-            this.setState({ Sites: data, SelectedSite: data[0] });
+            this.setState({ Sites: data, SelectedSite: data[0],layoutupdate:false });
         }).catch((str: string) => {
             alert(str);
         })
@@ -66,8 +66,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
     componentDidUpdate() {
         this.timer = window.setTimeout(() => {
             this.dt.loader().then((data: Site[]) => {
-                console.log(data[0].latitude);
-                this.setState({ Sites: data, SelectedSite: this.state.SelectedSite });
+                this.setState({ Sites: data, SelectedSite: this.state.SelectedSite,layoutupdate:false });
             }).catch((str: string) => {
                 alert(str);
             })
@@ -76,7 +75,6 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
     setSelectedSite(siteID: number) {
         for (let site of this.state.Sites) {
             if (siteID == site.site_recid) {
-                console.log("update")
                 this.setState({ SelectedSite: site });
 
             }
@@ -85,7 +83,8 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
     }
     setLayout(layout: string | Array<any>) {
         if (typeof layout === 'string') layout = this.layouts[layout];
-        this.setState({ Layout: { lg: layout } });
+        this.setState({ Layout: { lg: layout },layoutupdate:true });
+        
     }
     handleLayoutChange(layout: any) {
         if (!layoutsAreEqual(layout, this.layouts.fullmap)) {
@@ -110,7 +109,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
                     <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
                 </div>
                 <div key="map">
-                    <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} SetSelectedSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
+                    <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} SetSelectedSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} layoutupdate={this.state.layoutupdate}/>
                 </div>
                 <div key="summary">
                     <SummaryContainer Site={this.state.SelectedSite} />

@@ -16,22 +16,19 @@ const {
 } = require("react-google-maps");
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 
-export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: any, SetSelectedSite:any, SelectedSite:Site }, { Map: any }> {
-    constructor(props: { Sites: Site[], SetLayout: any, SetSelectedSite:any,SelectedSite:Site }) {
+export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: any, SetSelectedSite:any, SelectedSite:Site,layoutupdate:boolean }, { Map: any}> {
+    constructor(props: { Sites: Site[], SetLayout: any, SetSelectedSite:any,SelectedSite:Site,width:number,height:number,layoutupdate:boolean }) {
         super(props);
         this.state = {
-            Map: <div></div>
+            Map: <div></div>,
         }
     }
-    componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any }) {
-        this._renderMap(next.Sites, next.SelectedSite.site_recid,next.SetSelectedSite,next.SelectedSite);
+    componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any,layoutupdate:boolean }) {
+        this._renderMap(next.Sites, next.SelectedSite.site_recid,next.SetSelectedSite,next.SelectedSite,next.layoutupdate);
     }
-
     private _renderMap = (() => {
-        let container = <div className={"container-inner"} style={{width: "100%", position: "absolute"}}></div>
-        let map = <div style={{ height: "100%", width: "100%" }}></div>;
-        let Map = withGoogleMap((props: {markers:MarkerWrappers,SelectedSite: Site}) => {
-            console.log(props.SelectedSite.latitude);
+        
+        let Map = withGoogleMap((props: {markers:MarkerWrappers,SelectedSite: Site,this:any}) => {
             return (
                 <GoogleMap defaultZoom={11} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
                     <MarkerClusterer 
@@ -45,9 +42,32 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                 </GoogleMap>
             )
         });
-        return function(sites: Site[],ID:number,SetSelectedSite:any,SelectedSite:Site) {
-            let map_ele: any = <Map SelectedSite={SelectedSite} containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={ID} SetSelectedSite={SetSelectedSite} />}/>
-            this.setState({ Map: map_ele });
+        return function(sites: Site[],ID:number,SetSelectedSite:any,SelectedSite:Site,layout:boolean) {
+            if(!layout){
+                let container = <div id={"newmap"} className={"container-inner"} style={{height:"100%",width: "100%", position: "absolute"}}></div>
+                let map = <div id={"newmapcontainer"} style={{ height: "100%", width: "100%"}}></div>;
+                let map_ele: any = <Map SelectedSite={SelectedSite} containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={ID} SetSelectedSite={SetSelectedSite} />}/>
+                this.setState({ Map: map_ele });
+            }else{
+                Map = withGoogleMap((props: {markers:MarkerWrappers,SelectedSite: Site,this:any}) => {
+                    return (
+                        <GoogleMap defaultZoom={11} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                            <MarkerClusterer 
+                                averageCenter
+                                enableRetinaIcons
+                                gridSize={60}
+                                defaultMinimumClusterSize={5}
+                                defaultZoomOnClick={true}>
+                                {props.markers}
+                            </MarkerClusterer>
+                        </GoogleMap>
+                    )
+                });
+                let container = <div id={"newmap"} className={"container-inner"} style={{height:"100%",width: "100%", position: "absolute"}}></div>
+                let map_ele: any = <Map SelectedSite={SelectedSite} containerElement={container} mapElement={<div id={"newmapcontainer"} style={{height: "100%", width: "100%"}}></div>} markers={<MarkerWrappers Sites={sites} ClickedId={ID} SetSelectedSite={SetSelectedSite} />}/>
+                this.setState({ Map: map_ele });
+            }
+            
         }
     })();
 
