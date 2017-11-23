@@ -6,7 +6,9 @@ import { MapContainer } from "./components/MapContainer";
 import { SummaryContainer } from "./components/SummaryContainer";
 import { DataLoader } from './DataLoader';
 import { Site } from "uniserve.m8s.types";
-import { Responsive, WidthProvider } from 'react-grid-layout'
+import { Responsive, WidthProvider } from 'react-grid-layout';
+import { Route } from 'react-router-dom';
+import Report from './ReportPage';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const globalAny: any = global;
@@ -21,6 +23,10 @@ function layoutsAreEqual(l1: any, l2: any) {
             l1[i].y == l2[i].y;
     }
 }
+
+const child = ({match}) => (
+    <p>Child Element</p>
+)
 
 export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, ViewHeight: number }> {
     constructor(props: any) {
@@ -108,6 +114,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             >
                 <div key="sites">
                     <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
+                    <Route path='report/:id' component={child}/>
                 </div>
                 <div key="map">
                     <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} SetSelectedSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />

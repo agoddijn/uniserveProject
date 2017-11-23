@@ -24,7 +24,9 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         }
     }
     componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any }) {
-        this._renderMap(next.Sites, next.SelectedSite.site_recid,next.SetSelectedSite,next.SelectedSite);
+        if (next.Sites.length > 0) {
+            this._renderMap(next.Sites, next.SelectedSite ? next.SelectedSite.site_recid : 0,next.SetSelectedSite,next.SelectedSite);
+        }
     }
 
     private _renderMap = (() => {

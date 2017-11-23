@@ -23,7 +23,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
                 { name: 'status', title: 'Status', dataType: 'status' },
                 { name: 'site', title: 'Site' },
                 { name: 'response', title: 'Response (ms)' },
-                { name: 'report', title: 'Report', getCellValue: (row: any) => row.siteID }
+                { name: 'report', title: 'Report', getCellValue: (row: any) => row.siteID, dataType: 'report' }
             ],
             rows: this.generateRows(this.props.sites),
             SelectSite: {},
@@ -33,16 +33,18 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
     }
     componentWillReceiveProps(next: { sites: Site[], SelectSite: any, SelectedSite: any }) {
         let siteData = this.generateRows(next.sites);
+        let changed: boolean = false;
         let index = this.state.selection[0];
         if (siteData.length > 0 && next.SelectedSite) {
             for (let i = 0; i < siteData.length; i++) {
                 if (siteData[i].siteID == next.SelectedSite.site_recid) {
+                    if (i != index) changed = true;
                     index = i;
                     break;
                 }
             }
         }
-        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: [index]});
+        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: changed? [index] : this.state.expanded});
     }
     handleRowSelection(selection: any) {
         let selected = [selection[selection.length - 1]]
@@ -62,9 +64,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
         return (
             <div className={"row-detail"}>
                 <h6> Devices: </h6>
-                <div>
-                    <DeviceTable devices={detailContent.row.devices} />
-                </div>
+                <DeviceTable devices={detailContent.row.devices} />
             </div>)
     }
     generateRows(sites: Site[]) {
@@ -107,6 +107,13 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
                         return (<span className="responseCircle"><div style={{ backgroundColor: value.value }}></div></span>)
                     }}
                 />
+                <DataTypeProvider
+                    type='report'
+                    formatterTemplate={(value: any) => {
+                        return (<ReportIcon SiteID={value.value}></ReportIcon>)
+                    }}
+                />
+
                 <FilteringState 
                     defaultFilters={[]}
                 />
