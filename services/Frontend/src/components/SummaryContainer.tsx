@@ -58,8 +58,6 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
         }
     }
     render(){
-        console.log(this.state.FromDate);
-        console.log(this.state.ToDate);
         var style = {};
         var title = (
             <h5 className="title" style={style}>

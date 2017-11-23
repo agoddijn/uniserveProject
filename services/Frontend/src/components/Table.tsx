@@ -2,7 +2,7 @@ import * as React from "react";
 import { Site, Device, PingRecord } from 'uniserve.m8s.types';
 import { DeviceTable } from './DeviceTable';
 import { ReportIcon } from './ReportIcon';
-
+import { TableCell, Input } from 'material-ui';
 import {
     SortingState, SelectionState, FilteringState,
     LocalFiltering, LocalSorting, DataTypeProvider, RowDetailState
@@ -14,7 +14,19 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 
-export class Table extends React.Component<{ sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any}>{
+const FilterCell = ({ filter, setFilter, placeholder }) => (
+    <TableCell style={{paddingLeft: "8px"}}>
+        <Input
+            style={{width: "95px"}}
+            type="string"
+            value={filter ? filter.value : ''}
+            onChange={e => setFilter(e.target.value ? { value: e.target.value } : null)}
+            placeholder={placeholder}
+        />
+    </TableCell>
+);
+
+export class Table extends React.Component<{ sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any }>{
     constructor(props: { sites: Site[], SelectSite: any, SelectedSite: any }) {
         super(props);
 
@@ -44,19 +56,19 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
                 }
             }
         }
-        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: changed? [index] : this.state.expanded});
+        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: changed ? [index] : this.state.expanded });
     }
     handleRowSelection(selection: any) {
         let selected = [selection[selection.length - 1]]
         let empty = [];
         if (selection.length > 1) {
-            this.setState({selection: selected, expanded: empty});
+            this.setState({ selection: selected, expanded: empty });
             this.state.SelectSite(this.state.rows[selection[selection.length - 1]].siteID);
         } else {
             if (this.state.expanded.length == 1) {
-                this.setState({ expanded: empty});
+                this.setState({ expanded: empty });
             } else {
-                this.setState({ expanded: this.state.selection});
+                this.setState({ expanded: this.state.selection });
             }
         }
     }
@@ -94,8 +106,21 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
         }
         return data;
     }
+    responseFilter(value, filter) {
+        let firstChar = filter.value.charAt(0);
+        if (firstChar == '>' || firstChar == '<') {
+            let val = filter.value.substr(1, filter.value.length - 1);
+            if (firstChar == '>') return value >= val;
+            if (firstChar == '<') return value <= val;
+            return value == val;
+        }
+        return value == filter.value;
+    }
+    getColumnPredicate = columnName => (
+        (columnName == 'response') ? this.responseFilter : undefined
+    )
     render() {
-        const { rows, columns, selection, expanded} = this.state;
+        const { rows, columns, selection, expanded } = this.state;
         return (
             <Grid
                 rows={rows}
@@ -114,7 +139,7 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
                     }}
                 />
 
-                <FilteringState 
+                <FilteringState
                     defaultFilters={[]}
                 />
                 <SortingState
@@ -122,15 +147,17 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
                         { columnName: 'status', direction: 'desc' }
                     ]}
                 />
-                <RowDetailState 
-                    expandedRows={expanded} 
+                <RowDetailState
+                    expandedRows={expanded}
                 />
-                <SelectionState 
-                    selection={selection} 
+                <SelectionState
+                    selection={selection}
                     onSelectionChange={this.handleRowSelection.bind(this)}
                 />
 
-                <LocalFiltering />
+                <LocalFiltering
+                    getColumnPredicate={this.getColumnPredicate}
+                />
                 <LocalSorting
                     getColumnCompare={(columnName: string) => {
                         if (columnName == 'status') {
@@ -149,21 +176,24 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
 
                 <DragDropContext />
                 <TableView />
-                <TableHeaderRow 
-                    allowSorting 
-                    allowDragging 
+                <TableHeaderRow
+                    allowSorting
+                    allowDragging
                 />
-                <TableFilterRow 
+                <TableFilterRow
                     filterCellTemplate={({ column, filter, setFilter }) => {
                         if (column.name === 'status' || column.name === 'report') {
-                          return <p></p>
+                            return <p></p>
                         }
-                        return undefined;
-                      }}
+                        if (column.name === 'response') {
+                            return <FilterCell filter={filter} setFilter={setFilter} placeholder={"10 or >10 or <10"} />;
+                        }
+                        return <FilterCell filter={filter} setFilter={setFilter} placeholder={"Filter..."} />;
+                    }}
                 />
-                <TableSelection 
-                    selectByRowClick 
-                    highlightSelected 
+                <TableSelection
+                    selectByRowClick
+                    highlightSelected
                     showSelectionColumn={false}
                 />
                 <TableRowDetail
