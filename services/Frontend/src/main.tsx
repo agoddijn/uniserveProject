@@ -29,8 +29,6 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         let height = window.innerHeight;
 
         //uniserve header
-        height = height - 100;
-
         this.state = {
             Sites: [],
             SelectedSite: null,
