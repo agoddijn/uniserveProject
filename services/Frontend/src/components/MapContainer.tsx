@@ -24,7 +24,8 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         }
     }
     componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any,layoutupdate:boolean }) {
-        this._renderMap(next.Sites, next.SelectedSite.site_recid,next.SetSelectedSite,next.SelectedSite,next.layoutupdate);
+        if (next.Sites.length > 0)
+        this._renderMap(next.Sites, next.SelectedSite? next.SelectedSite.site_recid : 0,next.SetSelectedSite,next.SelectedSite,next.layoutupdate);
     }
     private _renderMap = (() => {
         let container = <div id={"newmap"} className={"container-inner"} style={{height:"100%",width: "100%", position: "absolute"}}></div>

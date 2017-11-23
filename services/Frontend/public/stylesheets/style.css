@@ -133,10 +133,6 @@ iframe{
     display: flex;
     flex-wrap: wrap;
     width: var( --datetime-picker-width );
-<<<<<<< HEAD
-=======
-    overflow: hidden;
->>>>>>> d5970bb34a2342f66ce53ad7377092bbfd4803a8
     padding-right: 10px;
     height: 100%;
     float: right;
@@ -169,4 +165,11 @@ iframe{
     padding-top: 10px;
     white-space: nowrap;
     float: left;
+    overflow-x: scroll;
+}
+.report-icon{
+    margin-top: 7px;
+    color: var(--primary-color);
+    height: 25px !important;
+    width: 25px !important;
 }

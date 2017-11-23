@@ -29,7 +29,7 @@ export class SummaryContainer extends React.Component<{Site: Site}, {Site: Site 
             from = moment(this.state.FromDate,myFormat);
         }
 
-        if (next.Site.devices && next.Site.devices.length > 0) {
+        if (next.Site && next.Site.devices && next.Site.devices.length > 0) {
             if (changedFrom || changedTo) {
                 this.setState({Site: next.Site, FromDate: from.format(myFormat), ToDate: now.format(myFormat)})
             } else {
