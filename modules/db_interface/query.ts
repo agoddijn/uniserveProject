@@ -50,11 +50,11 @@ export var Query = {
     GET_DEVICE_PINGS :
         "SELECT * from msp_ping where msp_ping.device_recid=\'deviceRecID\' order by datetime",
     GET_PINGS_BETWEEN :
-        "SELECT * from msp_ping  where datetime>='psqlBefore' AND datetime<'psqlAfter' and device_recid=deviceID " +
+        "SELECT * from msp_ping  where datetime>='psqlStart' AND datetime<'psqlFinish' and device_recid=deviceID " +
         "UNION " +
-        "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_30 WHERE datetime>='psqlBefore' AND datetime<'psqlAfter' AND device_recid=deviceID " +
+        "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_30 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID " +
         "UNION " + 
-        "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_60 WHERE datetime>='psqlBefore' AND datetime<'psqlAfter' AND device_recid=deviceID ORDER BY datetime;",
+        "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_60 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID ORDER BY datetime;",
     GET_30_DAY_UPTIME :
         "SELECT (count(nullif(responded, false))::decimal)/count(*) AS uptime FROM msp_ping where device_recid=deviceRecID;",
     GET_60_DAY_UPTIME :

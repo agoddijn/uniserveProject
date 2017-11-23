@@ -371,17 +371,17 @@ export class DbInterface {
      * Retrieve all pings that are within the date range.
      * Return true if succesful, false otherwise
      */
-    getPingRecordsByDate(deviceID: number, after : Date, before: Date) : Promise<[PingRecord[], boolean]>{
+    getPingRecordsByDate(deviceID: number, start : Date, finish: Date) : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
             let that = this;
             //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
-            let psqlAfter = new Date(after).toISOString().slice(0, 19).replace('T', ' ');
-            let psqlBefore = new Date(before).toISOString().slice(0, 19).replace('T', ' ');
-            let query: string = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlAfter/g,`${psqlAfter}`).replace(/psqlBefore/g,`${psqlBefore}`);
+            let psqlStart = new Date(start).toISOString().slice(0, 19).replace('T', ' ');
+            let psqlFinish = new Date(finish).toISOString().slice(0, 19).replace('T', ' ');
+            let query: string = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlStart/g,`${psqlStart}`).replace(/psqlFinish/g,`${psqlFinish}`);
+            console.log(query);
             db.any(query).then(data => {
-                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                Log.info("Query yexecution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
-               // console.log(pingRecords);
                 fulfill([pingRecords,true]);
             }).catch(e => {
                 Log.error("Error: " + e);
@@ -589,9 +589,8 @@ export class DbInterface {
                     ip_address : results[key]["ip_address"],
                     ms_response : results[key]["ms_response"],
                     responded : results[key]["responded"],
-                    datetime : new Date(results[key]["datetime"]),
+                    datetime : results[key]["datetime"],
                 }
-                Log.info(ping.datetime.toString());
                 pingRecords.push(ping);
             }
         }
