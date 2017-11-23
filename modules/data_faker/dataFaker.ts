@@ -78,7 +78,7 @@ export class DataFaker {
             limit--;
             device_id++;
         }
-        console.log(generatedPingRecords);
+
         return generatedPingRecords;
         
     }
