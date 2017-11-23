@@ -20,12 +20,10 @@ export default class DbTesting {
             const sqlCreateTables = this.sql('../../database/schema.sql');
             db.one(sqlCreateTables)
             .then(result => {
-                //console.log(result);
                 fulfill([result, true]);
             })
             .catch(error => {
-                //console.log(error);
-                reject([error, true]);
+                reject([error, false]);
             })
         });
     }
@@ -58,12 +56,10 @@ export default class DbTesting {
             const sqlGenerateCompanyRecords = this.sql('../../database/insert_msp_company.sql');
             db.one(sqlGenerateCompanyRecords)
             .then(result => {
-               // console.log(result);
                 fulfill([true]);
             })
             .catch(error => {
-               // console.log(error);
-                reject([true]);
+                reject([false]);
             })
         });
     }
@@ -77,12 +73,10 @@ export default class DbTesting {
             const sqlGenerateSiteRecords = this.sql('../../database/insert_msp_site.sql');
             db.one(sqlGenerateSiteRecords)
             .then(result => {
-               // console.log(result);
                 fulfill([true]);
             })
             .catch(error => {
-               // console.log(error);
-                reject([true]);
+                reject([false]);
             })
         });
     }
@@ -96,12 +90,10 @@ export default class DbTesting {
             const sqlGenerateDeviceRecords = this.sql('../../database/insert_msp_device_valid.sql');
             db.one(sqlGenerateDeviceRecords)
             .then(result => {
-                //console.log(result);
                 fulfill([true]);
             })
             .catch(error => {
-              //  console.log(error);
-                reject([true]);
+                reject([false]);
             })
         });
     }
