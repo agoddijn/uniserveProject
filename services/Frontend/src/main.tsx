@@ -1,9 +1,10 @@
-require('es6-promise').polyfill();
+
 import * as React from "react";
 import { TabularViewContainer } from "./components/TabularViewContainer";
 // import {NewMapContainer} from "./components/NewMapContainer";
 import { MapContainer } from "./components/MapContainer";
 import { SummaryContainer } from "./components/SummaryContainer";
+import { ReportContainer } from "./components/ReportContainer";
 import { DataLoader } from './DataLoader';
 import { Site } from "uniserve.m8s.types";
 import { Responsive, WidthProvider } from 'react-grid-layout'
@@ -22,7 +23,7 @@ function layoutsAreEqual(l1: any, l2: any) {
     }
 }
 
-export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, ViewHeight: number,layoutupdate:boolean}> {
+export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, LayoutName: string, ViewHeight: number,layoutupdate:boolean}> {
     constructor(props: any) {
         super(props);
 
@@ -33,6 +34,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             Sites: [],
             SelectedSite: null,
             Layout: { lg: this.layouts.default },
+            LayoutName: "default",
             ViewHeight: height,
             layoutupdate:false
         }
@@ -45,9 +47,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             { i: 'summary', x: 2, y: 2, w: 2, h: 2 }
         ],
         fullmap: [
-            { w: 2, h: 2, x: 0, y: 4, i: 'sites' },
-            { w: 4, h: 4, x: 0, y: 0, i: 'map' },
-            { w: 2, h: 2, x: 2, y: 4, i: 'summary' }
+            { w: 4, h: 4, x: 0, y: 0, i: 'map' }
         ]
     }
     
@@ -79,9 +79,13 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             
         }
     }
-    setLayout(layout: string | Array<any>) {
-        if (typeof layout === 'string') layout = this.layouts[layout];
-        this.setState({ Layout: { lg: layout },layoutupdate:true });
+    setLayout(layoutname: string) {
+        let layout = this.layouts[layoutname];
+        this.setState({ 
+            Layout: { lg: layout },
+            layoutupdate:true,
+            LayoutName: layout
+        });
         
     }
     handleLayoutChange(layout: any) {
@@ -90,9 +94,17 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             this.setState({ Layout: { lg: layout } });
         }
     }
+
+
     render() {
         this.timer = window.clearTimeout(this.timer);
         var rowHeight = Math.floor(this.state.ViewHeight / 4);
+        
+        let displayMap = (this.state.LayoutName == "default") || (this.state.LayoutName == "fullmap");
+        let displaySites = (this.state.LayoutName == "default") || (this.state.LayoutName == "report");
+        let displaySummary = (this.state.LayoutName == "default");
+        let displayReport = (this.state.LayoutName == "report");
+
         return <div className={"grid-container"}>
             <ResponsiveReactGridLayout
                 className="layout"
@@ -103,15 +115,18 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
                 draggableCancel=".no-drag"
                 onLayoutChange={this.handleLayoutChange.bind(this)}
             >
-                <div key="sites">
+                {displaySites && <div key="sites">
                     <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
-                </div>
-                <div key="map">
+                </div> }
+                {displayMap && <div key="map">
                     <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} SetSelectedSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} layoutupdate={this.state.layoutupdate}/>
-                </div>
-                <div key="summary">
+                </div> }
+                {displaySummary && <div key="summary">
                     <SummaryContainer Site={this.state.SelectedSite} />
-                </div>
+                </div> }
+                {displayReport && <div key="report"> 
+                    <ReportContainer SelectedSite={this.state.SelectedSite} SetLayout={this.setLayout.bind(this)} />
+                </div> }
             </ResponsiveReactGridLayout>
         </div>;
     }

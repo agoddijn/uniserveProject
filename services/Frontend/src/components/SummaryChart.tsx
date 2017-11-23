@@ -120,11 +120,22 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
             alert("Error in parsing data for summary chart\n" + err);
         })
     }
+
+    componentDidMount() {
+        //hack to give chart time to mount then set its id;
+        //should really fork the reactchart library and add id as a prop
+		setTimeout(() => {
+            console.log((this.refs.chart as any).chart_instance);
+            (this.refs.chart as any).chart_instance.canvas.id = "m8slinechart";
+        }, 2000);
+	}
+
     render() {
+        
         return (
             <div id="chartcontainer">
                 <Line data={this.state.
-                    Data} options={options} redraw />
+                    Data} ref="chart" options={options} redraw />
             </div>
         );
     }
