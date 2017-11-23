@@ -380,7 +380,7 @@ export class DbInterface {
             let query: string = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlStart/g,`${psqlStart}`).replace(/psqlFinish/g,`${psqlFinish}`);
             console.log(query);
             db.any(query).then(data => {
-                Log.info("Query yexecution successful, execution time is " + data.duration + "ms");
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill([pingRecords,true]);
             }).catch(e => {
