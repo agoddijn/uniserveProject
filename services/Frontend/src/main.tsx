@@ -1,9 +1,10 @@
-require('es6-promise').polyfill();
+
 import * as React from "react";
 import { TabularViewContainer } from "./components/TabularViewContainer";
 // import {NewMapContainer} from "./components/NewMapContainer";
 import { MapContainer } from "./components/MapContainer";
 import { SummaryContainer } from "./components/SummaryContainer";
+import { ReportContainer } from "./components/ReportContainer";
 import { DataLoader } from './DataLoader';
 import { Site } from "uniserve.m8s.types";
 import { Responsive, WidthProvider } from 'react-grid-layout';
@@ -24,7 +25,7 @@ function layoutsAreEqual(l1: any, l2: any) {
     }
 }
 
-export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, ViewHeight: number,layoutupdate:boolean}> {
+export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, LayoutName: string, ViewHeight: number,layoutupdate:boolean}> {
     constructor(props: any) {
         super(props);
 
@@ -35,7 +36,8 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             Sites: [],
             SelectedSite: null,
             Layout: { lg: this.layouts.default },
-            ViewHeight: window.innerHeight - 119,
+            LayoutName: "default",
+            ViewHeight: height,
             layoutupdate:false
         }
     }
@@ -47,10 +49,13 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             { i: 'summary', x: 2, y: 2, w: 2, h: 2 }
         ],
         fullmap: [
-            { w: 2, h: 2, x: 0, y: 4, i: 'sites' },
-            { w: 4, h: 4, x: 0, y: 0, i: 'map' },
-            { w: 2, h: 2, x: 2, y: 4, i: 'summary' }
-        ]
+            { w: 4, h: 4, x: 0, y: 0, i: 'map' }
+        ],
+        report: [
+            { i: 'sites', x: 0, y: 0, w: 2, h: 4 },
+            { i: 'report', x: 2, y: 0, w: 2, h: 4 }
+        ],
+        saved: []
     }
     
     private timer: any;
@@ -81,20 +86,69 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             
         }
     }
-    setLayout(layout: string | Array<any>) {
-        if (typeof layout === 'string') layout = this.layouts[layout];
-        this.setState({ Layout: { lg: layout },layoutupdate:true });
+    setLayout(layoutname: string) {
+        let layout = this.layouts[layoutname];
+        this.setState({ 
+            Layout: { lg: layout },
+            layoutupdate:true,
+            LayoutName: layoutname
+        });
         
     }
     handleLayoutChange(layout: any) {
-        if (!layoutsAreEqual(layout, this.layouts.fullmap)) {
-            this.layouts.default = layout;
+        if (!layoutsAreEqual(layout, this.layouts.fullmap) !) {
+            this.layouts.saved = layout;
             this.setState({ Layout: { lg: layout } });
         }
     }
+
+    renderGridComponents(){
+        let toReturn        =  [];
+        let displaySummary  = (this.state.LayoutName == "default");
+        let displayReport   = (this.state.LayoutName == "report");
+        let displayMap      = (this.state.LayoutName == "default") 
+                                || (this.state.LayoutName == "fullmap");
+        let displaySites    = (this.state.LayoutName == "default") 
+                                || (this.state.LayoutName == "report");
+        if(displaySites){
+            toReturn.push(
+            <div key="sites"><TabularViewContainer
+                    SetLayout={this.setLayout.bind(this)}  
+                    Sites={this.state.Sites} 
+                    SelectSite={this.setSelectedSite.bind(this)} 
+                    SelectedSite={this.state.SelectedSite} /></div>);
+        }
+        if(displayMap){
+            toReturn.push(
+                <div key="map"><MapContainer 
+                    SetLayout={this.setLayout.bind(this)} 
+                    Sites={this.state.Sites} 
+                    SetSelectedSite={this.setSelectedSite.bind(this)} 
+                    SelectedSite={this.state.SelectedSite} 
+                    layoutupdate={this.state.layoutupdate}/>
+                </div>);
+        }
+        if(displaySummary){
+            toReturn.push(
+                <div key="summary">
+                    <SummaryContainer Site={this.state.SelectedSite} />
+                </div>);
+        }
+        if(displayReport){
+            toReturn.push(
+                <div key="report"> 
+                    <ReportContainer SelectedSite={this.state.SelectedSite} SetLayout={this.setLayout.bind(this)} />
+                </div>);
+        }
+
+        return toReturn;
+
+    }
+
     render() {
         this.timer = window.clearTimeout(this.timer);
         var rowHeight = Math.floor(this.state.ViewHeight / 4);
+        
         return <div className={"grid-container"}>
             <ResponsiveReactGridLayout
                 className="layout"
@@ -104,16 +158,9 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
                 draggableHandle=".container-bar"
                 draggableCancel=".no-drag"
                 onLayoutChange={this.handleLayoutChange.bind(this)}
+                margin={[5,5]}
             >
-                <div key="sites">
-                    <TabularViewContainer Sites={this.state.Sites} SelectSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} />
-                </div>
-                <div key="map">
-                    <MapContainer SetLayout={this.setLayout.bind(this)} Sites={this.state.Sites} SetSelectedSite={this.setSelectedSite.bind(this)} SelectedSite={this.state.SelectedSite} layoutupdate={this.state.layoutupdate}/>
-                </div>
-                <div key="summary">
-                    <SummaryContainer Site={this.state.SelectedSite} />
-                </div>
+            {this.renderGridComponents()}
             </ResponsiveReactGridLayout>
         </div>;
     }

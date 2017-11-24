@@ -6,26 +6,34 @@ import {
   Link
 } from 'react-router-dom';
 
-export class ReportIcon extends React.Component<{SiteID: number},{SiteID: number}> {
-    constructor(props: {SiteID: number}) {
+export class ReportIcon extends React.Component<{ SiteID: number, SetLayout: any, SelectSite: any }, { SiteID: number }> {
+    constructor(props: { SiteID: number, SetLayout: any, SelectSite: any }) {
         super(props);
         this.state = {
             SiteID: 0
         }
     }
-    componentWillReceiveProps(next: {SiteID: number}) {
-        this.setState({SiteID: next.SiteID});
+    componentWillReceiveProps(next: { SiteID: number }) {
+        this.setState({ SiteID: next.SiteID });
     }
+
+    openReportWindow(e) {
+        e.preventDefault();
+        this.props.SelectSite(this.state.SiteID);
+        this.props.SetLayout("report");
+    }
+
     render() {
         return (
-            <div>
-                <Link 
-                    to={'/#/report/' + this.state.SiteID}
-                    style={{width: "100%", height: "100%"}}
-                >
-                    <Assessment className={"report-icon"}/>
-                </Link>
-            </div>
+
+            <IconButton onClick={this.openReportWindow.bind(this)}>
+                    <Assessment style = {{
+                                            color: 'red',
+                                            width: 30,
+                                            height: 30,
+                                        }} />
+            </IconButton>
+
         )
     }
 }

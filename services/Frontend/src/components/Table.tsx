@@ -14,20 +14,10 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 
-const FilterCell = ({ filter, setFilter, placeholder }) => (
-    <TableCell style={{paddingLeft: "8px"}}>
-        <Input
-            style={{width: "95px"}}
-            type="string"
-            value={filter ? filter.value : ''}
-            onChange={e => setFilter(e.target.value ? { value: e.target.value } : null)}
-            placeholder={placeholder}
-        />
-    </TableCell>
-);
 
-export class Table extends React.Component<{ sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any }>{
-    constructor(props: { sites: Site[], SelectSite: any, SelectedSite: any }) {
+export class Table extends React.Component<{ SetLayout: any, sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any}>{
+    constructor(props: { SetLayout: any, sites: Site[], SelectSite: any, SelectedSite: any }) {
+
         super(props);
 
         this.state = {
@@ -35,10 +25,11 @@ export class Table extends React.Component<{ sites: Site[], SelectSite: any, Sel
                 { name: 'status', title: 'Status', dataType: 'status' },
                 { name: 'site', title: 'Site' },
                 { name: 'response', title: 'Response (ms)' },
-                { name: 'report', title: 'Report', getCellValue: (row: any) => row.siteID, dataType: 'report' }
+                { name: 'report', title: 'Report', getCellValue: (row: any) => <ReportIcon SiteID={row.siteID} SetLayout={this.props.SetLayout} SelectSite={this.props.SelectSite} />}
+
             ],
             rows: this.generateRows(this.props.sites),
-            SelectSite: {},
+            SelectSite: props.SelectSite,
             selection: [0],
             expanded: []
         };
