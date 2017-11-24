@@ -14,6 +14,18 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 
+const FilterCell = ({ filter, setFilter, placeholder }) => (
+    <TableCell style={{paddingLeft: "8px"}}>
+        <Input
+            style={{width: "95px"}}
+            type="string"
+            value={filter ? filter.value : ''}
+            onChange={e => setFilter(e.target.value ? { value: e.target.value } : null)}
+            placeholder={placeholder}
+        />
+    </TableCell>
+)
+
 
 export class Table extends React.Component<{ SetLayout: any, sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any}>{
     constructor(props: { SetLayout: any, sites: Site[], SelectSite: any, SelectedSite: any }) {
@@ -121,12 +133,6 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
                     type='status'
                     formatterTemplate={(value: any) => {
                         return (<span className="responseCircle"><div style={{ backgroundColor: value.value }}></div></span>)
-                    }}
-                />
-                <DataTypeProvider
-                    type='report'
-                    formatterTemplate={(value: any) => {
-                        return (<ReportIcon SiteID={value.value}></ReportIcon>)
                     }}
                 />
 

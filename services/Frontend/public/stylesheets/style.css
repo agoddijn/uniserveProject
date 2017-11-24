@@ -166,7 +166,7 @@ iframe{
     padding-top: 10px;
     white-space: nowrap;
     float: left;
-    overflow-x: scroll;
+    overflow: hidden;
 }
 .report-icon{
     margin-top: 7px;
