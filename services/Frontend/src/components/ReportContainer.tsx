@@ -20,11 +20,9 @@ export class ReportContainer extends React.Component<{SelectedSite: any, SetLayo
                 <IconButton onClick={this.props.SetLayout.bind(this, "default")} className={"bar-button"}>
                     <Close style={{color: "white"}}/>
                 </IconButton>
-
             </div>
-            <div className={"container-inner"}>
-                <PresentationalReport SelectedSite={this.props.SelectedSite} />
-            </div> 
+
+            <PresentationalReport SelectedSite={this.props.SelectedSite} />
         </div>;
     }
 }

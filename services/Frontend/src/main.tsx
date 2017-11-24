@@ -33,8 +33,8 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         this.state = {
             Sites: [],
             SelectedSite: null,
-            Layout: { lg: this.layouts.report },
-            LayoutName: "report",
+            Layout: { lg: this.layouts.default },
+            LayoutName: "default",
             ViewHeight: height,
             layoutupdate:false
         }
@@ -52,7 +52,8 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         report: [
             { i: 'sites', x: 0, y: 0, w: 2, h: 4 },
             { i: 'report', x: 2, y: 0, w: 2, h: 4 }
-        ]
+        ],
+        saved: []
     }
     
     private timer: any;
@@ -93,8 +94,8 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         
     }
     handleLayoutChange(layout: any) {
-        if (!layoutsAreEqual(layout, this.layouts.fullmap)) {
-            this.layouts.default = layout;
+        if (!layoutsAreEqual(layout, this.layouts.fullmap) !) {
+            this.layouts.saved = layout;
             this.setState({ Layout: { lg: layout } });
         }
     }

@@ -125,7 +125,6 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
         //hack to give chart time to mount then set its id;
         //should really fork the reactchart library and add id as a prop
 		setTimeout(() => {
-            console.log((this.refs.chart as any).chart_instance);
             (this.refs.chart as any).chart_instance.canvas.id = "m8slinechart";
         }, 2000);
 	}

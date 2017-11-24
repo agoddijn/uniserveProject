@@ -28,7 +28,7 @@ export class TabularViewContainer extends React.Component<{SetLayout: any, Sites
             <div className={"container-inner"}>
                 <Table 
                     sites={this.state.Sites} 
-                    SelectSite={this.state.SelectSite} 
+                    SelectSite={this.props.SelectSite} 
                     SelectedSite={this.state.SelectedSite}
                     SetLayout= {this.props.SetLayout}/>
             </div> 

@@ -23,10 +23,10 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
                 { name: 'status', title: 'Status', dataType: 'status' },
                 { name: 'site', title: 'Site' },
                 { name: 'response', title: 'Response (ms)' },
-                { name: 'report', title: 'Report', getCellValue: (row: any) => row.siteID }
+                { name: 'report', title: 'Report', getCellValue: (row: any) => <ReportIcon SiteID={row.siteID} SetLayout={this.props.SetLayout} SelectSite={this.props.SelectSite} />}
             ],
             rows: this.generateRows(this.props.sites),
-            SelectSite: {},
+            SelectSite: props.SelectSite,
             selection: [0],
             expanded: []
         };
