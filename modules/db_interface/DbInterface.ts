@@ -7,7 +7,7 @@ const path = require('path');
 let db = dbObj;
 export class DbInterface {
     constructor(){
-        console.log("DbInterface::Init");
+        Log.trace("DbInterface::Init");
     }
 
     // AGGREGATION COMMANDS
@@ -95,9 +95,9 @@ export class DbInterface {
      */
     storePingRecords(date: number, records: PingRecord[]): Promise<[number, boolean]> {
         return new Promise((fulfill, reject) => {
-            // console.log("Recieving records");
+            Log.debug("Recieving records");
             for (let record of records) {
-                // console.log("\n" + JSON.stringify(record));
+                Log.debug("\n" + JSON.stringify(record));
                 if (isNaN(record.ms_response) || record.ms_response === null) {
                     record.ms_response = -1
                 }
@@ -113,7 +113,7 @@ export class DbInterface {
                 db.any(query)
                 .then(data => {
                     Log.info("Query execution successful, execution time is " + data.duration + "ms");
-                    console.log("Sent data");
+                    Log.debug("Sent data");
                     fulfill([date, true]); 
                 }).catch(e => {
                     Log.error("Error: " + e);
@@ -378,7 +378,7 @@ export class DbInterface {
             let psqlStart = new Date(start).toISOString().slice(0, 19).replace('T', ' ');
             let psqlFinish = new Date(finish).toISOString().slice(0, 19).replace('T', ' ');
             let query: string = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlStart/g,`${psqlStart}`).replace(/psqlFinish/g,`${psqlFinish}`);
-            console.log(query);
+            Log.debug(query);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);

@@ -31,7 +31,9 @@ module.exports = {
           "DB_PORT" : 5432,
           "DB_NAME" : 'ubc03',
           "DB_USER" : 'ubc03',
-          "DB_PASS" : 'olivepepsi'
+          "DB_PASS" : 'olivepepsi',
+          "PING_INTERVAL": 60000, // Interval to ping devices (ms) 1min
+          "PING_NEWDEVS": 4.32e7 // Interval to get all devices (ms) 12hour
         }
       }
     ],

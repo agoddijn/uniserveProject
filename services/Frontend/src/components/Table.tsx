@@ -2,7 +2,7 @@ import * as React from "react";
 import { Site, Device, PingRecord } from 'uniserve.m8s.types';
 import { DeviceTable } from './DeviceTable';
 import { ReportIcon } from './ReportIcon';
-
+import { TableCell, Input } from 'material-ui';
 import {
     SortingState, SelectionState, FilteringState,
     LocalFiltering, LocalSorting, DataTypeProvider, RowDetailState
@@ -14,8 +14,10 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 import Collapse from 'material-ui/transitions/Collapse';
 
+
 export class Table extends React.Component<{ SetLayout: any, sites: Site[], SelectSite: any, SelectedSite: any }, { rows: any, columns: any, SelectSite: any, selection: any, expanded: any}>{
     constructor(props: { SetLayout: any, sites: Site[], SelectSite: any, SelectedSite: any }) {
+
         super(props);
 
         this.state = {
@@ -24,6 +26,7 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
                 { name: 'site', title: 'Site' },
                 { name: 'response', title: 'Response (ms)' },
                 { name: 'report', title: 'Report', getCellValue: (row: any) => <ReportIcon SiteID={row.siteID} SetLayout={this.props.SetLayout} SelectSite={this.props.SelectSite} />}
+
             ],
             rows: this.generateRows(this.props.sites),
             SelectSite: props.SelectSite,
@@ -33,28 +36,30 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
     }
     componentWillReceiveProps(next: { sites: Site[], SelectSite: any, SelectedSite: any }) {
         let siteData = this.generateRows(next.sites);
+        let changed: boolean = false;
         let index = this.state.selection[0];
         if (siteData.length > 0 && next.SelectedSite) {
             for (let i = 0; i < siteData.length; i++) {
                 if (siteData[i].siteID == next.SelectedSite.site_recid) {
+                    if (i != index) changed = true;
                     index = i;
                     break;
                 }
             }
         }
-        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: [index]});
+        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: changed ? [index] : this.state.expanded });
     }
     handleRowSelection(selection: any) {
         let selected = [selection[selection.length - 1]]
         let empty = [];
         if (selection.length > 1) {
-            this.setState({selection: selected, expanded: empty});
+            this.setState({ selection: selected, expanded: empty });
             this.state.SelectSite(this.state.rows[selection[selection.length - 1]].siteID);
         } else {
             if (this.state.expanded.length == 1) {
-                this.setState({ expanded: empty});
+                this.setState({ expanded: empty });
             } else {
-                this.setState({ expanded: this.state.selection});
+                this.setState({ expanded: this.state.selection });
             }
         }
     }
@@ -62,9 +67,7 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
         return (
             <div className={"row-detail"}>
                 <h6> Devices: </h6>
-                <div>
-                    <DeviceTable devices={detailContent.row.devices} />
-                </div>
+                <DeviceTable devices={detailContent.row.devices} />
             </div>)
     }
     generateRows(sites: Site[]) {
@@ -94,8 +97,21 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
         }
         return data;
     }
+    responseFilter(value, filter) {
+        let firstChar = filter.value.charAt(0);
+        if (firstChar == '>' || firstChar == '<') {
+            let val = filter.value.substr(1, filter.value.length - 1);
+            if (firstChar == '>') return value >= val;
+            if (firstChar == '<') return value <= val;
+            return value == val;
+        }
+        return value == filter.value;
+    }
+    getColumnPredicate = columnName => (
+        (columnName == 'response') ? this.responseFilter : undefined
+    )
     render() {
-        const { rows, columns, selection, expanded} = this.state;
+        const { rows, columns, selection, expanded } = this.state;
         return (
             <Grid
                 rows={rows}
@@ -107,7 +123,14 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
                         return (<span className="responseCircle"><div style={{ backgroundColor: value.value }}></div></span>)
                     }}
                 />
-                <FilteringState 
+                <DataTypeProvider
+                    type='report'
+                    formatterTemplate={(value: any) => {
+                        return (<ReportIcon SiteID={value.value}></ReportIcon>)
+                    }}
+                />
+
+                <FilteringState
                     defaultFilters={[]}
                 />
                 <SortingState
@@ -115,15 +138,17 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
                         { columnName: 'status', direction: 'desc' }
                     ]}
                 />
-                <RowDetailState 
-                    expandedRows={expanded} 
+                <RowDetailState
+                    expandedRows={expanded}
                 />
-                <SelectionState 
-                    selection={selection} 
+                <SelectionState
+                    selection={selection}
                     onSelectionChange={this.handleRowSelection.bind(this)}
                 />
 
-                <LocalFiltering />
+                <LocalFiltering
+                    getColumnPredicate={this.getColumnPredicate}
+                />
                 <LocalSorting
                     getColumnCompare={(columnName: string) => {
                         if (columnName == 'status') {
@@ -142,21 +167,24 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
 
                 <DragDropContext />
                 <TableView />
-                <TableHeaderRow 
-                    allowSorting 
-                    allowDragging 
+                <TableHeaderRow
+                    allowSorting
+                    allowDragging
                 />
-                <TableFilterRow 
+                <TableFilterRow
                     filterCellTemplate={({ column, filter, setFilter }) => {
                         if (column.name === 'status' || column.name === 'report') {
-                          return <p></p>
+                            return <p></p>
                         }
-                        return undefined;
-                      }}
+                        if (column.name === 'response') {
+                            return <FilterCell filter={filter} setFilter={setFilter} placeholder={"10 or >10 or <10"} />;
+                        }
+                        return <FilterCell filter={filter} setFilter={setFilter} placeholder={"Filter..."} />;
+                    }}
                 />
-                <TableSelection 
-                    selectByRowClick 
-                    highlightSelected 
+                <TableSelection
+                    selectByRowClick
+                    highlightSelected
                     showSelectionColumn={false}
                 />
                 <TableRowDetail

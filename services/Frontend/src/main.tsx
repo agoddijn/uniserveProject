@@ -7,7 +7,9 @@ import { SummaryContainer } from "./components/SummaryContainer";
 import { ReportContainer } from "./components/ReportContainer";
 import { DataLoader } from './DataLoader';
 import { Site } from "uniserve.m8s.types";
-import { Responsive, WidthProvider } from 'react-grid-layout'
+import { Responsive, WidthProvider } from 'react-grid-layout';
+import { Route } from 'react-router-dom';
+import Report from './ReportPage';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const globalAny: any = global;
@@ -73,7 +75,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 5000)
+        }, 60000)
     }
     setSelectedSite(siteID: number) {
         for (let site of this.state.Sites) {
