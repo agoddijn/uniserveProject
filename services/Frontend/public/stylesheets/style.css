@@ -133,10 +133,7 @@ iframe{
     display: flex;
     flex-wrap: wrap;
     width: var( --datetime-picker-width );
-<<<<<<< HEAD
-=======
     overflow: hidden;
->>>>>>> d5970bb34a2342f66ce53ad7377092bbfd4803a8
     padding-right: 10px;
     height: 100%;
     float: right;
@@ -170,3 +167,46 @@ iframe{
     white-space: nowrap;
     float: left;
 }
+
+
+/* marker */
+.polygon-wrap {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    margin-bottom: 49px;
+  }
+  .polygon-wrap .polygon {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0;
+    left: 0;
+    clip-path: polygon(11% 40%, 22% 30%, 50% 95%);
+    -webkit-clip-path: polygon(11% 40%, 21% 28%, 50% 95%);
+    
+  }
+  .polygon-wrap .polygon:nth-child(2) {
+    clip-path: polygon(21% 28%, 34% 20%, 50% 95%);
+    -webkit-clip-path: polygon(21% 28%, 34% 20%, 50% 95%);
+    
+  }
+  .polygon-wrap .polygon:nth-child(3) {
+    clip-path: polygon(34% 20%,50% 17%, 50% 95%);
+    -webkit-clip-path: polygon(34% 20%,50% 17%, 50% 95%);
+  }
+  .polygon-wrap .polygon:nth-child(4) {
+    clip-path: polygon(50% 17%,66% 20%, 50% 95%);
+    -webkit-clip-path: polygon(50% 17%,66% 20%, 50% 95%);
+  }
+  .polygon-wrap .polygon:nth-child(5) {
+    clip-path: polygon(66% 20%,79% 30%, 50% 95%);
+    -webkit-clip-path: polygon(66% 20%,78% 29%, 50% 95%);
+
+  }
+  .polygon-wrap .polygon:nth-child(6) {
+    clip-path: polygon(78% 29%,87% 40%, 50% 95%);
+    -webkit-clip-path: polygon(78% 29%,87% 40%, 50% 95%);
+  }
+
