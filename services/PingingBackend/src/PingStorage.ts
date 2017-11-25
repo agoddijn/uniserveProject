@@ -9,14 +9,14 @@ export default class PingStorage {
     pingMapSending: Map<number,PingRecord[]>;
 
     constructor() {
-        console.log("PingStorage::init");
+        Log.trace("PingStorage::init");
         this.pingMap = new Map();
         this.pingMapSending = new Map();
         this.dbInt = new DbInterface();
     };
 
     public addPingRecords(dateStamp: Date, records: PingRecord[]): void {
-        // console.log("Adding ping records: " + JSON.stringify(records));
+        Log.debug("Adding ping records: " + JSON.stringify(records));
         for (let record of records) {
             record.datetime = dateStamp;
         }
@@ -27,7 +27,7 @@ export default class PingStorage {
 
     public sendRecords(): void {
         var that = this;
-        // console.log("sending ping records");
+        Log.debug("sending ping records");
         let storePromises: Promise<[number, boolean]>[] = [];
         for (let [date, records] of this.pingMap) {
             that.pingMapSending.set(date,records.slice());
@@ -39,7 +39,6 @@ export default class PingStorage {
             for (let response of responses) {
                 let date = <number>response[0];
                 if (response[1]) {
-                    // console.log("Deleting " + date);
                     that.pingMapSending.delete(date);
                 } else {
                     that.pingMap.set(date, that.pingMapSending.get(date));

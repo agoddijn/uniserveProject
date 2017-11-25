@@ -69,8 +69,6 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
         let dataPromises = [];
         let startdate = moment(fromDate, myFormat).utc().format();
         let enddate = moment(toDate, myFormat).utc().format();
-        console.log(startdate);
-        console.log(enddate);
         for (let j = 0; j < site.devices.length; j++) {
             var device = site.devices[j];
             let req: string = '/ajax/monitoring_api.php?type=device&device='+ device.device_recid + '&startdate='+ startdate + '&enddate=' + enddate;
@@ -99,7 +97,7 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
                 for (let i = 0; i < device.ping_records.length; i ++) {
                     let curRecord: PingRecord = device.ping_records[i];
                     var date = moment.utc(curRecord.datetime);
-                    var dateString: string = date.format('D[/]M[-]HH[:]mm');
+                    var dateString: string = date.local().format('D[/]M[-]HH[:]mm');
                     if (j == 0) data.labels.push(dateString);
                     if (curRecord.responded) {
                         data.datasets[j].data.push(curRecord.ms_response);
@@ -120,11 +118,21 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
             alert("Error in parsing data for summary chart\n" + err);
         })
     }
+
+    componentDidMount() {
+        //hack to give chart time to mount then set its id;
+        //should really fork the reactchart library and add id as a prop
+		setTimeout(() => {
+            (this.refs.chart as any).chart_instance.canvas.id = "m8slinechart";
+        }, 2000);
+	}
+
     render() {
+        
         return (
             <div id="chartcontainer">
                 <Line data={this.state.
-                    Data} options={options} redraw />
+                    Data} ref="chart" options={options} redraw />
             </div>
         );
     }

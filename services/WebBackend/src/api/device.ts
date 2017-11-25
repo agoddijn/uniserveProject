@@ -31,7 +31,7 @@ export let device = async (req: Request, res: Response) => {
 
         
         if(device){
-            const pingRecords = await db.getPingRecordsByDate(device.device_recid, enddate, startdate);
+            const pingRecords = await db.getPingRecordsByDate(device.device_recid, startdate, enddate);
             if(!pingRecords[0]) throw new Error("No Ping Records Found");
             device.ping_records = pingRecords[0];
             res.json(device);              

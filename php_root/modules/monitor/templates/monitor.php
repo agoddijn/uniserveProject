@@ -2,25 +2,32 @@
 
 ?>
 
-<link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/grid-style.css">
-<link rel="stylesheet" href="/css/resizeable-styles.css">
-<div id="m8sbody">
+<style type="text/css">
+#monitoringframe {
+  width: 100vw;
+  border: none;
+  position: relative;
+  left: -60px;
+  top: -10px;
+}
+</style>
 
-    <div id="m8scontainer">
-        
-    </div>
-    <!-- Dependencies -->
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.js"></script>
+<script type="text/javascript">
+    function m8sready(){
+      window.location = (""+window.location).replace(/#[A-Za-z0-9_]*$/,'')+"#menu_ul";
+      var iframeheight = window.innerHeight - 60;
+      document.getElementById('monitoringframe').style.height = iframeheight + "px";
+    }
+    
+    if (document.readyState !== 'loading') {
+      m8sready();
+    } else {
+      document.addEventListener('DOMContentLoaded', m8sready);
+    }
+</script>
 
-    <!-- Main -->
-    <script type="text/javascript"> 
-        window.location = (""+window.location).replace(/#[A-Za-z0-9_]*$/,'')+"#menu_ul";
-    </script>
-    <script type="text/javascript" src="/js_src/m8sbuild.min.js"></script>
-
-</div>
-
+<iframe src="/monitoringframe.html"  id="monitoringframe">
+  <p>Iframes are required for monitoring. Your browser does not support iframes.</p>
+</iframe>
 
 

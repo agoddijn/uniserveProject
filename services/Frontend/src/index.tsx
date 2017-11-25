@@ -5,11 +5,12 @@ import main from './main';
 import { Site } from "uniserve.m8s.types"
 
 
+
 const render = (Component: any) => {
     ReactDOM.render(
-        <AppContainer>
-            <Component />
-        </AppContainer>,
+            <AppContainer>
+                <Component />
+            </AppContainer>,
         document.getElementById("container")
     );
 }

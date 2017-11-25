@@ -12,7 +12,7 @@ export default class Pinger {
 
     constructor() {
         var that = this;
-        console.log("Pinger::init");
+        Log.trace("Pinger::init");
         this.dbInt = new DbInterface();
         this.storage = new PingStorage();
         this.devices = [];
@@ -20,14 +20,15 @@ export default class Pinger {
     }
 
     public updateDevices() {
+        Log.info("updating devices");
         var that = this;
         this.dbInt.getAllDevices()
         .then(devices => {
             that.devices = devices;
         })
         .catch(e => {
-            console.error(JSON.stringify(e));
-            console.log("Could not get data");
+            Log.error(JSON.stringify(e));
+            Log.error("Could not get data");
         });
     }
 
@@ -50,7 +51,7 @@ export default class Pinger {
                 fulfill(true);
             })
             .catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 fulfill(false);
             });
         })   
@@ -106,7 +107,7 @@ export default class Pinger {
                 fulfill(records);
             })
             .catch(e => {
-                console.log("Error: " + JSON.stringify(e));
+                Log.error("Error: " + JSON.stringify(e));
                 fulfill([]);
             });
         });
