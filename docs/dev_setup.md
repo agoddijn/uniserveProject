@@ -13,8 +13,6 @@ Database Setup:
 
 [Database Install Guide](../database/README.md)
 
-simon: I had to change 
-
 Deployment:
 --
     All done in project root:
@@ -24,6 +22,8 @@ Deployment:
     3. pm2 start dev.config.js
     4. Monitor with pm2 monit or pm2 logs
     5. Stop with pm2 stop all
+
+DEBUG=true pm2 start dev.config.js for extra debugging
 
 VSCode Scripts
 --
