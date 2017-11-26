@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Site, Device } from "uniserve.m8s.types";
 import { MarkerWrapper } from "./PresentationalMarkerWrapper"
-import { DeviceTable } from "./DeviceTable"
 const { compose } = require("recompose");
 const {
     Marker,
