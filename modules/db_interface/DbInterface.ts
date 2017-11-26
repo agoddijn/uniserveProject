@@ -112,7 +112,7 @@ export class DbInterface {
                     .replace("psqlDate",`${psqlDate}`)
                 db.any(query)
                 .then(data => {
-                    Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                    Log.info("Ping records stored, execution time is " + data.duration + "ms");
                     Log.debug("Sent data");
                     fulfill([date, true]); 
                 }).catch(e => {

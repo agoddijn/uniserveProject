@@ -60,6 +60,10 @@ app.get('/ajax/monitoring_api.php', async (req, res) => {
                 options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/device/${device}?authtoken=${process.env.PHP_AUTH_TOKEN}`;
             }
             break;
+        case 'devicehistory':
+            device = req.query.device;
+            options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/devicehistory/${device}?authtoken=${process.env.PHP_AUTH_TOKEN}`;
+            break;
         default:
             res.status(404).send("Monitoring api type not found.");
     }
