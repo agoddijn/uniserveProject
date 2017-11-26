@@ -4,6 +4,7 @@
     --status-orange: orange;
     --status-red: red;
     --container-bar-height: 40px;
+    --datetime-picker-width: 160px;
 }
 *{
     box-sizing: border-box;
@@ -22,7 +23,7 @@
     border: 1px solid lightgrey;
     border-radius: 5px;
     float: left;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 #summarycontainer{
     position: relative;
@@ -88,7 +89,7 @@ iframe{
 }
 .container-bar{
     width: 100%;
-    display: inline-block;
+    display: block;
     height: var(--container-bar-height);
     text-align: center;
     background-color: var(--primary-color);
@@ -100,6 +101,7 @@ iframe{
     cursor: pointer;
 }
 .container-inner {
+    display: block;
     /* Firefox */
     height: -moz-calc(100% - var(--container-bar-height));
     /* WebKit */
@@ -108,6 +110,7 @@ iframe{
     height: -o-calc(100% - var(--container-bar-height));
     /* Standard */
     height: calc(100% - var(--container-bar-height));
+    overflow-y: auto;
 }
 .row-detail{
     width: 450px;
@@ -115,7 +118,8 @@ iframe{
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.map-button{
+.bar-button{
+    color: white;
     float: right;
     /* Firefox */
     top: -moz-calc(5px - var(--container-bar-height));
@@ -126,3 +130,94 @@ iframe{
     /* Standard */
     top: calc(5px - var(--container-bar-height));
 }
+.date-field{
+    display: flex;
+    flex-wrap: wrap;
+    width: var( --datetime-picker-width );
+<<<<<<< HEAD
+    overflow: hidden;
+=======
+>>>>>>> 35ddce6c62b80a2424e62e47d23e8c568f981f4f
+    padding-right: 10px;
+    height: 100%;
+    float: right;
+    border-left: 1px solid rgba(255, 255, 255, 0.267);
+    padding: 5px;
+}
+.date-field > p {
+    font-size: 0.5em;
+    margin: 0;
+}
+.datetime-input{
+    background: none;
+    border: none;
+    width: 100%;
+    font-size: 0.7em;
+    margin: 0;
+}
+.summary-title{
+   /* Firefox */
+   max-width: -moz-calc(100% - 2 * var(--datetime-picker-width));
+   /* WebKit */
+   max-width: -webkit-calc(100% - 2 * var(--datetime-picker-width));
+   /* Opera */
+   max-width: -o-calc(100% - 2 * var(--datetime-picker-width));
+   /* Standard */
+   max-width: calc(100% - 2 * var(--datetime-picker-width));
+
+    padding-left: 20px;
+    height: var(--container-bar-height);
+    padding-top: 10px;
+    white-space: nowrap;
+    float: left;
+    overflow: hidden;
+}
+.report-icon{
+    margin-top: 7px;
+    color: var(--primary-color);
+    height: 25px !important;
+    width: 25px !important;
+}
+
+
+/* marker */
+.polygon-wrap {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    margin-bottom: 49px;
+  }
+  .polygon-wrap .polygon {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0;
+    left: 0;
+    clip-path: polygon(11% 40%, 22% 30%, 50% 95%);
+    -webkit-clip-path: polygon(11% 40%, 21% 28%, 50% 95%);
+    
+  }
+  .polygon-wrap .polygon:nth-child(2) {
+    clip-path: polygon(21% 28%, 34% 20%, 50% 95%);
+    -webkit-clip-path: polygon(21% 28%, 34% 20%, 50% 95%);
+    
+  }
+  .polygon-wrap .polygon:nth-child(3) {
+    clip-path: polygon(34% 20%,50% 17%, 50% 95%);
+    -webkit-clip-path: polygon(34% 20%,50% 17%, 50% 95%);
+  }
+  .polygon-wrap .polygon:nth-child(4) {
+    clip-path: polygon(50% 17%,66% 20%, 50% 95%);
+    -webkit-clip-path: polygon(50% 17%,66% 20%, 50% 95%);
+  }
+  .polygon-wrap .polygon:nth-child(5) {
+    clip-path: polygon(66% 20%,79% 30%, 50% 95%);
+    -webkit-clip-path: polygon(66% 20%,78% 29%, 50% 95%);
+
+  }
+  .polygon-wrap .polygon:nth-child(6) {
+    clip-path: polygon(78% 29%,87% 40%, 50% 95%);
+    -webkit-clip-path: polygon(78% 29%,87% 40%, 50% 95%);
+  }
+

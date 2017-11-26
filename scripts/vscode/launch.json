@@ -6,23 +6,29 @@
     "configurations": [
         {
             "type": "node",
+            "request": "attach",
+            "name": "Attach",
+            "port": 5858
+        },
+        {
+            "type": "node",
             "request": "launch",
             "name": "Pinger",
-            "envFile": "${workspaceFolder}/env",            
+            "envFile": "${workspaceFolder}/.env",            
             "program": "${workspaceFolder}/services/PingingBackend/src/PingingBackend.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "WebBackend",
-            "envFile": "${workspaceFolder}/env",
+            "envFile": "${workspaceFolder}/.env",
             "program": "${workspaceFolder}/services/WebBackend/src/WebBackend.js"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "PHPShim",
-            "envFile": "${workspaceFolder}/env",
+            "name": "PHP_Shim",
+            "envFile": "${workspaceFolder}/.env",
             "program": "${workspaceFolder}/modules/php_shim/php_shim.js"
         }
 
@@ -30,7 +36,7 @@
     "compounds": [
         {
             "name": "Shim/Backend",
-            "configurations": ["WebBackend", "PHPShim"]
+            "configurations": ["WebBackend", "PHP_Shim"]
         }
     ]
 }

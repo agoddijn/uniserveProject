@@ -36,12 +36,10 @@ app.get('/ajax/monitoring_api.php', async (req, res) => {
     let company_recid   = session[req.cookies.SHIM_SESSION];
     let type            = req.query.type;
     let device          = null;
+    let startdate       = null;
+    let enddate         = null;
 
     if(!company_recid) res.status(401).send("Not logged in.");    
-    if(type === 'device'){
-        device = req.query.device;
-    }
-    Log.trace(`php_shim::/ajax/monitoring_api.php | company_recid: ${company_recid} type: ${type} ${device ? 'device: ' + device : ''}`);
 
     let options = {
         json: true,
@@ -52,13 +50,26 @@ app.get('/ajax/monitoring_api.php', async (req, res) => {
         case 'devices': 
             options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/devices?authtoken=${process.env.PHP_AUTH_TOKEN}`;
             break;
-        case 'device': {
-            options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/device/${device}?authtoken=${process.env.PHP_AUTH_TOKEN}`;
+        case 'device': 
+            device = req.query.device;
+            if(req.query.startdate && req.query.enddate){
+                startdate = req.query.startdate;
+                enddate = req.query.enddate;
+                options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/device/${device}?startdate=${startdate}&enddate=${enddate}&authtoken=${process.env.PHP_AUTH_TOKEN}`;                
+            } else {
+                options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/device/${device}?authtoken=${process.env.PHP_AUTH_TOKEN}`;
+            }
             break;
-        }
+        case 'devicehistory':
+            device = req.query.device;
+            options.uri = `http://127.0.0.1:${process.env.WEBBACKEND_PORT}/api/company/${company_recid}/devicehistory/${device}?authtoken=${process.env.PHP_AUTH_TOKEN}`;
+            break;
         default:
             res.status(404).send("Monitoring api type not found.");
     }
+
+    Log.trace(`php_shim::/ajax/monitoring_api.php | company_recid: ${company_recid} type: ${type} ${device ? 'device: ' + device : ''}`);
+    
 
     let apiResponse = await rp(options);
     res.json(apiResponse);

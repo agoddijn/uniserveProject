@@ -3,19 +3,11 @@ import {HTTPMainPageResponse, Site, Device} from "uniserve.m8s.types";
 import {Log} from "uniserve.m8s.utils";
 import {DbInterface} from "uniserve.m8s.web.db_interface";
 
-export let device = async (req: Request, res: Response) => {
+export let devicehistory = async (req: Request, res: Response) => {
     const company_recid = parseInt(req.params.company_recid);
     const device_recid  = parseInt(req.params.device_recid);
-    let enddate = new Date();
-    let startdate = new Date();
-    startdate.setHours(startdate.getHours() - 24);
 
-    if(req.query.startdate && req.query.enddate){
-        startdate = new Date(req.query.startdate);
-        enddate = new Date (req.query.enddate); 
-    }
-
-    Log.info("API:device # company_recid: " + company_recid + "device_recid " + device_recid + " startdate " + startdate + " enddate " + enddate);
+    Log.info("API:devicehistory # company_recid: " + company_recid + "device_recid " + device_recid);
 
     try {
         const db = new DbInterface();
@@ -29,11 +21,17 @@ export let device = async (req: Request, res: Response) => {
         })
         let device = devices.find( device => device.device_recid === device_recid);
 
-        
         if(device){
-            const pingRecords = await db.getPingRecordsByDate(device.device_recid, startdate, enddate);
-            if(!pingRecords[0]) throw new Error("No Ping Records Found");
-            device.ping_records = pingRecords[0];
+            let historyPromises = [];
+            historyPromises.push(db.get30DayUptime(device_recid));
+            historyPromises.push(db.get60DayUptime(device_recid));
+            historyPromises.push(db.get90DayUptime(device_recid));
+
+            const deviceHistory = await Promise.all(historyPromises);
+            device.uptime30 = deviceHistory[0][0];
+            device.uptime60 = deviceHistory[1][0];
+            device.uptime90 = deviceHistory[2][0];
+
             res.json(device);              
         } else {
             res.status(404);

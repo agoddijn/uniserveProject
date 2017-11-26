@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Site, Device } from "uniserve.m8s.types";
-import { ContainerBar } from "./PresentationalContainerBar"
-import { MapIframeContainer } from "./MapIframeContainer"
-import { DeviceBody } from "./PresentationalDeviceBody"
-import { MarkerWrapper } from "./MarkerWrapper"
+import { MarkerWrappers } from "./MarkerWrappers";
+import { ColorMarkers } from "./ColorMarkersContainer";
 const { compose } = require("recompose");
 import IconButton from 'material-ui/IconButton';
 import ViewModule from 'material-ui-icons/ViewModule';
 import AspectRatio from 'material-ui-icons/AspectRatio';
+import { ColorMarker } from "./PresentationalColorMarker";
 
 
 const {
@@ -15,51 +14,96 @@ const {
     withGoogleMap,
     GoogleMap,
     Marker,
-    InfoWindow
+    InfoWindow,
+    OverlayView
 } = require("react-google-maps");
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 
-export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: any }, { Map: any }> {
-    constructor(props: any) {
+export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: any, SetSelectedSite: any, SelectedSite: Site, layoutupdate: boolean }, { Map: any }> {
+    constructor(props: { Sites: Site[], SetLayout: any, SetSelectedSite: any, SelectedSite: Site, width: number, height: number, layoutupdate: boolean }) {
         super(props);
         this.state = {
-            Map: <div></div>
+            Map: <div></div>,
         }
     }
-    componentWillReceiveProps(next: { Sites: Site[] }) {
-        let Map: any = withGoogleMap((props: any) => {
+<<<<<<< HEAD
+    getPixelPositionOffset = (width, height) => ({
+        x: -(width / 2),
+        y: -(height / 2),
+    })
+    componentWillReceiveProps(next: { Sites: Site[], SelectedSite: Site, SetSelectedSite: any, layoutupdate: boolean }) {
+        this._renderMap(next.Sites, next.SelectedSite.site_recid, next.SetSelectedSite, next.SelectedSite, next.layoutupdate);
+=======
+    componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any,layoutupdate:boolean }) {
+        if (next.Sites.length > 0)
+        this._renderMap(next.Sites, next.SelectedSite? next.SelectedSite.site_recid : 0,next.SetSelectedSite,next.SelectedSite,next.layoutupdate);
+>>>>>>> 35ddce6c62b80a2424e62e47d23e8c568f981f4f
+    }
+    private _renderMap = (() => {
+        let container = <div id={"newmap"} className={"container-inner"} style={{ height: "100%", width: "100%", position: "absolute" }}></div>
+        let map = <div id={"newmapcontainer"} style={{ height: "95%", width: "100%" }}></div>;
+        let Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site }) => {
             return (
-                <GoogleMap defaultZoom={11} defaultCenter={{ lat: 49.2648641, lng: -123.2536411 }}>
-                    <MarkerClusterer 
+                <GoogleMap defaultZoom={5} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                    <MarkerClusterer
                         averageCenter
                         enableRetinaIcons
                         gridSize={60}
-                        defaultMinimumClusterSize={2}
+                        defaultMinimumClusterSize={5}
                         defaultZoomOnClick={true}>
-                        {next.Sites.map((s: Site, key: number) => {
-                            return <MarkerWrapper Site={s} num={key} info={props} />
-                        })}
+                        {props.markers}
                     </MarkerClusterer>
+                    {props.sites.map((s: Site, key: number) => {
+                        return <OverlayView key={key} position={{ lat: Number(s.latitude), lng: Number(s.longitude) }} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET} getPixelPositionOffset={this.getPixelPositionOffset}>
+                            <ColorMarker Devices={s.devices} />
+                        </OverlayView>
+                    })}
                 </GoogleMap>
             )
-        })
-        let map_ele: any = <Map containerElement={<div className={"container-inner"} style={{ height: "100%", width: "100%" }}></div>} mapElement={<div style={{ height: "100%", width: "100%" }}></div>} />
-        this.setState({ Map: map_ele });
-    }
+        });
+        return function (sites: Site[], ID: number, SetSelectedSite: any, SelectedSite: Site, layout: boolean) {
+            if (layout) {
+                Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site, this: any }) => {
+                    return (
+                        <GoogleMap defaultZoom={5} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                            <MarkerClusterer
+                                averageCenter
+                                enableRetinaIcons
+                                gridSize={60}
+                                defaultMinimumClusterSize={5}
+                                defaultZoomOnClick={true}>
+                                {props.markers}
+                            </MarkerClusterer>
+                            {props.sites.map((s: Site, key: number) => {
+                                return <OverlayView key={key} position={{ lat: Number(s.latitude), lng: Number(s.longitude) }} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET} getPixelPositionOffset={this.getPixelPositionOffset}>
+                                    <ColorMarker Devices={s.devices} />
+                                </OverlayView>
+                            })}
+                        </GoogleMap>
+                    )
+                });
+            }
+            let map_ele: any = <Map sites={sites} SelectedSite={SelectedSite} containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={ID} SetSelectedSite={SetSelectedSite} />} />
+            this.setState({ Map: map_ele });
+        }
+    })();
+
     render() {
         return <div className="myContainer">
             <div className={"container-bar"}>
                 <h5 className={"title"}>
                     Map
                 </h5>
-                <IconButton onClick={this.props.SetLayout.bind(this, "fullmap")} className={"map-button"}>
-                    <AspectRatio style={{color: "white"}}/>
+                <IconButton onClick={this.props.SetLayout.bind(this, "fullmap")} className={"bar-button"}>
+                    <AspectRatio style={{ color: "white" }} />
                 </IconButton>
-                <IconButton onClick={this.props.SetLayout.bind(this, "default")} className={"map-button"}>
-                    <ViewModule style={{color: "white"}}/>
+                <IconButton onClick={this.props.SetLayout.bind(this, "default")} className={"bar-button"}>
+                    <ViewModule style={{ color: "white" }} />
                 </IconButton>
             </div>
             {this.state.Map}
         </div>;
     }
 }
+
+

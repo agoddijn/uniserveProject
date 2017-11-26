@@ -10,7 +10,8 @@ module.exports = {
         script    : './services/WebBackend/src/WebBackend.js',
         env : {
           "NODE_ENV": 'staging',
-          "WEBBACKEND_PORT"    : 3031,
+
+          "WEBBACKEND_PORT": 3031,
           "PHP_AUTH_TOKEN": "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ",
           "DB_HOST" : 'localhost',
           "DB_PORT" : 5432,
@@ -27,15 +28,33 @@ module.exports = {
         script    : './services/PingingBackend/src/PingingBackend.js',
         env : {
           "NODE_ENV": 'staging',
-          "WEBBACKEND_PORT"    : 3031,
           "DB_HOST" : 'localhost',
           "DB_PORT" : 5432,
           "DB_NAME" : 'ubc03',
           "DB_USER" : 'ubc03',
-          "DB_PASS" : 'olivepepsi'
+          "DB_PASS" : 'olivepepsi',
+          "PING_INTERVAL": 60000, // Interval to ping devices (ms) 1min
+          "PING_NEWDEVS": 4.32e7 // Interval to get all devices (ms) 12hour
         }
       }
-    ]
+    ],
+
+    "deploy" : {
+      "staging" : {
+        "user" : "ubc03",
+        "key": "~/.ssh/uniservekey",
+        "host" : "lab3.uniserve.ca",
+        // Branch
+        "ref"  : "origin/uniservestaging",
+        // Git repository to clone
+        "repo" : "git@github.com:CPSC319-2017w1/uniserve.m8s.git",
+        // Path of the application on target servers
+        "path" : "/home/ubc03/uniserve.m8s",
+        //fix for older git version
+        "pre-deploy": "git reset --hard origin/uniservestaging && git pull",
+        // Commands to be executed on the server after the repo has been cloned
+        "post-deploy" : "yarn install && npm run buildstaging && pm2 startOrRestart staging.config.js"
+      },
   
-  };
-  
+  }
+}

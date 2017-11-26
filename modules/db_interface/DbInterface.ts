@@ -7,26 +7,29 @@ const path = require('path');
 let db = dbObj;
 export class DbInterface {
     constructor(){
-        console.log("DbInterface::Init");
+        Log.trace("DbInterface::Init");
     }
 
     // AGGREGATION COMMANDS
+
 
     /*
      * Migrate and aggregate all records older than 30 days
      * Return true if succesful, false otherwise
      */
     migrate30DayData() : Promise<[any, boolean]>{
-        return new Promise((fulfill,reject) => {
-            let query = Query.MIGRATE_30;
-
-            db.any(query).then(data => {
+        return new Promise((fulfill, reject) => {
+            db.tx(t => {
+                const query = t.none(Query.MIGRATE_30);
+                return t.batch([query]);
+            }).then(data => {
+                Log.info("Query execution successful");
                 fulfill([data,true]);
-            }).catch(e => {
-                console.log("Error: " + e);
+            }).catch(error => {
+                Log.error("Error: " + error)
                 reject([null,false]);
             })
-        })
+        });
     }
 
     /*
@@ -34,15 +37,18 @@ export class DbInterface {
      * Return true if succesful, false otherwise
      */
     migrate60DayData() : Promise<[any, boolean]>{
-        return new Promise((fulfill,reject) => {
-            let query = Query.MIGRATE_60;
-            db.any(query).then(data => {
+        return new Promise((fulfill, reject) => {
+            db.tx(t => {
+                const query = t.none(Query.MIGRATE_60);
+                return t.batch([query]);
+            }).then(data => {
+                Log.info("Query execution successful");
                 fulfill([data,true]);
-            }).catch(e => {
-                console.log("Error: " + e);
+            }).catch(error => {
+                Log.error("Error: " + error)
                 reject([null,false]);
             })
-        })
+        });
     }
 
     // DELETION COMMANDS
@@ -53,11 +59,12 @@ export class DbInterface {
      */
     delete30DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = Query.DELETE_30_DAYS;
+            let query: string = Query.DELETE_30_DAYS;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([null,false]);
             })
         });
@@ -69,11 +76,12 @@ export class DbInterface {
      */
     delete60DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = Query.DELETE_60_DAYS;
+            let query: string = Query.DELETE_60_DAYS;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([null,false]);
             })
         });
@@ -87,16 +95,16 @@ export class DbInterface {
      */
     storePingRecords(date: number, records: PingRecord[]): Promise<[number, boolean]> {
         return new Promise((fulfill, reject) => {
-            // console.log("Recieving records");
+            Log.debug("Recieving records");
             for (let record of records) {
-                // console.log("\n" + JSON.stringify(record));
+                Log.debug("\n" + JSON.stringify(record));
                 if (isNaN(record.ms_response) || record.ms_response === null) {
                     record.ms_response = -1
                 }
                 //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
                 let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
 
-                let query = Query.INSERT_RECORDS
+                let query: string = Query.INSERT_RECORDS
                     .replace("deviceRecID",`${record.device_recid}`)
                     .replace("IPAddress",`${record.ip_address}`)
                     .replace("msResponse",`${record.ms_response}`)
@@ -104,10 +112,11 @@ export class DbInterface {
                     .replace("psqlDate",`${psqlDate}`)
                 db.any(query)
                 .then(data => {
-                    console.log("Sent data");
+                    Log.info("Ping records stored, execution time is " + data.duration + "ms");
+                    Log.debug("Sent data");
                     fulfill([date, true]); 
                 }).catch(e => {
-                    console.log("Error: " + e);
+                    Log.error("Error: " + e);
                     fulfill([date, false]); 
                 })
             }      
@@ -120,11 +129,12 @@ export class DbInterface {
      */
     updateSiteLocation(siteID: number, newLat: string, newLon: string) : Promise<boolean>{
         return new Promise((fulfill, reject) => {
-            let query = Query.UPDATE_SITE_LOCATION.replace("siteID",`${siteID}`).replace("newLat",`${newLat}`).replace("newLon",`${newLon}`);
+            let query: string = Query.UPDATE_SITE_LOCATION.replace("siteID",`${siteID}`).replace("newLat",`${newLat}`).replace("newLon",`${newLon}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill(true);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject(false);
             })
         })
@@ -137,15 +147,16 @@ export class DbInterface {
      * Retrieve a specific company's devices
      * Return true if succesful, false otherwise
      */
-    getCompanyDevices(companyID: number)/*: Promise<[any, boolean]>*/ {
+    getCompanyDevices(companyID: number): Promise<[Company, boolean]> {
         return new Promise((fulfill, reject) => {
             let that = this;
-            let query = Query.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
+            let query: string = Query.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let compiledResult = that.compileResults(data, that);
                 fulfill([compiledResult, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([null, false]);
             })
          });
@@ -155,16 +166,18 @@ export class DbInterface {
      * Get a device's recent pings
      * Return true if succesful, false otherwise
      */
-    getRecentPings(deviceRecID:any, limitNum:number = 5) : Promise<[any, boolean]>{
+    getRecentPings(deviceRecID:any, limitNum:number = 5) : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = Query.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
+            let that = this;
+            let query: string = Query.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
             Log.debug(query);
             db.any(query).then(data => {
-                Log.debug(data);
-                fulfill([data, true]); 
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                let pingRecords = that.parsePings(data);
+                fulfill([pingRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
-                reject([null,false])
+                Log.error("Error: " + e);
+                reject([[],false])
             })  
         });
     }
@@ -173,15 +186,17 @@ export class DbInterface {
      * Retrieve all companies.
      * Return true if succesful, false otherwise
      */
-    getAllCompanies() : Promise<[any, boolean]>{
+    getAllCompanies() : Promise<[Company[], boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = Query.GET_ALL_COMPANIES;
+            let that = this;
+            let query: string = Query.GET_ALL_COMPANIES;
             db.any(query).then(data => {
-                console.log(JSON.stringify(data));
-                fulfill([data, true]); 
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                let companyRecords = that.parseAllCompanies(data);
+                fulfill([companyRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
-                reject([null,false])
+                Log.error("Error: " + e);
+                reject([[],false])
             })  
         });
     }
@@ -190,40 +205,49 @@ export class DbInterface {
      * Retrieve a specific record, based on username.
      * Return true if succesful, false otherwise
      */
-    getCompanyID(username) : Promise<[any, boolean]>{
+    getCompanyID(username: string) : Promise<[Company, boolean]>{
         return new Promise((fulfill, reject) => {
-            let query = Query.GET_COMPANY.replace("username",`${username}`);
+            let that = this;
+            let query: string = Query.GET_COMPANY.replace("username",`${username}`);
             db.any(query).then(data => {
-                fulfill([data, true]); 
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                let companyRecord = that.parseAllCompanies(data);
+                fulfill([companyRecord[0], true]); 
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([null,false])
             })  
         });
     }
 
     // Retrieves all sites
-    getAllSites() : Promise<[any, boolean]>{
+    getAllSites() : Promise<[Site[], boolean]>{
         return new Promise ((fulfill, reject) => {
-            let query = Query.GET_ALL_SITES;
+            let that = this;
+            let query: string = Query.GET_ALL_SITES;
             db.any(query).then(data => {
-                fulfill([data, true]); 
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                let siteRecords = that.parseAllSites(data);
+                fulfill([siteRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
-                reject([null,false])
+                Log.error("Error: " + e);
+                reject([[],false])
             })  
         });
     }
 
     // Retrieves the site IDs based on the given Company ID.
-    getSites(companyID){
+    getSites(companyID : number) : Promise<[Site[], boolean]> {
         return new Promise ((fulfill, reject) => {
-            let query = Query.GET_SITES_BY_COMPANY.replace("companyID",`${companyID}`);
+            let that = this;
+            let query: string = Query.GET_SITES_BY_COMPANY.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
-                fulfill([data, true]); 
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                let siteRecords = that.parseAllSites(data);
+                fulfill([siteRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
-                reject([null,false])
+                Log.error("Error: " + e);
+                reject([[],false])
             })  
         });
     }
@@ -235,12 +259,13 @@ export class DbInterface {
     getAllDevices(): Promise<Device[]> {
         return new Promise ((fulfill, reject) => {
             let that = this;
-            let query = Query.GET_ALL_DEVICES;
+            let query: string = Query.GET_ALL_DEVICES;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let devices = that.parseAllDevices(data);
                 fulfill(devices);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([]);
             })
         })
@@ -251,14 +276,17 @@ export class DbInterface {
      * Retrieve all devices belonging to a specific site.
      * Return true if succesful, false otherwise
      */
-    getDevices(siteID): Promise<[any, boolean]> {
+    getDevices(siteID: number): Promise<[Device[], boolean]> {
         return new Promise((fulfill, reject) => {
-            let query = Query.GET_SITE_DEVICES.replace("siteID",`${siteID}`);
+            let that = this;
+            let query: string = Query.GET_SITE_DEVICES.replace("siteID",`${siteID}`);
             db.any(query).then(data => {
-                fulfill([data,true]);
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                let deviceRecords = that.parseAllDevices(data);
+                fulfill([deviceRecords,true]);
             }).catch(e => {
-                console.log("Error: " + e);
-                reject([null,true]);
+                Log.error("Error: " + e);
+                reject([[],true]);
             })
         });
     }
@@ -270,12 +298,13 @@ export class DbInterface {
     getAllPings(): Promise<PingRecord[]> {
         return new Promise ((fulfill, reject) => {
             let that = this;
-            let query = Query.GET_ALL_PINGS;
+            let query: string = Query.GET_ALL_PINGS;
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill(pingRecords);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([]);
             })
         })
@@ -285,16 +314,17 @@ export class DbInterface {
      * Retrieve all pings for a given device.
      * Return true if succesful, false otherwise
      */
-    getDevicePings(deviceRecID:any) : Promise<[any, boolean]>{
+    getDevicePings(deviceRecID: number) : Promise<[PingRecord[], boolean]>{
         let that = this;
         return new Promise((fulfill, reject) => {
-            let query = Query.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
+            let query: string = Query.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill([pingRecords, true]); 
             }).catch(e => {
-                console.log("Error: " + e);
-                reject([null,false])
+                Log.error("Error: " + e);
+                reject([[],false])
             })  
         });     
     }
@@ -303,14 +333,17 @@ export class DbInterface {
      * Retrieve all pings that are older than 30 days.
      * Return true if succesful, false otherwise
      */
-    get30DayOldRecords() : Promise<[any, boolean]>{
+    get30DayOldRecords() : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = Query.GET_30_DAYS_OLD_PINGS;
+            let that = this;
+            let query: string = Query.GET_30_DAYS_OLD_PINGS;
             db.any(query).then(data => {
-                fulfill([data,true]);
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                let pingRecords = that.parsePings(data);
+                fulfill([pingRecords,true]);
             }).catch(e => {
-                console.log("Error: " + e);
-                reject([null,false]);
+                Log.error("Error: " + e);
+                reject([[],false]);
             })
         });
     }
@@ -319,14 +352,17 @@ export class DbInterface {
      * Retrieve all pings that are older than 60 days.
      * Return true if succesful, false otherwise
      */
-    get60DayOldRecords() : Promise<[any, boolean]>{
+    get60DayOldRecords() : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
-            let query = Query.GET_60_DAYS_OLD_PINGS;
+            let that= this;
+            let query: string = Query.GET_60_DAYS_OLD_PINGS;
             db.any(query).then(data => {
-                fulfill([data,true]);
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                let pingRecords = that.parsePings(data);
+                fulfill([pingRecords,true]);
             }).catch(e => {
-                console.log("Error: " + e);
-                reject([null,false]);
+                Log.error("Error: " + e);
+                reject([[],false]);
             })
         });
     }
@@ -335,24 +371,76 @@ export class DbInterface {
      * Retrieve all pings that are within the date range.
      * Return true if succesful, false otherwise
      */
-    getPingRecordsByDate(deviceID: number, after : Date, before: Date) : Promise<[PingRecord[], boolean]>{
+    getPingRecordsByDate(deviceID: number, start : Date, finish: Date) : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
             let that = this;
             //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
-            let psqlAfter = new Date(after).toISOString().slice(0, 19).replace('T', ' ');
-            let psqlBefore = new Date(before).toISOString().slice(0, 19).replace('T', ' ');
-            let query = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlAfter/g,`${psqlAfter}`).replace(/psqlBefore/g,`${psqlBefore}`);
-
+            let psqlStart = new Date(start).toISOString().slice(0, 19).replace('T', ' ');
+            let psqlFinish = new Date(finish).toISOString().slice(0, 19).replace('T', ' ');
+            let query: string = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlStart/g,`${psqlStart}`).replace(/psqlFinish/g,`${psqlFinish}`);
+            Log.debug(query);
             db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
-                console.log(pingRecords);
                 fulfill([pingRecords,true]);
             }).catch(e => {
-                console.log("Error: " + e);
+                Log.error("Error: " + e);
                 reject([[],false]);
             })
         });
     }
+
+    /*
+     * Retrieve uptime for all pings up to 30 days.
+     * Return true if succesful, false otherwise
+     */
+    get30DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
+        return new Promise((fulfill,reject) => {
+            let query: string = Query.GET_30_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                fulfill([data[0]["uptime"],true]);
+            }).catch(e => {
+                Log.error("Error : " + e);
+                reject([-1,false]);
+            })
+        });
+    }
+
+    /*
+     * Retrieve uptime for all pings older than 30 days and up to 60 days.
+     * Return true if succesful, false otherwise
+     */
+    get60DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
+        return new Promise((fulfill,reject) => {
+            let query: string = Query.GET_60_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                fulfill([data[0]["uptime"],true]);
+            }).catch(e => {
+                Log.error("Error : " + e);
+                reject([-1,false]);
+            })
+        });
+    }
+
+    /*
+     * Retrieve uptime for all pings older than 60 days and up to 90 days.
+     * Return true if succesful, false otherwise
+     */
+    get90DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
+        return new Promise((fulfill,reject) => {
+            let query: string = Query.GET_90_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                fulfill([data[0]["uptime"],true]);
+            }).catch(e => {
+                Log.error("Error : " + e);
+                reject([-1,false]);
+            })
+        });
+    }
+
 
     // HELPERS
 
@@ -364,8 +452,9 @@ export class DbInterface {
     compileResults(results:any, that:any) {
         let pingRecords: PingRecord[] = [];
         let siteRecords : Site[] = [];
+        let oldSite = -1;
         for (var key in results){
-            if (results.hasOwnProperty(key)){
+            if (results.hasOwnProperty(key) && (oldSite != results[key]["site_recid"])){
                 let tempSite : Site = {
                     site_recid : results[key]["site_recid"],
                     company_recid : results[key]["company_recid"],
@@ -377,9 +466,10 @@ export class DbInterface {
                     postal_code : results[key]["postal_code"],
                     latitude : results[key]["latitude"],
                     longitude : results[key]["longitude"],
-                    devices : that.parseDevices(results, results[key]["company_recid"], results[key]["site_recid"], that)
+                    devices : that.parseDevices(results, results[key]["site_recid"], that)
                 }
                 siteRecords.push(tempSite);
+                oldSite = tempSite.site_recid;
             }
         }
         let companyRecord : Company = {
@@ -390,6 +480,49 @@ export class DbInterface {
         }
         return companyRecord
     }
+    
+    /*
+    *
+    * Retrieve a specific company's devices
+    * Return true if succesful, false otherwise
+    */
+    parseAllCompanies(results:any) :  Company[] {
+        let companyRecords: Company[] = [];
+         for (var key in results){
+            let company : Company = {    
+                company_recid : results[key]["company_recid"],
+                company_id : results[key]["company_id"],
+                company_name : results[key]["company_name"],
+            }
+            companyRecords.push(company)
+         }
+         return companyRecords;
+     }
+ 
+    /*
+    *
+    * Retrieve a specific company's devices
+    * Return true if succesful, false otherwise
+    */
+    parseAllSites(results:any) :  Site[] {
+        let siteRecords: Site[] = [];
+         for (var key in results){
+            let site : Site = {    
+                site_recid : results[key]["site_recid"],
+                company_recid : results[key]["company_recid"],
+                description : results[key]["description"],
+                address1 : results[key]["address1"],
+                address2 : results[key]["address2"],
+                city : results[key]["city"],
+                province : results[key]["province"],
+                postal_code : results[key]["postal_code"],
+                latitude : results[key]["latitude"],
+                longitude : results[key]["longitude"]
+            }
+            siteRecords.push(site)
+         }
+         return siteRecords;
+     }
 
     /*
     *
@@ -419,10 +552,11 @@ export class DbInterface {
      * Retrieve a specific company's devices
      * Return true if succesful, false otherwise
      */
-    parseDevices(results:any, company_recid, site_recid, that) {
+    parseDevices(results:any, site_recid, that) {
         let deviceRecords: Device[] = [];
+        let oldDeviceID : number = -1;
         for (var key in results){
-            if (results.hasOwnProperty(key) && results[key]["company_recid"] == company_recid && results[key]["site_recid"] == site_recid){
+            if (results.hasOwnProperty(key) && results[key]["site_recid"] == site_recid && (oldDeviceID != results[key]["device_recid"])){
                 let device : Device = {
                     device_recid : results[key]["device_recid"],
                     site_recid : results[key]["site_recid"],
@@ -434,6 +568,7 @@ export class DbInterface {
                     ip_address : results[key]["ip_address"],
                 }
                 deviceRecords.push(device)
+                oldDeviceID = device.device_recid;
             }
         }
         return deviceRecords;

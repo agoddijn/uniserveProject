@@ -65,6 +65,7 @@ export class DataFaker {
         that.links = that.populateLinks(that.webLinksJSONFile);
         that.addresses = that.populateAddresses(that.addressesJSONFile);
         that.devices = that.generateDeviceList(that.links);
+
     }
 
     /**
@@ -177,6 +178,7 @@ export class DataFaker {
         let that = this;
         
         let pingRec: PingRecord;
+
         let generatedPingRecords: PingRecord[] = [];
 
         let limit = howMany;
@@ -191,7 +193,7 @@ export class DataFaker {
             limit--;
             device_id++;
         }
-        
+
         return generatedPingRecords;
         
     }
@@ -211,6 +213,7 @@ export class DataFaker {
         pingRecord.device_recid = device_id;
         pingRecord.responded = true;
         pingRecord.ms_response = 100;
+
 
         return pingRecord;
     }

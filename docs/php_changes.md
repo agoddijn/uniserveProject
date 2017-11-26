@@ -24,5 +24,4 @@ Issues:
 --------
 
     *Node-PHP communication goes over http, not a big deal ATM as they are on same box
-
     *Node-PHP auth tokens checked into repo
