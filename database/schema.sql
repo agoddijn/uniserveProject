@@ -105,7 +105,7 @@ ALTER TABLE public.msp_ping OWNER TO ubc03;
 --
 
 CREATE TABLE msp_ping_30 (
-    ping_recid integer DEFAULT nextval(('pk_msp_ping_recid'::text)::regclass) NOT NULL,
+    ping_30_recid integer DEFAULT nextval(('pk_msp_ping_recid'::text)::regclass) NOT NULL,
     device_recid integer NOT NULL,
     ip_address character varying(50),
     ms_response integer,
@@ -121,7 +121,7 @@ ALTER TABLE public.msp_ping_30 OWNER TO ubc03;
 --
 
 CREATE TABLE msp_ping_60 (
-    ping_recid integer DEFAULT nextval(('pk_msp_ping_recid'::text)::regclass) NOT NULL,
+    ping_60_recid integer DEFAULT nextval(('pk_msp_ping_recid'::text)::regclass) NOT NULL,
     device_recid integer NOT NULL,
     ip_address character varying(50),
     ms_response integer,
