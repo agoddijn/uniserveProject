@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as mocha from 'mocha';
 import {Company} from "uniserve.m8s.types";
 import {Device} from "uniserve.m8s.types";
-import { DataFaker } from '../DataFaker';
+import { DataFaker } from 'uniserve.m8s.data_faker';
 import { exec } from 'child_process';
 import { PingRecord } from '../../common_types/types/PingRecord';
 var assert = require('assert');
