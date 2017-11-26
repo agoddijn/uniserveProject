@@ -6,8 +6,6 @@ const { compose, withProps, withHandlers } = require("recompose");
 import IconButton from 'material-ui/IconButton';
 import ViewModule from 'material-ui-icons/ViewModule';
 import AspectRatio from 'material-ui-icons/AspectRatio';
-import { ColorMarker } from "./PresentationalColorMarker";
-
 
 const {
   withScriptjs,
