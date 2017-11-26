@@ -15,6 +15,8 @@ export let devices = async (req: Request, res: Response) => {
         const siteData = await db.getCompanyDevices(request_id);
         const sites: Site[] = siteData[0].sites;
         
+        let pingPromises = [];
+        
         for(let site of sites){
 
             if(site.latitude == ""){
@@ -28,10 +30,21 @@ export let devices = async (req: Request, res: Response) => {
             }
 
             for(const device of site.devices){
-                const dbpings = await db.getRecentPings(device.device_recid,5);
-                device.ping_records = dbpings[0];
+                pingPromises.push(db.getRecentPings(device.device_recid, 5));
+            }
+            
+        }
+
+        const pingRecords = await Promise.all(pingPromises);
+
+        let i = 0;
+        for(let j = 0; j < sites.length; j++){
+            for(let k = 0; k < sites[j].devices.length; k++){
+                sites[j].devices[k].ping_records = pingRecords[i][0];
+                i++;
             }
         }
+
 
         res.json(sites);  
 
