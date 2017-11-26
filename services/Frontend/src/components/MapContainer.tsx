@@ -33,7 +33,7 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         
         let Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site }) => {
             return (
-                <GoogleMap defaultZoom={5} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                <GoogleMap defaultZoom={5} defaultCenter={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
                     <MarkerClusterer
                         averageCenter
                         enableRetinaIcons
@@ -50,7 +50,7 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
             if (layout) {
                 Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site, this: any }) => {
                     return (
-                        <GoogleMap defaultZoom={5} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                        <GoogleMap defaultZoom={5} defaultCenter={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
                             <MarkerClusterer
                                 averageCenter
                                 enableRetinaIcons

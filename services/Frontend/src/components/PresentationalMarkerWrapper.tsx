@@ -15,6 +15,7 @@ export class MarkerWrapper extends React.Component<{ Site: Site, display: boolea
         this.state = {
             table:
                 <div style={{ width: "22vw", height: "14vh" }}>
+                    <p>Site: {this.props.Site.site_recid} - {this.props.Site.description}</p>
                     <DeviceTable devices={this.props.Site.devices} />
                 </div>,
             clicked: this.props.display
