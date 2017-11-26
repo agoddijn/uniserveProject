@@ -2,12 +2,10 @@ import * as React from "react";
 import { Site, Device } from "uniserve.m8s.types";
 import { MarkerWrappers } from "./MarkerWrappers";
 import { ColorMarkers } from "./ColorMarkersContainer";
-const { compose } = require("recompose");
+const { compose, withProps, withHandlers } = require("recompose");
 import IconButton from 'material-ui/IconButton';
 import ViewModule from 'material-ui-icons/ViewModule';
 import AspectRatio from 'material-ui-icons/AspectRatio';
-import { ColorMarker } from "./PresentationalColorMarker";
-
 
 const {
   withScriptjs,
@@ -26,16 +24,13 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
             Map: <div></div>,
         }
     }
-    getPixelPositionOffset = (width, height) => ({
-        x: -(width / 2),
-        y: -(height / 2),
-    })
     componentWillReceiveProps(next: { Sites: Site[], SelectedSite: Site, SetSelectedSite: any, layoutupdate: boolean }) {
         this._renderMap(next.Sites, next.SelectedSite.site_recid, next.SetSelectedSite, next.SelectedSite, next.layoutupdate);
     }
     private _renderMap = (() => {
         let container = <div id={"newmap"} className={"container-inner"} style={{ height: "100%", width: "100%", position: "absolute" }}></div>
         let map = <div id={"newmapcontainer"} style={{ height: "95%", width: "100%" }}></div>;
+        
         let Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site }) => {
             return (
                 <GoogleMap defaultZoom={5} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
@@ -47,14 +42,10 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                         defaultZoomOnClick={true}>
                         {props.markers}
                     </MarkerClusterer>
-                    {props.sites.map((s: Site, key: number) => {
-                        return <OverlayView key={key} position={{ lat: Number(s.latitude), lng: Number(s.longitude) }} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET} getPixelPositionOffset={this.getPixelPositionOffset}>
-                            <ColorMarker Devices={s.devices} />
-                        </OverlayView>
-                    })}
                 </GoogleMap>
             )
         });
+        
         return function (sites: Site[], ID: number, SetSelectedSite: any, SelectedSite: Site, layout: boolean) {
             if (layout) {
                 Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site, this: any }) => {
@@ -68,11 +59,6 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                                 defaultZoomOnClick={true}>
                                 {props.markers}
                             </MarkerClusterer>
-                            {props.sites.map((s: Site, key: number) => {
-                                return <OverlayView key={key} position={{ lat: Number(s.latitude), lng: Number(s.longitude) }} mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET} getPixelPositionOffset={this.getPixelPositionOffset}>
-                                    <ColorMarker Devices={s.devices} />
-                                </OverlayView>
-                            })}
                         </GoogleMap>
                     )
                 });
