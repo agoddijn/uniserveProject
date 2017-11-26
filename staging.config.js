@@ -10,6 +10,7 @@ module.exports = {
         script    : './services/WebBackend/src/WebBackend.js',
         env : {
           "NODE_ENV": 'staging',
+
           "WEBBACKEND_PORT": 3031,
           "PHP_AUTH_TOKEN": "tfFu9iEUfNjmW6Oj3sOSPS4BKGeBKTaJ",
           "DB_HOST" : 'localhost',
