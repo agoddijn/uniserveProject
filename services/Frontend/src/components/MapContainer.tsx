@@ -26,18 +26,12 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
             Map: <div></div>,
         }
     }
-<<<<<<< HEAD
     getPixelPositionOffset = (width, height) => ({
         x: -(width / 2),
         y: -(height / 2),
     })
     componentWillReceiveProps(next: { Sites: Site[], SelectedSite: Site, SetSelectedSite: any, layoutupdate: boolean }) {
         this._renderMap(next.Sites, next.SelectedSite.site_recid, next.SetSelectedSite, next.SelectedSite, next.layoutupdate);
-=======
-    componentWillReceiveProps(next: { Sites: Site[], SelectedSite:Site,SetSelectedSite:any,layoutupdate:boolean }) {
-        if (next.Sites.length > 0)
-        this._renderMap(next.Sites, next.SelectedSite? next.SelectedSite.site_recid : 0,next.SetSelectedSite,next.SelectedSite,next.layoutupdate);
->>>>>>> 35ddce6c62b80a2424e62e47d23e8c568f981f4f
     }
     private _renderMap = (() => {
         let container = <div id={"newmap"} className={"container-inner"} style={{ height: "100%", width: "100%", position: "absolute" }}></div>

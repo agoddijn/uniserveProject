@@ -59,7 +59,7 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
                 }
             }
         }
-        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: changed ? [index] : this.state.expanded });
+        this.setState({ rows: siteData, SelectSite: next.SelectSite, selection: [index], expanded: changed ? [] : this.state.expanded });
     }
     handleRowSelection(selection: any) {
         let selected = [selection[selection.length - 1]]
@@ -183,7 +183,7 @@ export class Table extends React.Component<{ SetLayout: any, sites: Site[], Sele
                             return <p></p>
                         }
                         if (column.name === 'response') {
-                            return <FilterCell filter={filter} setFilter={setFilter} placeholder={"10 or >10 or <10"} />;
+                            return <FilterCell filter={filter} setFilter={setFilter} placeholder={"e.g. <10, 10, >10"} />;
                         }
                         return <FilterCell filter={filter} setFilter={setFilter} placeholder={"Filter..."} />;
                     }}

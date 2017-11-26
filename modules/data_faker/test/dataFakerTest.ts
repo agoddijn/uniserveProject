@@ -6,9 +6,6 @@ import { DataFaker } from '../DataFaker';
 import { exec } from 'child_process';
 import { PingRecord } from '../../common_types/types/PingRecord';
 var assert = require('assert');
-var describe = mocha.describe;
-var it = mocha.it;
-var beforeEach = mocha.beforeEach;
 
 describe('dataFakerTest', function() {
     console.log("Entering Data Faker Test")

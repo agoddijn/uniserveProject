@@ -134,10 +134,7 @@ iframe{
     display: flex;
     flex-wrap: wrap;
     width: var( --datetime-picker-width );
-<<<<<<< HEAD
     overflow: hidden;
-=======
->>>>>>> 35ddce6c62b80a2424e62e47d23e8c568f981f4f
     padding-right: 10px;
     height: 100%;
     float: right;

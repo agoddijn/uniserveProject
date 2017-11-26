@@ -36,7 +36,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             SelectedSite: null,
             Layout: { lg: this.layouts.default },
             LayoutName: "default",
-            ViewHeight: height,
+            ViewHeight: window.innerHeight - 70,
             layoutupdate:false
         }
     }
@@ -74,7 +74,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 60000)
+        }, 10000)
     }
     setSelectedSite(siteID: number) {
         for (let site of this.state.Sites) {

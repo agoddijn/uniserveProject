@@ -23,15 +23,9 @@ export class ReportIcon extends React.Component<{ SiteID: number, SetLayout: any
 
     render() {
         return (
-
             <IconButton onClick={this.openReportWindow.bind(this)}>
-                    <Assessment style = {{
-                                            color: 'red',
-                                            width: 30,
-                                            height: 30,
-                                        }} />
+                    <Assessment className={"report-icon"} />
             </IconButton>
-
         )
     }
 }
