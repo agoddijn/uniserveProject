@@ -1,5 +1,5 @@
 
-export var Query = {
+export var TestQuery = {
     MIGRATE_30 : 
         "INSERT INTO msp_ping_test_30_test (device_recid, ip_address, ms_response, response_count, datetime) " +
         "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, round((count(nullif(responded, false))::decimal/5),1), date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '5 min' as timestamp " +

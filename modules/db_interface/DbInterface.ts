@@ -1,13 +1,22 @@
 import {Company, Site, Device, PingRecord} from 'uniserve.m8s.types'
 import {dbObj} from '../db_connection/db_connection'
 import {Query} from './query'
+import {TestQuery} from './query_test'
 import {Log} from 'uniserve.m8s.utils'
 
 const path = require('path');
 let db = dbObj;
+let queryMode;
 export class DbInterface {
-    constructor(){
+    constructor(test:boolean = false){
+
         Log.trace("DbInterface::Init");
+        if (test == true) {
+            queryMode = TestQuery;
+        }
+        else {
+            queryMode = Query;
+        }
     }
 
     // AGGREGATION COMMANDS
@@ -20,7 +29,7 @@ export class DbInterface {
     migrate30DayData() : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
             db.tx(t => {
-                const query = t.none(Query.MIGRATE_30);
+                const query = t.none(queryMode.MIGRATE_30);
                 return t.batch([query]);
             }).then(data => {
                 Log.info("Query execution successful");
@@ -39,7 +48,7 @@ export class DbInterface {
     migrate60DayData() : Promise<[any, boolean]>{
         return new Promise((fulfill, reject) => {
             db.tx(t => {
-                const query = t.none(Query.MIGRATE_60);
+                const query = t.none(queryMode.MIGRATE_60);
                 return t.batch([query]);
             }).then(data => {
                 Log.info("Query execution successful");
@@ -59,7 +68,7 @@ export class DbInterface {
      */
     delete30DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query: string = Query.DELETE_30_DAYS;
+            let query: string = queryMode.DELETE_30_DAYS;
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data,true]);
@@ -76,7 +85,7 @@ export class DbInterface {
      */
     delete60DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
-            let query: string = Query.DELETE_60_DAYS;
+            let query: string = queryMode.DELETE_60_DAYS;
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data,true]);
@@ -104,7 +113,7 @@ export class DbInterface {
                 //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
                 let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
 
-                let query: string = Query.INSERT_RECORDS
+                let query: string = queryMode.INSERT_RECORDS
                     .replace("deviceRecID",`${record.device_recid}`)
                     .replace("IPAddress",`${record.ip_address}`)
                     .replace("msResponse",`${record.ms_response}`)
@@ -129,7 +138,7 @@ export class DbInterface {
      */
     updateSiteLocation(siteID: number, newLat: string, newLon: string) : Promise<boolean>{
         return new Promise((fulfill, reject) => {
-            let query: string = Query.UPDATE_SITE_LOCATION.replace("siteID",`${siteID}`).replace("newLat",`${newLat}`).replace("newLon",`${newLon}`);
+            let query: string = queryMode.UPDATE_SITE_LOCATION.replace("siteID",`${siteID}`).replace("newLat",`${newLat}`).replace("newLon",`${newLon}`);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill(true);
@@ -150,7 +159,7 @@ export class DbInterface {
     getCompanyDevices(companyID: number): Promise<[Company, boolean]> {
         return new Promise((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
+            let query: string = queryMode.GET_COMPANY_DEVICES.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let compiledResult = that.compileResults(data, that);
@@ -169,7 +178,7 @@ export class DbInterface {
     getRecentPings(deviceRecID:any, limitNum:number = 5) : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
+            let query: string = queryMode.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
             Log.debug(query);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
@@ -189,7 +198,7 @@ export class DbInterface {
     getAllCompanies() : Promise<[Company[], boolean]>{
         return new Promise((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_ALL_COMPANIES;
+            let query: string = queryMode.GET_ALL_COMPANIES;
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let companyRecords = that.parseAllCompanies(data);
@@ -208,7 +217,7 @@ export class DbInterface {
     getCompanyID(username: string) : Promise<[Company, boolean]>{
         return new Promise((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_COMPANY.replace("username",`${username}`);
+            let query: string = queryMode.GET_COMPANY.replace("username",`${username}`);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let companyRecord = that.parseAllCompanies(data);
@@ -224,7 +233,7 @@ export class DbInterface {
     getAllSites() : Promise<[Site[], boolean]>{
         return new Promise ((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_ALL_SITES;
+            let query: string = queryMode.GET_ALL_SITES;
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let siteRecords = that.parseAllSites(data);
@@ -240,7 +249,7 @@ export class DbInterface {
     getSites(companyID : number) : Promise<[Site[], boolean]> {
         return new Promise ((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_SITES_BY_COMPANY.replace("companyID",`${companyID}`);
+            let query: string = queryMode.GET_SITES_BY_COMPANY.replace("companyID",`${companyID}`);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let siteRecords = that.parseAllSites(data);
@@ -259,7 +268,7 @@ export class DbInterface {
     getAllDevices(): Promise<Device[]> {
         return new Promise ((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_ALL_DEVICES;
+            let query: string = queryMode.GET_ALL_DEVICES;
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let devices = that.parseAllDevices(data);
@@ -279,7 +288,7 @@ export class DbInterface {
     getDevices(siteID: number): Promise<[Device[], boolean]> {
         return new Promise((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_SITE_DEVICES.replace("siteID",`${siteID}`);
+            let query: string = queryMode.GET_SITE_DEVICES.replace("siteID",`${siteID}`);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let deviceRecords = that.parseAllDevices(data);
@@ -298,7 +307,8 @@ export class DbInterface {
     getAllPings(): Promise<PingRecord[]> {
         return new Promise ((fulfill, reject) => {
             let that = this;
-            let query: string = Query.GET_ALL_PINGS;
+            let query: string = queryMode.GET_ALL_PINGS;
+            console.log(query)
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
@@ -317,7 +327,7 @@ export class DbInterface {
     getDevicePings(deviceRecID: number) : Promise<[PingRecord[], boolean]>{
         let that = this;
         return new Promise((fulfill, reject) => {
-            let query: string = Query.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
+            let query: string = queryMode.GET_DEVICE_PINGS.replace("deviceRecID",`${deviceRecID}`);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
@@ -336,7 +346,7 @@ export class DbInterface {
     get30DayOldRecords() : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
             let that = this;
-            let query: string = Query.GET_30_DAYS_OLD_PINGS;
+            let query: string = queryMode.GET_30_DAYS_OLD_PINGS;
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
@@ -355,7 +365,7 @@ export class DbInterface {
     get60DayOldRecords() : Promise<[PingRecord[], boolean]>{
         return new Promise((fulfill,reject) => {
             let that= this;
-            let query: string = Query.GET_60_DAYS_OLD_PINGS;
+            let query: string = queryMode.GET_60_DAYS_OLD_PINGS;
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
@@ -377,7 +387,7 @@ export class DbInterface {
             //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
             let psqlStart = new Date(start).toISOString().slice(0, 19).replace('T', ' ');
             let psqlFinish = new Date(finish).toISOString().slice(0, 19).replace('T', ' ');
-            let query: string = Query.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlStart/g,`${psqlStart}`).replace(/psqlFinish/g,`${psqlFinish}`);
+            let query: string = queryMode.GET_PINGS_BETWEEN.replace(/deviceID/g,`${deviceID}`).replace(/psqlStart/g,`${psqlStart}`).replace(/psqlFinish/g,`${psqlFinish}`);
             Log.debug(query);
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
@@ -396,7 +406,7 @@ export class DbInterface {
      */
     get30DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
         return new Promise((fulfill,reject) => {
-            let query: string = Query.GET_30_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            let query: string = queryMode.GET_30_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data[0]["uptime"],true]);
@@ -413,7 +423,7 @@ export class DbInterface {
      */
     get60DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
         return new Promise((fulfill,reject) => {
-            let query: string = Query.GET_60_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            let query: string = queryMode.GET_60_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data[0]["uptime"],true]);
@@ -430,7 +440,7 @@ export class DbInterface {
      */
     get90DayUptime(deviceRecID: number) : Promise<[number, boolean]> {
         return new Promise((fulfill,reject) => {
-            let query: string = Query.GET_90_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
+            let query: string = queryMode.GET_90_DAY_UPTIME.replace("deviceRecID",`${deviceRecID}`)
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data[0]["uptime"],true]);
