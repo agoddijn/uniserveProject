@@ -69,22 +69,22 @@ async function filldb(){
     await db.migrate30DayData();
     await db.migrate60DayData();
 
-    // //30-60 day table
-    // start = new Date();
-    // end = new Date(start);
-    // start = new Date(start.setDate(start.getDate() - 60));
-    // end = new Date(end.setDate(end.getDate() - 30));
-    // await createPingRecords(start, end, devices);
+    //30-60 day table
+    start = new Date();
+    end = new Date(start);
+    start = new Date(start.setDate(start.getDate() - 60));
+    end = new Date(end.setDate(end.getDate() - 30));
+    await createPingRecords(start, end, devices);
 
-    // await db.migrate30DayData();
+    await db.migrate30DayData();
 
-    // //30 day table
-    // //Run topup after
-    // start = new Date();
-    // end = new Date(start);
-    // start = new Date(start.setDate(start.getDate() - 30));
-    // end = new Date(end.setDate(end.getDate() - 10));
-    // await createPingRecords(start, end, devices);
+    //30 day table
+    //Run topup after
+    start = new Date();
+    end = new Date(start);
+    start = new Date(start.setDate(start.getDate() - 30));
+    end = new Date(end.setDate(end.getDate() - 10));
+    await createPingRecords(start, end, devices);
     
 }
 
