@@ -7,7 +7,6 @@ export default class DbTesting {
     constructor(){
         console.log("DbTesting::Init");
     }
-
     
     // INSERTION/DELETION SCRIPTS
 
@@ -18,7 +17,7 @@ export default class DbTesting {
     createTables() : Promise<[any,boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlCreateTables = this.sql('../../database/schema.sql');
-            db.one(sqlCreateTables)
+            db.any(sqlCreateTables)
             .then(result => {
                 fulfill([result, true]);
             })
@@ -35,7 +34,7 @@ export default class DbTesting {
     deleteAllRecords() : Promise<[boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlDeleteRecords = this.sql('../../database/delete_all_records.sql');
-            db.one(sqlDeleteRecords)
+            db.any(sqlDeleteRecords)
             .then(result => {
                // console.log(result);
                 fulfill([true]);
@@ -54,7 +53,7 @@ export default class DbTesting {
     generateCompanyRecords() : Promise<[boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlGenerateCompanyRecords = this.sql('../../database/insert_msp_company.sql');
-            db.one(sqlGenerateCompanyRecords)
+            db.any(sqlGenerateCompanyRecords)
             .then(result => {
                 fulfill([true]);
             })
@@ -71,7 +70,7 @@ export default class DbTesting {
     generateSiteRecords() : Promise<[boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlGenerateSiteRecords = this.sql('../../database/insert_msp_site.sql');
-            db.one(sqlGenerateSiteRecords)
+            db.any(sqlGenerateSiteRecords)
             .then(result => {
                 fulfill([true]);
             })
@@ -88,7 +87,7 @@ export default class DbTesting {
     generateDeviceRecords() : Promise<[boolean]> {
         return new Promise((fulfill, reject) => {
             const sqlGenerateDeviceRecords = this.sql('../../database/insert_msp_device_valid.sql');
-            db.one(sqlGenerateDeviceRecords)
+            db.any(sqlGenerateDeviceRecords)
             .then(result => {
                 fulfill([true]);
             })
