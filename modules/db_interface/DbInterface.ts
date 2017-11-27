@@ -87,6 +87,24 @@ export class DbInterface {
         });
     }
 
+    /*
+     * Delete all pings older than 90 days
+     * Return true if succesful, false otherwise
+     */
+    delete90DayOldRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query: string = Query.DELETE_90_DAYS;
+            db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                fulfill([data,true]);
+            }).catch(e => {
+                Log.error("Error: " + e);
+                reject([null,false]);
+            })
+        });
+    }
+
+
     // INSERTION COMMANDS
 
     /*
@@ -469,6 +487,23 @@ export class DbInterface {
             db.any(query).then(data => {
                 Log.info("Query execution successful, execution time is " + data.duration + "ms");
                 fulfill([data[0]["uptime"],true]);
+            }).catch(e => {
+                Log.error("Error : " + e);
+                reject([-1,false]);
+            })
+        });
+    }
+
+    /*
+     * Retrieve newest timestamp in the ping table.
+     * Return true if succesful, false otherwise
+     */
+    getNewestPingDatetime() : Promise<[Date, boolean]> {
+        return new Promise((fulfill,reject) => {
+            let query: string = Query.GET_NEWEST_DATETIME;
+            db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                fulfill([data[0]["datetime"],true]);
             }).catch(e => {
                 Log.error("Error : " + e);
                 reject([-1,false]);
