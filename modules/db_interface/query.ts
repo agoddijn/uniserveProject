@@ -21,6 +21,8 @@ export var Query = {
         "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval);",
     DELETE_60_DAYS :
         "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);",
+    DELETE_90_DAYS :
+        "DELETE FROM msp_ping_60 WHERE datetime < (timezone('UTC',NOW()) - '90 days'::interval);",
     GET_ALL_COMPANIES :
         "SELECT * FROM msp_company;",
     GET_COMPANY :       
@@ -61,5 +63,7 @@ export var Query = {
         "SELECT sum(response_count)/count(*) AS uptime FROM msp_ping_30 where device_recid=deviceRecID",
     GET_90_DAY_UPTIME :
         "SELECT sum(response_count)/count(*) AS uptime FROM msp_ping_60 where device_recid=deviceRecID",
+    GET_NEWEST_DATETIME :
+        "SELECT datetime FROM msp_ping ORDER BY datetime DESC LIMIT 1;"
     
 }
