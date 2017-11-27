@@ -41,7 +41,7 @@ export default class DbTesting {
             })
             .catch(error => {
                 //console.log(error);
-                reject([true]);
+                reject(error);
             })
         });
     }
@@ -58,7 +58,7 @@ export default class DbTesting {
                 fulfill([true]);
             })
             .catch(error => {
-                reject([false]);
+                reject(error);
             })
         });
     }
@@ -75,7 +75,7 @@ export default class DbTesting {
                 fulfill([true]);
             })
             .catch(error => {
-                reject([false]);
+                reject(error);
             })
         });
     }
@@ -92,7 +92,7 @@ export default class DbTesting {
                 fulfill([true]);
             })
             .catch(error => {
-                reject([false]);
+                reject(error);
             })
         });
     }
