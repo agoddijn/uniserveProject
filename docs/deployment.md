@@ -21,7 +21,6 @@ Deploy:
     pm2 deploy <configuration_file> <environment>
     
     Staging example:
-
     pm2 deploy staging.config.js staging
 
     
