@@ -36,8 +36,26 @@ module.exports = {
           "PING_INTERVAL": 60000, // Interval to ping devices (ms) 1min
           "PING_NEWDEVS": 4.32e7 // Interval to get all devices (ms) 12hour
         }
-      }
-    ],
+      },
+
+    {
+      name      : 'Aggregator',
+      script    : './services/DataAggregator/src/DataAggregator.js',
+      env: {
+        "NODE_ENV": 'staging',
+        "DB_HOST" : 'localhost',
+        "DB_PORT" : 5432,
+        "DB_NAME" : 'ubc03',
+        "DB_USER" : 'ubc03',
+        "DB_PASS" : 'olivepepsi',
+      },
+      "autorestart": false,
+      "exec_mode"  : "cluster_mode",
+      "instances"  : 1,
+      "cron_restart": "0-59 * * * *"
+    }
+
+  ],
 
     "deploy" : {
       "staging" : {
