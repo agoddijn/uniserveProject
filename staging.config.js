@@ -19,7 +19,8 @@ module.exports = {
           "DB_USER" : 'ubc03',
           "DB_PASS" : 'olivepepsi',
           "MAPS_KEY": 'AIzaSyDkDqXvVsLgxlM2Wt-c0ixl0Ov2C-9AJDE'          
-        }
+        },
+        "log_file": "/home/ubc03/logs/webbackend-combined.log"
       },
   
       // Pinger
@@ -35,7 +36,8 @@ module.exports = {
           "DB_PASS" : 'olivepepsi',
           "PING_INTERVAL": 60000, // Interval to ping devices (ms) 1min
           "PING_NEWDEVS": 4.32e7 // Interval to get all devices (ms) 12hour
-        }
+        },
+        "log_file": "/home/ubc03/logs/pinger-combined.log"
       },
 
     {
@@ -49,12 +51,12 @@ module.exports = {
         "DB_USER" : 'ubc03',
         "DB_PASS" : 'olivepepsi',
       },
+      "log_file": "/home/ubc03/logs/webbackend-combined.log",
       "autorestart": false,
       "exec_mode"  : "cluster_mode",
       "instances"  : 1,
       "cron_restart": "0-59 * * * *"
-    }
-
+    },
   ],
 
     "deploy" : {
