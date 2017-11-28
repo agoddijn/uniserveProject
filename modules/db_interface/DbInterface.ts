@@ -251,7 +251,7 @@ export class DbInterface {
             let query: string = queryMode.GET_RECENT_PINGS.replace("deviceRecID",`${deviceRecID}`).replace("limitNum", `${limitNum}`);
             Log.debug(query);
             db.any(query).then(data => {
-                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                Log.info("getRecent Pings for device: " + deviceRecID + ". Query execution successful, execution time is " + data.duration + "ms");
                 let pingRecords = that.parsePings(data);
                 fulfill([pingRecords, true]); 
             }).catch(e => {
