@@ -1,8 +1,40 @@
-import {Log} from 'uniserve.m8s.utils';
-import {DbInterface} from 'uniserve.m8s.web.db_interface'
+import { Log } from 'uniserve.m8s.utils';
+import { DbInterface } from 'uniserve.m8s.web.db_interface'
 
-Log.info("Aggregating, not really tho");
+async function migrate() {
+    try {
+        let DbInt = new DbInterface;
 
-// let DbInt = new DbInterface;
-// DbInt.migrate60DayData();
-// DbInt.migrate30DayData();
+        Log.info("Starting 30 Day Migration");
+        const d30status = await DbInt.migrate30DayData();
+        if (d30status[1]) {
+            Log.info(d30status[0]);
+            Log.info("30 Day Migration Success");
+        } else {
+            Log.error("30 Day Migration Fail");
+        }
+
+        Log.info("Starting 30 Day Migration");
+        const d60status = await DbInt.migrate60DayData();
+        if (d30status[1]) {
+            Log.info("60 Day Migration Success");
+        } else {
+            Log.error("60 Day Migration Fail");
+        }
+
+        const deletionstatus = await DbInt.delete90DayOldRecords();
+        if (d30status[1]) {
+            Log.info("90 Day Deletion Success");
+        } else {
+            Log.error("60 Day Deletion Fail");
+        }
+
+    } catch (e) {
+        Log.error("DataAggregator/DataAggregator.ts ERROR: " + JSON.stringify(e));
+    }
+
+    return true;
+}
+
+migrate();
+

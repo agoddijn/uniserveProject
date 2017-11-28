@@ -30,6 +30,23 @@
             "name": "PHP_Shim",
             "envFile": "${workspaceFolder}/.env",
             "program": "${workspaceFolder}/modules/php_shim/php_shim.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "dbfill",
+            "envFile": "${workspaceFolder}/.env",
+            "program": "${workspaceFolder}/modules/db_utils/fillPingDBUniserve.js",
+            "args": [".1", "1"]
+
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "dbtopup",
+            "envFile": "${workspaceFolder}/.env",
+            "program": "${workspaceFolder}/modules/db_utils/topupPingDBUniserve.js",
+            "args": [".1", "1"]         
         }
 
     ],

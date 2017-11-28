@@ -9,8 +9,8 @@ export var Query = {
         "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval); ",
     MIGRATE_60 : 
         "INSERT INTO msp_ping_60 (device_recid, ip_address, ms_response, response_count, datetime) " + 
-        "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, (round(sum(response_count),1)::decimal) as ping_success_rate, date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '25 min' as timestamp " +
-        "FROM(SELECT * FROM msp_ping_30 p WHERE  datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.response_count ORDER BY p.device_recid, p.datetime) AS SUBQUERY " +
+        "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, (round(sum(response_count),1)::decimal) as ping_success_rate, date_trunc('hour', datetime) + date_part('minute', datetime)::int / 25 * interval '25 min' as timestamp " +
+        "FROM(SELECT * FROM msp_ping_30 p WHERE  datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_30_recid, p.response_count ORDER BY p.device_recid, p.datetime) AS SUBQUERY " +
         "GROUP BY timestamp, device_recid ORDER BY device_recid, timestamp; " +
         "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);",
     INSERT_RECORDS :
@@ -23,6 +23,8 @@ export var Query = {
         "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval);",
     DELETE_60_DAYS :
         "DELETE FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);",
+    DELETE_90_DAYS :
+        "DELETE FROM msp_ping_60 WHERE datetime < (timezone('UTC',NOW()) - '90 days'::interval);",
     GET_ALL_COMPANIES :
         "SELECT * FROM msp_company;",
     GET_COMPANY :       
@@ -54,14 +56,16 @@ export var Query = {
     GET_PINGS_BETWEEN :
         "SELECT * from msp_ping  where datetime>='psqlStart' AND datetime<'psqlFinish' and device_recid=deviceID " +
         "UNION " +
-        "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_30 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID " +
+        "SELECT ping_30_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_30 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID " +
         "UNION " + 
-        "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_60 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID ORDER BY datetime;",
+        "SELECT ping_60_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_60 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID ORDER BY datetime;",
     GET_30_DAY_UPTIME :
         "SELECT (count(nullif(responded, false))::decimal)/count(*) AS uptime FROM msp_ping where device_recid=deviceRecID;",
     GET_60_DAY_UPTIME :
         "SELECT sum(response_count)/count(*) AS uptime FROM msp_ping_30 where device_recid=deviceRecID",
     GET_90_DAY_UPTIME :
         "SELECT sum(response_count)/count(*) AS uptime FROM msp_ping_60 where device_recid=deviceRecID",
+    GET_NEWEST_DATETIME :
+        "SELECT datetime FROM msp_ping ORDER BY datetime DESC LIMIT 1;"
     
 }

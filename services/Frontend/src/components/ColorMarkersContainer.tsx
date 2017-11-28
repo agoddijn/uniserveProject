@@ -14,7 +14,7 @@ export class ColorMarkers extends React.Component<{ Sites: Site[] }, { Sites: an
     }
     getPixelPositionOffset = (width, height) => ({
         x: -(width / 2),
-        y: -(height / 2),
+        y: -(height / 2) + 10,
     })
     render() {
         return (this.state.Sites.map((s: Site) => {
