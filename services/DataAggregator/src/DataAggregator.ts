@@ -22,8 +22,12 @@ async function migrate() {
             Log.error("60 Day Migration Fail");
         }
 
-        //Log.info("Starting Old Data Deletion");
-        //const deletionstatus = await DbInt.delete90DayOldRecords
+        const deletionstatus = await DbInt.delete90DayOldRecords();
+        if (d30status[1]) {
+            Log.info("90 Day Deletion Success");
+        } else {
+            Log.error("60 Day Deletion Fail");
+        }
 
     } catch (e) {
         Log.error("DataAggregator/DataAggregator.ts ERROR: " + JSON.stringify(e));

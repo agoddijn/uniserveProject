@@ -9,27 +9,30 @@ const {
 } = require("react-google-maps");
 
 
-export class MarkerWrapper extends React.Component<{ Site: Site, clicked: number, SetSelectedSite: any }, { site: Site, display: boolean, clicked: number }> {
+export class MarkerWrapper extends React.Component<{ Site: Site, clicked: number, SetSelectedSite: any }, { site: Site, display: boolean, closed: boolean}> {
     constructor(props: { Site: Site, clicked: number, SetSelectedSite: any }) {
         super(props);
         this.state = {
             site: this.props.Site,
             display: this.props.clicked == this.props.Site.site_recid,
-            clicked: this.props.clicked
+            closed: false
         }
     }
     componentWillReceiveProps(next: { Site: Site, clicked: number, SetSelectedSite: any }) {
+        let closed = this.state.closed;
+        if (this.props.Site.site_recid != this.props.clicked) closed = false;
         this.setState({ 
-            display: (next.clicked == next.Site.site_recid && next.clicked != this.state.clicked), 
-            site: next.Site, 
-            clicked: next.clicked })
+            display: (next.clicked == next.Site.site_recid &&
+                !closed), 
+            site: next.Site,
+            closed: closed})
     }
     handleCloseClick(){
-        this.setState({display: false});
+        this.setState({display: false, closed: true});
     }
     handleClick(){
+        this.setState({display: true, closed: false});
         this.props.SetSelectedSite(this.props.Site.site_recid);
-        this.setState({display: true});
     }
     render() {
         var status = "pin-green", pings = 0, unresponsive = 0, avResponse = 0;
@@ -50,7 +53,7 @@ export class MarkerWrapper extends React.Component<{ Site: Site, clicked: number
             <div style={{ width: "22vw", height: "14vh" }}>
                 <p>Site: {this.state.site.site_recid} - {this.state.site.description}</p>
                 <DeviceTable devices={this.state.site.devices} />
-            </div>
+            </div>;
         return <Marker 
             key={this.props.Site.site_recid} 
             position={{ lat: Number(this.props.Site.latitude), 

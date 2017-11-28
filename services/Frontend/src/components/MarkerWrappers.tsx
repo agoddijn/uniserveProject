@@ -15,7 +15,7 @@ export class MarkerWrappers extends React.Component<{ Sites: Site[],ClickedId:nu
         }
     }
     componentWillReceiveProps(next:{ Sites: Site[],ClickedId:number,SetSelectedSite:any }){
-        this.setState({Clicked:next.ClickedId})
+        this.setState({Clicked: next.ClickedId})
     }
     render() {
         let map_ele: any = this.props.Sites.map((s:Site,key:number) => { 
