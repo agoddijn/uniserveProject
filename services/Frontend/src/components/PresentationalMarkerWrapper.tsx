@@ -50,7 +50,7 @@ export class MarkerWrapper extends React.Component<{ Site: Site, clicked: number
         }
         let path = '/images/m8s/'+status+'.svg'
         let table = 
-            <div style={{ width: "22vw", height: "14vh" }}>
+            <div style={{ width: "450px", height: "200px" }}>
                 <p>Site: {this.state.site.site_recid} - {this.state.site.description}</p>
                 <DeviceTable devices={this.state.site.devices} />
             </div>;

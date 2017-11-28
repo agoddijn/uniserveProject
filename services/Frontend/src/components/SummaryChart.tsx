@@ -92,7 +92,8 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
                         pointRadius: [],
                         pointStyle: [],
                         pointBorderColor: [],
-                        pointHoverRadius: 6
+                        pointHoverRadius: 6,
+                        lineTension: 0
                     })
                     let interval = 1;
                     if (device.ping_records.length > maxPoints) interval = Math.floor(device.ping_records.length / maxPoints);
