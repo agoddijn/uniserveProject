@@ -175,3 +175,7 @@ iframe{
     height: 25px !important;
     width: 25px !important;
 }
+.pie-container{
+    display: inline-block;
+    width: 33%;
+}
