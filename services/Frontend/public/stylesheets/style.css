@@ -181,8 +181,8 @@ iframe{
 }
 #info-bar{
     background-color: var(--primary-color);
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
     animation: 1s linear recurrence ;
     -webkit-animation: 1s linear recurrence;
 }

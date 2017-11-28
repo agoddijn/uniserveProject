@@ -14,7 +14,7 @@ export class InfoBar extends React.Component<{location: string, CurrentTime:stri
 
     componentWillReceiveProps(next:{location: string, CurrentTime:string}){
         let p:any =
-            <p id={"clock"}>{"Last Updated: " + next.CurrentTime+ "&nbsp&nbsp&nbsp" }</p>
+            <p id={"clock"}>{"Last Updated: " + next.CurrentTime}</p>
         this.setState({p:p});
     }
     render() {
