@@ -17,6 +17,8 @@ export var Query = {
         "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (deviceRecID, \'IPAddress\', msResponse, respondedResult, \'psqlDate\');",
     UPDATE_SITE_LOCATION :
         "UPDATE msp_site SET latitude=newLat, longitude=newLon WHERE site_recid=siteID;",
+    DELETE_RECENT_PINGS :
+        "DELETE FROM msp_ping;",
     DELETE_30_DAYS :
         "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval);",
     DELETE_60_DAYS :

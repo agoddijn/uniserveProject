@@ -68,7 +68,7 @@ ALTER TABLE public.msp_device_test OWNER TO ubc03;
 -- Name: msp_site; Type: TABLE; Schema: public; Owner: ubc03; Tablespace: 
 --
 
-CREATE TABLE msp_site (
+CREATE TABLE msp_site_test (
     site_recid integer DEFAULT nextval(('pk_msp_site_recid_test'::text)::regclass) NOT NULL,
     company_recid integer NOT NULL,
     description character varying(50),
@@ -221,7 +221,7 @@ ALTER TABLE public.pk_msp_ping_60_recid_test OWNER TO ubc03;
 --
 
 ALTER TABLE ONLY msp_company_test
-    ADD CONSTRAINT msp_company_pkey_test PRIMARY KEY (company_recid_test);
+    ADD CONSTRAINT msp_company_pkey_test PRIMARY KEY (company_recid);
 
 
 --
@@ -229,7 +229,7 @@ ALTER TABLE ONLY msp_company_test
 --
 
 ALTER TABLE ONLY msp_device_test
-    ADD CONSTRAINT msp_device_pkey_test PRIMARY KEY (device_recid_test);
+    ADD CONSTRAINT msp_device_pkey_test PRIMARY KEY (device_recid);
 
 
 --
@@ -237,7 +237,7 @@ ALTER TABLE ONLY msp_device_test
 --
 
 ALTER TABLE ONLY msp_site_test
-    ADD CONSTRAINT msp_site_pkey_test PRIMARY KEY (site_recid_test);
+    ADD CONSTRAINT msp_site_pkey_test PRIMARY KEY (site_recid);
 
 
 --
@@ -245,7 +245,7 @@ ALTER TABLE ONLY msp_site_test
 --
 
 ALTER TABLE ONLY msp_ping_test
-    ADD CONSTRAINT msp_ping_pkey_test PRIMARY KEY (ping_recid_test);
+    ADD CONSTRAINT msp_ping_pkey_test PRIMARY KEY (ping_recid);
 
 
 --
@@ -253,7 +253,7 @@ ALTER TABLE ONLY msp_ping_test
 --
 
 ALTER TABLE ONLY msp_ping_30_test
-    ADD CONSTRAINT msp_ping_30_pkey_test PRIMARY KEY (ping_30_recid_test);
+    ADD CONSTRAINT msp_ping_30_pkey_test PRIMARY KEY (ping_30_recid);
 
 
 
@@ -262,7 +262,7 @@ ALTER TABLE ONLY msp_ping_30_test
 --
 
 ALTER TABLE ONLY msp_ping_60_test
-    ADD CONSTRAINT msp_ping_60_pkey_test PRIMARY KEY (ping_60_recid_test);
+    ADD CONSTRAINT msp_ping_60_pkey_test PRIMARY KEY (ping_60_recid);
 
 
 --
