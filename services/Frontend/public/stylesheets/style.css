@@ -175,3 +175,23 @@ iframe{
     height: 25px !important;
     width: 25px !important;
 }
+#info-bar{
+    
+    animation: 2s linear recurrence ;
+    -webkit-animation: 2s linear recurrence;
+}
+#info-bar p{
+    float: right ;
+    text-align: right;
+}
+
+@keyframes recurrence {
+    0% {
+        
+        opacity: 0;
+    }
+    100% {
+        
+        opacity: 100;
+    }
+}
