@@ -1,8 +1,8 @@
 import {Device, PingRecord, Company, Site} from "uniserve.m8s.types";
 
 let fs = require('fs');
-let Chance = require('chance');
-var fakerator = require("fakerator")("en-CA");
+//let Chance = require('chance');
+//var fakerator = require("fakerator")("en-CA");
 
 class PingRecordClass implements PingRecord {
     ping_recid = 0;
@@ -56,7 +56,7 @@ export class DataFaker {
     addresses: Address[];
     webLinksJSONFile: any = require('./data/top10000.json');
     addressesJSONFile: any = require('./data/1Kaddresses.json');
-    chance = new Chance();
+    //chance = new Chance();
     devices: Device[] = [];
 
     constructor() {
@@ -272,7 +272,7 @@ export class DataFaker {
 
             company.company_recid = c_recid;
             company.company_id = c_id;
-            company.company_name = fakerator.company.name();
+            //company.company_name = fakerator.company.name();
             company.sites = that.generateSites(c_recid, numOfSitesForCompany, locations);
             companies.push(company);
             c_recid++;

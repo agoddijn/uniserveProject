@@ -14,11 +14,12 @@ export class InfoBar extends React.Component<{location: string, CurrentTime:stri
 
     componentWillReceiveProps(next:{location: string, CurrentTime:string}){
         let p:any =
-            <p id={"clock"}>{"--Last Updated: " + next.CurrentTime+ "--" }</p>
+            <p id={"clock"}>{"Last Updated: " + next.CurrentTime+ "&nbsp&nbsp&nbsp" }</p>
         this.setState({p:p});
     }
     render() {
-        
+       
         return<div id={"info-bar"} style={{ color:"white", fontSize:"1.5vh", width:"100%", height:"2.5vh", opacity:0.8, position:"relative"}}>{"Data Fetched from " + this.props.location}{this.state.p}</div> 
+
     }
 }

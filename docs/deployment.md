@@ -21,7 +21,20 @@ Deploy:
     pm2 deploy <configuration_file> <environment>
     
     Staging example:
-
     pm2 deploy staging.config.js staging
 
+Manual Deploy:
+
+    1. clone repo
+    2. yarn install
+    3. npm run build
+    4. pm2 start [environment].config.js
+
+Running Tests/Scripts:
+
+Most scripts and tests rely on relevant .env file in project root. 
+mv staging.env .env
+
+Or setup .env to match current environment
++
     

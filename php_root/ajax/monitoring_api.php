@@ -21,15 +21,15 @@ if(isset($gUser->id)){
                 $data = file_get_contents($host . "/api/company/" . $company_recid  . "/devices" . "?authtoken=" . $authToken);                
                 break;          
             case 'device':
-                $device_recid = $_GET['device_recid'];
+                $device_recid = $_GET['device'];
                 $startdate = $_GET['startdate'];
                 $endate = $_GET['enddate'];
                 $data = file_get_contents($host . "/api/company/" . $company_recid  
                 . "/device/" . $device_recid . "?authtoken=" . $authToken
-                . "?startdate=" . $startdate . "?enddate=" .$endate);
+                . "&?startdate=" . $startdate . "&?enddate=" .$endate);
                 break;
             case 'devicehistory':
-                $device_recid = $_GET['device_recid'];
+                $device_recid = $_GET['device'];
                 $data = file_get_contents($host . "/api/company/" . $company_recid  
                 . "/devicehistory/" . $device_recid . "?authtoken=" . $authToken);
                 break;
