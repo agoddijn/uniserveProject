@@ -83,7 +83,7 @@ async function filldb(){
     start = new Date();
     end = new Date(start);
     start = new Date(start.setDate(start.getDate() - 30));
-    end = new Date(end.setDate(end.getDate() - 10));
+    end = new Date(end.setDate(end.getDate() - 1));
     await createPingRecords(start, end, devices);
     
 }
