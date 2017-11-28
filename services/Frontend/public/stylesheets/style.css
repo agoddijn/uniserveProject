@@ -175,10 +175,16 @@ iframe{
     height: 25px !important;
     width: 25px !important;
 }
+.pie-container{
+    display: inline-block;
+    width: 33%;
+}
 #info-bar{
-    
-    animation: 3s linear recurrence ;
-    -webkit-animation: 3s linear recurrence;
+    background-color: var(--primary-color);
+    padding-left: 10px;
+    padding-right: 10px;
+    animation: 1s linear recurrence ;
+    -webkit-animation: 1s linear recurrence;
 }
 #info-bar p{
     float: right ;
@@ -192,6 +198,6 @@ iframe{
     }
     100% {
         
-        opacity: 100;
+        opacity: 0.8;
     }
 }

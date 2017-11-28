@@ -11,13 +11,13 @@ export class ReportContainer extends React.Component<{SelectedSite: any, SetLayo
     }
  
     render() {
-        return <div className="myContainer">
+        return <div className="myContainer" style={{overflowY: "scroll"}}>
             <div className={"container-bar"}>
                 <h5 className="title">
                     Report
                 </h5>
 
-                <IconButton onClick={this.props.SetLayout.bind(this, "default")} className={"bar-button"}>
+                <IconButton onClick={this.props.SetLayout.bind(this, "default")} className={"bar-button"} style={{height: "20%", top: "-25px"}}>
                     <Close style={{color: "white"}}/>
                 </IconButton>
             </div>

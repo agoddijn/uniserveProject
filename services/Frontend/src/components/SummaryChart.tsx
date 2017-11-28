@@ -1,6 +1,4 @@
 import * as React from "react";
-var PropTypes = require('prop-types')
-import { withStyles } from 'material-ui/styles';
 import { Site, Device, PingRecord } from 'uniserve.m8s.types';
 import { Line } from 'react-chartjs-2';
 import axios from 'axios';
