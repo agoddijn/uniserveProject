@@ -54,9 +54,9 @@ export var Query = {
     GET_PINGS_BETWEEN :
         "SELECT * from msp_ping  where datetime>='psqlStart' AND datetime<'psqlFinish' and device_recid=deviceID " +
         "UNION " +
-        "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_30 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID " +
+        "SELECT ping_30_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_30 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID " +
         "UNION " + 
-        "SELECT ping_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_60 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID ORDER BY datetime;",
+        "SELECT ping_60_recid, device_recid, ip_address, ms_response, CASE WHEN response_count>=1 THEN true ELSE false END, datetime from msp_ping_60 WHERE datetime>='psqlStart' AND datetime<'psqlFinish' AND device_recid=deviceID ORDER BY datetime;",
     GET_30_DAY_UPTIME :
         "SELECT (count(nullif(responded, false))::decimal)/count(*) AS uptime FROM msp_ping where device_recid=deviceRecID;",
     GET_60_DAY_UPTIME :
