@@ -177,8 +177,8 @@ iframe{
 }
 #info-bar{
     
-    animation: 2s linear recurrence ;
-    -webkit-animation: 2s linear recurrence;
+    animation: 3s linear recurrence ;
+    -webkit-animation: 3s linear recurrence;
 }
 #info-bar p{
     float: right ;

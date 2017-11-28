@@ -61,10 +61,12 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
     
     private timer: any;
     private dt: any = new DataLoader();
+    private myFormat = 'YYYY-MM-DD[T]HH:mm';
     componentDidMount() {
         let that: any = this;
         this.dt.loader().then((data: Site[]) => {
-            let curr:string = moment().format();
+            let curr:string = moment().format(this.myFormat).replace("T"," ");
+            console.log(curr);
             this.setState({ Sites: data, SelectedSite: data[0],layoutupdate:false,CurrentTime:curr });
         }).catch((str: string) => {
             alert(str);

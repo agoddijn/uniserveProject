@@ -11,6 +11,7 @@ export class InfoBar extends React.Component<{location: string, CurrentTime:stri
 
  
     render() {
+        console.log(this.props.CurrentTime)
         return <div id={"info-bar"} style={{ color:"white", fontSize:"1.5vh", width:"100%", height:"2.5vh", opacity:100, position:"relative", backgroundColor:"#D4321C"}}>{"Data Fetched from " + this.props.location}<p>{"----Latest TimeStamp: " + this.props.CurrentTime+ "----" }</p></div>        
     }
 }
