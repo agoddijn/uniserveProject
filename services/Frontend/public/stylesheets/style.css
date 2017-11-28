@@ -179,3 +179,25 @@ iframe{
     display: inline-block;
     width: 33%;
 }
+#info-bar{
+    background-color: var(--primary-color);
+    padding-left: 10px;
+    padding-right: 10px;
+    animation: 1s linear recurrence ;
+    -webkit-animation: 1s linear recurrence;
+}
+#info-bar p{
+    float: right ;
+    text-align: right;
+}
+
+@keyframes recurrence {
+    0% {
+        
+        opacity: 0;
+    }
+    100% {
+        
+        opacity: 0.8;
+    }
+}
