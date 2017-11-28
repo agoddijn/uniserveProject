@@ -73,13 +73,13 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
     }
     componentDidUpdate() {
         this.timer = window.setTimeout(() => {
-            let curr:string = moment().format();
             this.dt.loader().then((data: Site[]) => {
+                let curr:string = moment().format(this.myFormat).replace("T"," ");
                 this.setState({ Sites: data, SelectedSite: this.state.SelectedSite,layoutupdate:false,CurrentTime:curr });
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 10000)
+        }, 60000)
     }
     setSelectedSite(siteID: number) {
         for (let site of this.state.Sites) {
