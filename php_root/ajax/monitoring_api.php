@@ -26,7 +26,7 @@ if(isset($gUser->id)){
                 $endate = $_GET['enddate'];
                 $data = file_get_contents($host . "/api/company/" . $company_recid  
                 . "/device/" . $device_recid . "?authtoken=" . $authToken
-                . "&?startdate=" . $startdate . "&?enddate=" .$endate);
+                . "&startdate=" . $startdate . "&enddate=" .$endate);
                 break;
             case 'devicehistory':
                 $device_recid = $_GET['device'];
