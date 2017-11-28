@@ -25,15 +25,15 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         }
     }
     componentWillReceiveProps(next: { Sites: Site[], SelectedSite: Site, SetSelectedSite: any, layoutupdate: boolean }) {
-        this._renderMap(next.Sites, next.SelectedSite.site_recid, next.SetSelectedSite, next.SelectedSite, next.layoutupdate);
+        this._renderMap(next.Sites, next.SelectedSite.site_recid, next.SetSelectedSite, next.SelectedSite, next.layoutupdate, 10);
     }
     private _renderMap = (() => {
         let container = <div id={"newmap"} className={"container-inner"} style={{ height: "100%", width: "100%", position: "absolute" }}></div>
         let map = <div id={"newmapcontainer"} style={{ height: "95%", width: "100%" }}></div>;
         
-        let Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site }) => {
+        let Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site, zoom: number }) => {
             return (
-                <GoogleMap defaultZoom={5} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                <GoogleMap defaultZoom={props.zoom} zoom={props.zoom} defaultCenter={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
                     <MarkerClusterer
                         averageCenter
                         enableRetinaIcons
@@ -46,11 +46,11 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
             )
         });
         
-        return function (sites: Site[], ID: number, SetSelectedSite: any, SelectedSite: Site, layout: boolean) {
+        return function (sites: Site[], ID: number, SetSelectedSite: any, SelectedSite: Site, layout: boolean, zoom: number) {
             if (layout) {
-                Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site, this: any }) => {
+                Map = withGoogleMap((props: { sites: Site[], markers: MarkerWrappers, SelectedSite: Site, this: any, zoom: number }) => {
                     return (
-                        <GoogleMap defaultZoom={5} center={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
+                        <GoogleMap defaultZoom={props.zoom} zoom={props.zoom} defaultCenter={{ lat: Number(props.SelectedSite.latitude), lng: Number(props.SelectedSite.longitude) }}>
                             <MarkerClusterer
                                 averageCenter
                                 enableRetinaIcons
@@ -63,7 +63,19 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
                     )
                 });
             }
-            let map_ele: any = <Map sites={sites} SelectedSite={SelectedSite} containerElement={container} mapElement={map} markers={<MarkerWrappers Sites={sites} ClickedId={ID} SetSelectedSite={SetSelectedSite} />} />
+            let map_ele: any = 
+                <Map 
+                    sites={sites} 
+                    SelectedSite={SelectedSite} 
+                    containerElement={container} 
+                    mapElement={map}
+                    zoom={zoom}
+                    markers={<MarkerWrappers 
+                        Sites={sites} 
+                        ClickedId={ID} 
+                        SetSelectedSite={SetSelectedSite}  
+                    />} 
+                />
             this.setState({ Map: map_ele });
         }
     })();
