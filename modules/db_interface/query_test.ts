@@ -9,7 +9,7 @@ export var TestQuery = {
         "DELETE FROM msp_ping_test WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval); ",
     MIGRATE_60 : 
         "INSERT INTO msp_ping_test_60_test (device_recid, ip_address, ms_response, response_count, datetime) " + 
-        "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, (round(sum(response_count),1)::decimal) as ping_success_rate, date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '25 min' as timestamp " +
+        "SELECT device_recid, min(ip_address) as ip_address, avg(ms_response)::int as ms_response, round(sum(response_count)::decimal/5,1), date_trunc('hour', datetime) + date_part('minute', datetime)::int / 5 * interval '25 min' as timestamp " +
         "FROM(SELECT * FROM msp_ping_test_30_test p WHERE  datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY p.device_recid, p.ip_address, p.datetime,p.ms_response, p.ping_recid, p.response_count ORDER BY p.device_recid, p.datetime) AS SUBQUERY " +
         "GROUP BY timestamp, device_recid ORDER BY device_recid, timestamp; " +
         "DELETE FROM msp_ping_test_30_test WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval);",
