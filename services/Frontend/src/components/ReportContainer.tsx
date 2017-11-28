@@ -11,7 +11,7 @@ export class ReportContainer extends React.Component<{SelectedSite: any, SetLayo
     }
  
     render() {
-        return <div className="myContainer" style={{overflowY: "scroll"}}>
+        return <div className="myContainer">
             <div className={"container-bar"}>
                 <h5 className="title">
                     Report
@@ -21,8 +21,9 @@ export class ReportContainer extends React.Component<{SelectedSite: any, SetLayo
                     <Close style={{color: "white"}}/>
                 </IconButton>
             </div>
-
-            <PresentationalReport SelectedSite={this.props.SelectedSite} />
+            <div className={"container-inner"}>
+                <PresentationalReport SelectedSite={this.props.SelectedSite} />
+            </div>
         </div>;
     }
 }
