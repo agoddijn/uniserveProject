@@ -9,20 +9,30 @@ const {
 } = require("react-google-maps");
 
 
-export class MarkerWrapper extends React.Component<{ Site: Site, display: boolean, SetSelectedSite: any }, { table: any, clicked: boolean }> {
-    constructor(props: { Site: Site, display: boolean, SetSelectedSite: any }) {
+export class MarkerWrapper extends React.Component<{ Site: Site, clicked: number, SetSelectedSite: any }, { site: Site, display: boolean, closed: boolean}> {
+    constructor(props: { Site: Site, clicked: number, SetSelectedSite: any }) {
         super(props);
         this.state = {
-            table:
-                <div style={{ width: "22vw", height: "14vh" }}>
-                    <p>Site: {this.props.Site.site_recid} - {this.props.Site.description}</p>
-                    <DeviceTable devices={this.props.Site.devices} />
-                </div>,
-            clicked: this.props.display
+            site: this.props.Site,
+            display: this.props.clicked == this.props.Site.site_recid,
+            closed: false
         }
     }
-    componentWillReceiveProps(next: { Site: Site, display: boolean, SetSelectedSite: any }) {
-        this.setState({ clicked: next.display })
+    componentWillReceiveProps(next: { Site: Site, clicked: number, SetSelectedSite: any }) {
+        let closed = this.state.closed;
+        if (this.props.Site.site_recid != this.props.clicked) closed = false;
+        this.setState({ 
+            display: (next.clicked == next.Site.site_recid &&
+                !closed), 
+            site: next.Site,
+            closed: closed})
+    }
+    handleCloseClick(){
+        this.setState({display: false, closed: true});
+    }
+    handleClick(){
+        this.setState({display: true, closed: false});
+        this.props.SetSelectedSite(this.props.Site.site_recid);
     }
     render() {
         var status = "pin-green", pings = 0, unresponsive = 0, avResponse = 0;
@@ -39,16 +49,21 @@ export class MarkerWrapper extends React.Component<{ Site: Site, display: boolea
             if (unresponsive == pings) status = "pin-red";
         }
         let path = '/images/m8s/'+status+'.svg'
-        
+        let table = 
+            <div style={{ width: "22vw", height: "14vh" }}>
+                <p>Site: {this.state.site.site_recid} - {this.state.site.description}</p>
+                <DeviceTable devices={this.state.site.devices} />
+            </div>;
         return <Marker 
             key={this.props.Site.site_recid} 
             position={{ lat: Number(this.props.Site.latitude), 
             lng: Number(this.props.Site.longitude) }} 
-            onClick={() => { this.props.SetSelectedSite(this.props.Site.site_recid); }} 
+            onClick={this.handleClick.bind(this)} 
             icon={path}>
-            {this.state.clicked && this.props.Site.devices.length !== 0 &&
-                <InfoWindow>
-                    {this.state.table}
+            {this.state.display && this.state.site.devices.length > 0 &&
+                <InfoWindow
+                    onCloseClick={this.handleCloseClick.bind(this)}>
+                    {table}
                 </InfoWindow>
             }
         </Marker>

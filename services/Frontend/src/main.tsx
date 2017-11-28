@@ -5,9 +5,11 @@ import { TabularViewContainer } from "./components/TabularViewContainer";
 import { MapContainer } from "./components/MapContainer";
 import { SummaryContainer } from "./components/SummaryContainer";
 import { ReportContainer } from "./components/ReportContainer";
+import { InfoBar } from "./components/PresentationalInfoBar"
 import { DataLoader } from './DataLoader';
 import { Site } from "uniserve.m8s.types";
 import { Responsive, WidthProvider } from 'react-grid-layout';
+import * as moment from 'moment';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const globalAny: any = global;
@@ -23,7 +25,7 @@ function layoutsAreEqual(l1: any, l2: any) {
     }
 }
 
-export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, LayoutName: string, ViewHeight: number,layoutupdate:boolean}> {
+export default class main extends React.Component<any, { Sites: Site[], SelectedSite: Site, Layout: any, LayoutName: string, ViewHeight: number,layoutupdate:boolean,CurrentTime:string}> {
     constructor(props: any) {
         super(props);
 
@@ -36,7 +38,8 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
             Layout: { lg: this.layouts.default },
             LayoutName: "default",
             ViewHeight: window.innerHeight - 70,
-            layoutupdate:false
+            layoutupdate:false,
+            CurrentTime: ""
         }
     }
 
@@ -58,22 +61,25 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
     
     private timer: any;
     private dt: any = new DataLoader();
+    private myFormat = 'YYYY-MM-DD[T]HH:mm';
     componentDidMount() {
         let that: any = this;
         this.dt.loader().then((data: Site[]) => {
-            this.setState({ Sites: data, SelectedSite: data[0],layoutupdate:false });
+            let curr:string = moment().format(this.myFormat).replace("T"," ");
+            this.setState({ Sites: data, SelectedSite: data[0],layoutupdate:false,CurrentTime:curr });
         }).catch((str: string) => {
             alert(str);
         })
     }
     componentDidUpdate() {
         this.timer = window.setTimeout(() => {
+            let curr:string = moment().format();
             this.dt.loader().then((data: Site[]) => {
-                this.setState({ Sites: data, SelectedSite: this.state.SelectedSite,layoutupdate:false });
+                this.setState({ Sites: data, SelectedSite: this.state.SelectedSite,layoutupdate:false,CurrentTime:curr });
             }).catch((str: string) => {
                 alert(str);
             })
-        }, 60000)
+        }, 10000)
     }
     setSelectedSite(siteID: number) {
         for (let site of this.state.Sites) {
@@ -148,6 +154,7 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         var rowHeight = Math.floor(this.state.ViewHeight / 4);
         
         return <div className={"grid-container"}>
+            <InfoBar location={"Vancouver"} CurrentTime={this.state.CurrentTime} />
             <ResponsiveReactGridLayout
                 className="layout"
                 layouts={this.state.Layout}

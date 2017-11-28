@@ -17,6 +17,8 @@ export var Query = {
         "INSERT INTO msp_ping (device_recid, ip_address, ms_response, responded, datetime) VALUES (deviceRecID, \'IPAddress\', msResponse, respondedResult, \'psqlDate\');",
     UPDATE_SITE_LOCATION :
         "UPDATE msp_site SET latitude=newLat, longitude=newLon WHERE site_recid=siteID;",
+    DELETE_RECENT_PINGS :
+        "DELETE FROM msp_ping;",
     DELETE_30_DAYS :
         "DELETE FROM msp_ping WHERE datetime < (timezone('UTC',NOW()) - '30 days'::interval);",
     DELETE_60_DAYS :
@@ -48,7 +50,7 @@ export var Query = {
     GET_60_DAYS_OLD_PINGS :
         "SELECT * FROM msp_ping_30 WHERE datetime < (timezone('UTC',NOW()) - '60 days'::interval) GROUP BY device_recid, ping_recid, ip_address, ms_response, response_count, datetime ORDER BY device_recid, datetime",
     GET_RECENT_PINGS :
-        "SELECT * FROM msp_ping where device_recid=\'deviceRecID\' order by datetime desc, ping_recid, device_recid limit limitNum;",
+        "SELECT * FROM msp_ping where device_recid=\'deviceRecID\' order by datetime desc limit limitNum;",
     GET_DEVICE_PINGS :
         "SELECT * from msp_ping where msp_ping.device_recid=\'deviceRecID\' order by datetime",
     GET_PINGS_BETWEEN :

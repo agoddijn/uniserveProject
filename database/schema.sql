@@ -97,7 +97,7 @@ CREATE TABLE msp_ping (
     datetime TIMESTAMP
 );
 
-CREATE INDEX datePingIndex ON msp_ping (datetime);
+CREATE INDEX datePingIndex ON msp_ping (device_recid, datetime);
 ALTER TABLE public.msp_ping OWNER TO ubc03;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE msp_ping_30 (
     datetime TIMESTAMP
 );
 
-CREATE INDEX date30PingIndex ON msp_ping_30 (datetime);
+CREATE INDEX date30PingIndex ON msp_ping_30 (device_recid, datetime);
 ALTER TABLE public.msp_ping_30 OWNER TO ubc03;
 
 --
@@ -129,7 +129,7 @@ CREATE TABLE msp_ping_60 (
     datetime TIMESTAMP
 );
 
-CREATE INDEX date60PingIndex ON msp_ping_60 (datetime);
+CREATE INDEX date60PingIndex ON msp_ping_60 (device_recid, datetime);
 ALTER TABLE public.msp_ping_60 OWNER TO ubc03;
 
 --

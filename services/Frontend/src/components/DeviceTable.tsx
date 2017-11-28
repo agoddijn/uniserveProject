@@ -38,7 +38,7 @@ export class DeviceTable extends React.Component<{ devices: Device[] }, any> {
                 avResponse += record.ms_response;
             }
             avResponse = Math.round(avResponse / (pings - unresponsive));
-            if (unresponsive > 0) {
+            if (unresponsive > 0 || pings == 0) {
                 status = "orange";
                 if (unresponsive == pings) status = "red";
             }
