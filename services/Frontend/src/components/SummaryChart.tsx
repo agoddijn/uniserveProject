@@ -35,17 +35,17 @@ const options = {
 }
 
 const colors = [
-    "rgba(220, 57, 18, 0.5)",
+    "rgba(220, 57, 18, 0.8)",
     "rgba(220, 57, 18, 1)",
-    "rgba(51, 102, 204, 0.5)",
+    "rgba(51, 102, 204, 0.8)",
     "rgba(51, 102, 204, 1)",
-    "rgba(255, 153, 0, 0.5)",
+    "rgba(255, 153, 0, 0.8)",
     "rgba(255, 153, 0, 1)",
-    "rgba(16, 150, 24, 0.5)",
+    "rgba(16, 150, 24, 0.8)",
     "rgba(16, 150, 24, 1)",
-    "rgba(153, 0, 153, 0.5)",
+    "rgba(153, 0, 153, 0.8)",
     "rgba(153, 0, 153, 1)",
-    "rgba(59, 62, 172, 0.5)",
+    "rgba(59, 62, 172, 0.8)",
     "rgba(59, 62, 172, 1)"
 ]
 
@@ -111,7 +111,7 @@ export class SummaryChart extends React.Component<{ Site: Site, FromDate: string
                                 average /= count;
                                 if (j == 0) data.labels.push(dateString);
                                 data.datasets[j].data.push(average);
-                                data.datasets[j].pointRadius.push(4);
+                                data.datasets[j].pointRadius.push(0);
                                 data.datasets[j].pointStyle.push('circle');
                                 data.datasets[j].pointBorderColor.push(colors[(2 * j + 1) % colors.length]);
                                 count = 0;

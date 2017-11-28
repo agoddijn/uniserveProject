@@ -26,8 +26,10 @@ export class MapContainer extends React.Component<{ Sites: Site[], SetLayout: an
         }
     }
     componentWillReceiveProps(next: { Sites: Site[], SelectedSite: Site, SetSelectedSite: any, layoutupdate: boolean }) {
-        this._renderMap(next.Sites, next.SelectedSite.site_recid, next.SetSelectedSite, next.SelectedSite, next.layoutupdate);
-        this.setState({siteID: next.SelectedSite.site_recid})
+        if (next.SelectedSite) {
+            this._renderMap(next.Sites, next.SelectedSite.site_recid, next.SetSelectedSite, next.SelectedSite, next.layoutupdate);
+            this.setState({siteID: next.SelectedSite.site_recid})
+        }
     }
     private Map;
     private updated: boolean = true;
