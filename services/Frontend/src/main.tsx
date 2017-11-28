@@ -66,7 +66,6 @@ export default class main extends React.Component<any, { Sites: Site[], Selected
         let that: any = this;
         this.dt.loader().then((data: Site[]) => {
             let curr:string = moment().format(this.myFormat).replace("T"," ");
-            console.log(curr);
             this.setState({ Sites: data, SelectedSite: data[0],layoutupdate:false,CurrentTime:curr });
         }).catch((str: string) => {
             alert(str);
