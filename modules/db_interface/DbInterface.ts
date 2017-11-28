@@ -66,6 +66,23 @@ export class DbInterface {
      * Delete all pings older than 30 days.
      * Return true if succesful, false otherwise
      */
+    deleteRecentRecords() : Promise<[any, boolean]>{
+        return new Promise((fulfill,reject) => {
+            let query: string = queryMode.DELETE_RECENT_PINGS;
+            db.any(query).then(data => {
+                Log.info("Query execution successful, execution time is " + data.duration + "ms");
+                fulfill([data,true]);
+            }).catch(e => {
+                Log.error("Error: " + e);
+                reject([null,false]);
+            })
+        });
+    }
+
+    /*
+     * Delete all pings older than 30 days.
+     * Return true if succesful, false otherwise
+     */
     delete30DayOldRecords() : Promise<[any, boolean]>{
         return new Promise((fulfill,reject) => {
             let query: string = queryMode.DELETE_30_DAYS;
@@ -121,8 +138,8 @@ export class DbInterface {
                     .replace("psqlDate",`${psqlDate}`)
                 db.any(query)
                 .then(data => {
-                    Log.info("Ping records stored, execution time is " + data.duration + "ms");
-                    Log.debug("Sent data");
+                    //Log.info("Ping records stored, execution time is " + data.duration + "ms");
+                    //Log.debug("Sent data");
                     fulfill([date, true]); 
                 }).catch(e => {
                     Log.error("Error: " + e);
