@@ -1,5 +1,5 @@
 import {Company, Site, Device, PingRecord} from 'uniserve.m8s.types'
-import {dbObj} from '../db_connection/db_connection'
+import {dbObj, pgProm} from '../db_connection/db_connection'
 import {Query} from './query'
 import {Log} from 'uniserve.m8s.utils'
 
@@ -141,6 +141,41 @@ export class DbInterface {
         });
     }
 
+    storePingRecordsBulk(date: number, records: PingRecord[]): Promise<[number, boolean]> {
+        return new Promise((fulfill, reject) => {
+            Log.info("Bulk Insert Begin: " + records.length + " records");
+
+            let toInsert = [];        
+            for (let record of records) {
+                let dbRecord: any = {};
+                if (isNaN(record.ms_response) || record.ms_response === null) {
+                    dbRecord.ms_response = -1
+                } else {
+                    dbRecord.ms_response = record.ms_response;
+                }
+                //https://stackoverflow.com/questions/10830357/javascript-toisostring-ignores-timezone-offset
+                let psqlDate = new Date(record.datetime).toISOString().slice(0, 19).replace('T', ' ');
+                dbRecord.datetime = psqlDate;
+                dbRecord.device_recid = record.device_recid;
+                dbRecord.ip_address = record.ip_address;
+                dbRecord.responded = record.responded;
+                toInsert.push(dbRecord);           
+            }
+
+            const cs = new pgProm.helpers.ColumnSet(["device_recid", "ip_address", "ms_response", "responded", "datetime"], 
+                                                    {table: "msp_ping"});
+            const query = pgProm.helpers.insert(toInsert, cs);
+
+            db.any(query).then(data => {  
+                Log.info("Bulk Ping records stored, execution time is " + data.duration + "ms");
+                Log.debug("Sent data");
+                fulfill([date, true]); 
+            }).catch(e => {
+                Log.error("Error: " + e);
+                fulfill([date, false]); 
+            })
+        })            
+    }
     /*
      * Updates a site's latitude and longitude coordinates
      * Return true if succesful, false otherwise
