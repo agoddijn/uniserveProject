@@ -51,7 +51,7 @@ module.exports = {
         "DB_USER" : 'ubc03',
         "DB_PASS" : 'olivepepsi',
       },
-      "log_file": "/home/ubc03/logs/webbackend-combined.log",
+      "log_file": "/home/ubc03/logs/aggregator-combined.log",
       "autorestart": false,
       "exec_mode"  : "cluster_mode",
       "instances"  : 1,
